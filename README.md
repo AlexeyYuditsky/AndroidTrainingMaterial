@@ -1,1 +1,1 @@
-This repository is dedicated to the study of android development
+This repository is dedicated to learning Android development from the lessons RomanAndrushchenko [YouTube](https://www.youtube.com/c/RomanAndrushchenko), [GitHub](https://github.com/romychab)
