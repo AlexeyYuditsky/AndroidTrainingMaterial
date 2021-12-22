@@ -1,0 +1,14 @@
+com/alexeyyuditsky/test/databinding/ActivityBoxBinding.java
+ com.alexeyyuditsky.test.databinding.ActivityBoxBinding
+com/alexeyyuditsky/test/databinding/ActivityAboutBinding.java
+ com.alexeyyuditsky.test.databinding.ActivityAboutBinding
+com/alexeyyuditsky/test/databinding/ItemBoxBinding.java
+ com.alexeyyuditsky.test.databinding.ItemBoxBinding
+com/alexeyyuditsky/test/databinding/ActivityOptionsBinding.java
+ com.alexeyyuditsky.test.databinding.ActivityOptionsBinding
+com/alexeyyuditsky/test/databinding/ActivityMainBinding.java
+ com.alexeyyuditsky.test.databinding.ActivityMainBinding
+com/alexeyyuditsky/test/BuildConfig.java
+ com.alexeyyuditsky.test.BuildConfig
+com/alexeyyuditsky/test/databinding/ActivityBoxSelectionBinding.java
+ com.alexeyyuditsky.test.databinding.ActivityBoxSelectionBinding

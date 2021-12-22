@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\item_box.xml",
+        "source": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\src\\main\\res\\layout\\item_box.xml"
+    },
+    {
+        "merged": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_about.xml",
+        "source": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\src\\main\\res\\layout\\activity_about.xml"
+    },
+    {
+        "merged": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_box.xml",
+        "source": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\src\\main\\res\\layout\\activity_box.xml"
+    },
+    {
+        "merged": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_box_selection.xml",
+        "source": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\src\\main\\res\\layout\\activity_box_selection.xml"
+    },
+    {
+        "merged": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_options.xml",
+        "source": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\src\\main\\res\\layout\\activity_options.xml"
+    },
+    {
+        "merged": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_main.xml",
+        "source": "C:\\Users\\1\\Desktop\\AndroidTrainingMaterial\\Navigation based on activity\\app\\src\\main\\res\\layout\\activity_main.xml"
+    }
+]
