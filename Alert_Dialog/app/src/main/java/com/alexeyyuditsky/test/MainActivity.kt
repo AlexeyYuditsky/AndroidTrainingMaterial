@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -60,7 +61,6 @@ class MainActivity : AppCompatActivity() {
             .create()
         dialog.setOnShowListener {
             dialogBinding.volumeInputEditText.requestFocus()
-            showKeyboard(dialogBinding.volumeInputEditText)
 
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
                 val enteredText = dialogBinding.volumeInputEditText.text.toString()
@@ -78,7 +78,9 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
         }
-        dialog.setOnDismissListener { hideKeyboard(dialogBinding.volumeInputEditText) }
+
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+
         dialog.show()
     }
 
@@ -248,21 +250,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showToast(@StringRes messageRes: Int) {
         Toast.makeText(this, messageRes, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showKeyboard(view: View) {
-        Log.d("MyLog", "show")
-        view.post {
-            getInputMethodManager(view).showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-        }
-    }
-
-    private fun hideKeyboard(view: View) {
-        getInputMethodManager(view).hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
-    private fun getInputMethodManager(view: View): InputMethodManager {
-        return view.context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
     companion object {
