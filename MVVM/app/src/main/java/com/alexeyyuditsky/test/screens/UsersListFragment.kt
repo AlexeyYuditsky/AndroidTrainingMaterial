@@ -37,9 +37,9 @@ class UsersListFragment : Fragment() {
 
             recyclerView.adapter = adapter
 
-            viewModel.users.observe(viewLifecycleOwner, {
+            viewModel.users.observe(viewLifecycleOwner) {
                 adapter.users = it
-            })
+            }
 
         }.root
 

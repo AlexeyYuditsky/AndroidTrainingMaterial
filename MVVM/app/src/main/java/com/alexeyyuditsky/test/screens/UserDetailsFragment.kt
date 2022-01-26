@@ -6,21 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.alexeyyuditsky.test.R
-import com.alexeyyuditsky.test.viewModels.UserDetailsViewModel
 import com.alexeyyuditsky.test.databinding.FragmentUserDetailsBinding
-import com.alexeyyuditsky.test.utils.factory
 import com.alexeyyuditsky.test.utils.navigator
+import com.alexeyyuditsky.test.utils.viewModelCreator
+import com.alexeyyuditsky.test.viewModels.UserDetailsViewModel
 import com.bumptech.glide.Glide
 
 class UserDetailsFragment : Fragment() {
 
-    private val viewModel: UserDetailsViewModel by viewModels { factory() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.loadUser(requireArguments().getLong(ARG_USER_ID))
+    private val viewModel: UserDetailsViewModel by viewModelCreator {
+        UserDetailsViewModel(it.usersService, requireArguments().getLong(ARG_USER_ID))
     }
 
     override fun onCreateView(
@@ -30,7 +26,7 @@ class UserDetailsFragment : Fragment() {
     ): View {
         return FragmentUserDetailsBinding.inflate(inflater, container, false).apply {
 
-            viewModel.userDetails.observe(viewLifecycleOwner, {
+            viewModel.userDetails.observe(viewLifecycleOwner) {
                 if (it.user.photo.isNotBlank()) {
                     Glide.with(this@UserDetailsFragment)
                         .load(it.user.photo)
@@ -43,7 +39,7 @@ class UserDetailsFragment : Fragment() {
                 }
                 userNameTextView.text = it.user.name
                 userDetailsTextView.text = it.details
-            })
+            }
 
             deleteButton.setOnClickListener {
                 viewModel.deleteUser()
