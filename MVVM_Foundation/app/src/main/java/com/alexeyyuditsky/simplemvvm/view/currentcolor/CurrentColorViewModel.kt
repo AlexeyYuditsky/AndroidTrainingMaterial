@@ -6,9 +6,9 @@ import com.alexeyyuditsky.simplemvvm.R
 import com.alexeyyuditsky.simplemvvm.model.colors.ColorListener
 import com.alexeyyuditsky.simplemvvm.model.colors.ColorsRepository
 import com.alexeyyuditsky.simplemvvm.model.colors.NamedColor
-import com.alexeyyuditsky.simplemvvm.view.Navigator
-import com.alexeyyuditsky.simplemvvm.view.UIActions
-import com.alexeyyuditsky.simplemvvm.view.base.BaseViewModel
+import com.alexeyyuditsky.foundation.navigator.Navigator
+import com.alexeyyuditsky.foundation.uiactions.UIActions
+import com.alexeyyuditsky.foundation.views.BaseViewModel
 import com.alexeyyuditsky.simplemvvm.view.changecolor.ChangeColorFragment
 
 class CurrentColorViewModel(

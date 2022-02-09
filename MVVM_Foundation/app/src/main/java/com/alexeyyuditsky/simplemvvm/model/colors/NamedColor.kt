@@ -1,8 +1,6 @@
 package com.alexeyyuditsky.simplemvvm.model.colors
 
-/**
- * Represents color data
- */
+/** Represents color data */
 data class NamedColor(
     val id: Long,
     val name: String,

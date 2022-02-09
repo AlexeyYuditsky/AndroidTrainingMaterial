@@ -2,9 +2,7 @@ package com.alexeyyuditsky.simplemvvm.model.colors
 
 import android.graphics.Color
 
-/**
- * Simple in-memory implementation of [ColorsRepository]
- */
+/** Simple in-memory implementation of [ColorsRepository] */
 class InMemoryColorsRepository : ColorsRepository {
 
     override var currentColor: NamedColor = AVAILABLE_COLORS[0]

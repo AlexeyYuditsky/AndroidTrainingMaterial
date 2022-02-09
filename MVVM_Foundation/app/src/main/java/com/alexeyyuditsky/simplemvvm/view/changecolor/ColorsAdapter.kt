@@ -7,10 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alexeyyuditsky.simplemvvm.databinding.ItemColorBinding
 import com.alexeyyuditsky.simplemvvm.model.colors.NamedColor
 
-/**
- * Adapter for displaying the list of available colors
- * @param listener callback which notifies about user actions on items in the list, see [Listener] for details.
- */
+/** Adapter for displaying the list of available colors
+ * @param listener callback which notifies about user actions on items in the list, see [Listener] for details. */
 class ColorsAdapter(
     private val listener: Listener
 ) : RecyclerView.Adapter<ColorsAdapter.Holder>(), View.OnClickListener {
@@ -50,10 +48,8 @@ class ColorsAdapter(
 
     interface Listener {
 
-        /**
-         * Called when user chooses the specified color
-         * @param namedColor color chosen by the user
-         */
+        /** Called when user chooses the specified color
+         * @param namedColor color chosen by the user */
         fun onColorChosen(namedColor: NamedColor)
 
     }

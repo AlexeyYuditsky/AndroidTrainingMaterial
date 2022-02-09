@@ -1,9 +1,6 @@
-package com.alexeyyuditsky.simplemvvm.utils
+package com.alexeyyuditsky.foundation.utils
 
-/**
- * Represents "side effect".
- * Used in [LiveData] as a wrapper for events.
- */
+/** Represents "side effect". Used in [LiveData] as a wrapper for events. */
 class Event<T>(private val value: T) {
 
     private var handled: Boolean = false

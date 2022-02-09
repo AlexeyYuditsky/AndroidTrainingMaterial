@@ -7,9 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import com.alexeyyuditsky.simplemvvm.R
 import com.alexeyyuditsky.simplemvvm.model.colors.ColorsRepository
 import com.alexeyyuditsky.simplemvvm.model.colors.NamedColor
-import com.alexeyyuditsky.simplemvvm.view.Navigator
-import com.alexeyyuditsky.simplemvvm.view.UIActions
-import com.alexeyyuditsky.simplemvvm.view.base.BaseViewModel
+import com.alexeyyuditsky.foundation.navigator.Navigator
+import com.alexeyyuditsky.foundation.uiactions.UIActions
+import com.alexeyyuditsky.foundation.views.BaseViewModel
 
 class ChangeColorViewModel(
     screen: ChangeColorFragment.Screen,
@@ -50,9 +50,7 @@ class ChangeColorViewModel(
         navigator.goBack(result = currentColor)
     }
 
-    fun onCancelPressed() {
-        navigator.goBack()
-    }
+    fun onCancelPressed() = navigator.goBack()
 
     /**
      * [MediatorLiveData] can listen other LiveData instances (even more than 1)

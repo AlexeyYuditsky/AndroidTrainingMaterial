@@ -8,23 +8,24 @@ import android.view.ViewTreeObserver
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alexeyyuditsky.simplemvvm.R
 import com.alexeyyuditsky.simplemvvm.databinding.FragmentChangeColorBinding
-import com.alexeyyuditsky.simplemvvm.view.HasScreenTitle
-import com.alexeyyuditsky.simplemvvm.view.base.BaseFragment
-import com.alexeyyuditsky.simplemvvm.view.base.BaseScreen
-import com.alexeyyuditsky.simplemvvm.view.base.screenViewModel
+import com.alexeyyuditsky.foundation.views.HasScreenTitle
+import com.alexeyyuditsky.foundation.views.BaseFragment
+import com.alexeyyuditsky.foundation.views.BaseScreen
+import com.alexeyyuditsky.foundation.views.screenViewModel
 
+/** Screen for changing color.
+ * 1) Displays the list of available colors
+ * 2) Allows choosing the desired color
+ * 3) Chosen color is saved only after pressing "Save" button
+ * 4) The current choice is saved via [SavedStateHandle] (see [ChangeColorViewModel]) */
 class ChangeColorFragment : BaseFragment(), HasScreenTitle {
 
-    /**
-     * This screen has 1 argument: color ID to be displayed as selected.
-     */
+    /** This screen has 1 argument: color ID to be displayed as selected. */
     class Screen(val currentColorId: Long) : BaseScreen()
 
     override val viewModel by screenViewModel<ChangeColorViewModel>()
 
-    /**
-     * Example of dynamic screen title
-     */
+    /** Example of dynamic screen title */
     override fun getScreenTitle(): String? = viewModel.screenTitle.value
 
     override fun onCreateView(

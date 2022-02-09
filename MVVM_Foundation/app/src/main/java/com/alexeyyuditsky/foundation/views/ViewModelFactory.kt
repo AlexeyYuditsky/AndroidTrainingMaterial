@@ -1,33 +1,26 @@
-package com.alexeyyuditsky.simplemvvm.view.base
+package com.alexeyyuditsky.foundation.views
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.savedstate.SavedStateRegistryOwner
-import com.alexeyyuditsky.simplemvvm.ARG_SCREEN
-import com.alexeyyuditsky.simplemvvm.App
-import com.alexeyyuditsky.simplemvvm.MainViewModel
+import com.alexeyyuditsky.foundation.ARG_SCREEN
+import com.alexeyyuditsky.foundation.BaseApplication
 import java.lang.reflect.Constructor
 
-/**
- * Use this method for getting view-models from your fragments
- */
+/** Use this method for getting view-models from your fragments */
 inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<VM> {
-    val application = requireActivity().application as App
+    val application = requireActivity().application as BaseApplication
     val screen = requireArguments().getParcelable<BaseScreen>(ARG_SCREEN) as BaseScreen
 
-    // using Providers API directly for getting MainViewModel instance
-    val provider = ViewModelProvider(requireActivity(), AndroidViewModelFactory(application))
-    val mainViewModel = provider[MainViewModel::class.java]
+    val activityScopeViewModel = (requireActivity() as FragmentsHolder).getActivityScopeViewModel()
 
     // forming the list of available dependencies:
     // - screen ViewModel scope dependencies -> screen args
     // - activity ViewModel scope dependencies -> from MainViewModel
     // - singleton scope dependencies (repositories) -> from App class
-    val dependencies = listOf(screen, mainViewModel) + application.models
+    val dependencies = listOf(screen, activityScopeViewModel) + application.repositories
 
     // creating factory
     ViewModelFactory(dependencies, this)

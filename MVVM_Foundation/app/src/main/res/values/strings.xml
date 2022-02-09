@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Simple MVVM</string>
 
     <string name="color_red">Red</string>
@@ -17,4 +18,5 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="selected">Selected</string>
+
 </resources>
