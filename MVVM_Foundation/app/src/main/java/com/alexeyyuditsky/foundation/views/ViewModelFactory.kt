@@ -28,16 +28,15 @@ inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<
 
 class ViewModelFactory(
     private val dependencies: List<Any>,
-    owner: SavedStateRegistryOwner
+    owner: SavedStateRegistryOwner,
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel?> create(
         key: String,
         modelClass: Class<T>,
-        handle: SavedStateHandle
+        handle: SavedStateHandle,
     ): T {
-        val constructors = modelClass.constructors
-        val constructor = constructors.maxByOrNull { it.typeParameters.size }!!
+        val constructor = modelClass.constructors[0]
 
         // - SavedStateHandle is also a dependency from screen VM scope, but we can obtain it only here,
         //   that's why merging it with the list of other dependencies:

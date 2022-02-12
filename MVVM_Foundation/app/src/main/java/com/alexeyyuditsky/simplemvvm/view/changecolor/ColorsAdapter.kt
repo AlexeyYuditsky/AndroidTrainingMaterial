@@ -10,11 +10,12 @@ import com.alexeyyuditsky.simplemvvm.model.colors.NamedColor
 /** Adapter for displaying the list of available colors
  * @param listener callback which notifies about user actions on items in the list, see [Listener] for details. */
 class ColorsAdapter(
-    private val listener: Listener
-) : RecyclerView.Adapter<ColorsAdapter.Holder>(), View.OnClickListener {
+    private val listener: Listener,
+) : RecyclerView.Adapter<ColorsAdapter.ViewHolder>(), View.OnClickListener {
 
     var items: List<NamedColorListItem> = emptyList()
         set(value) {
+            if (field == value) return
             field = value
             notifyDataSetChanged()
         }
@@ -24,17 +25,16 @@ class ColorsAdapter(
         listener.onColorChosen(item)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemColorBinding.inflate(inflater, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemColorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.root.setOnClickListener(this)
-        return Holder(binding)
+        return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val namedColor = items[position].namedColor
         val selected = items[position].selected
-        holder.binding.apply {
+        viewHolder.binding.apply {
             root.tag = namedColor
             colorNameTextView.text = namedColor.name
             colorView.setBackgroundColor(namedColor.value)
@@ -44,14 +44,12 @@ class ColorsAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    class Holder(val binding: ItemColorBinding) : RecyclerView.ViewHolder(binding.root)
-
     interface Listener {
-
         /** Called when user chooses the specified color
          * @param namedColor color chosen by the user */
         fun onColorChosen(namedColor: NamedColor)
-
     }
+
+    class ViewHolder(val binding: ItemColorBinding) : RecyclerView.ViewHolder(binding.root)
 
 }

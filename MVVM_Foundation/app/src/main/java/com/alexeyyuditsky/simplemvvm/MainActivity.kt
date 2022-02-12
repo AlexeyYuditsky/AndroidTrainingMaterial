@@ -29,12 +29,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), FragmentsHolder 
             containerId = R.id.fragmentContainer,
             defaultTitle = getString(R.string.app_name),
             animations = StackFragmentNavigator.Animations(
-                enterAnim = R.anim.enter,
-                exitAnim = R.anim.exit,
-                popEnterAnim = R.anim.pop_enter,
-                popExitAnim = R.anim.pop_exit,
+                R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit,
             ),
-            initialScreenCreator = { CurrentColorFragment.Screen() }
+            initialScreen = CurrentColorFragment.Screen()
         )
         navigator.onCreate(savedInstanceState = savedInstanceState)
     }

@@ -16,7 +16,7 @@ class ChangeColorViewModel(
     private val navigator: Navigator,
     private val uiActions: UIActions,
     private val colorsRepository: ColorsRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel(), ColorsAdapter.Listener {
 
     // input sources
@@ -40,6 +40,7 @@ class ChangeColorViewModel(
     }
 
     override fun onColorChosen(namedColor: NamedColor) {
+        if (_currentColorId.value == namedColor.id) return
         _currentColorId.value = namedColor.id
     }
 
@@ -52,13 +53,10 @@ class ChangeColorViewModel(
 
     fun onCancelPressed() = navigator.goBack()
 
-    /**
-     * [MediatorLiveData] can listen other LiveData instances (even more than 1)
-     * and combine their values.
+    /** [MediatorLiveData] can listen other LiveData instances (even more than 1) and combine their values.
      * Here we listen the list of available colors ([_availableColors] live-data) + current color id
      * ([_currentColorId] live-data), then we use both of these values in order to create a list of
-     * [NamedColorListItem], it is a list to be displayed in RecyclerView.
-     */
+     * [NamedColorListItem], it is a list to be displayed in RecyclerView. */
     private fun mergeSources() {
         val colors = _availableColors.value ?: return
         val currentColorId = _currentColorId.value ?: return

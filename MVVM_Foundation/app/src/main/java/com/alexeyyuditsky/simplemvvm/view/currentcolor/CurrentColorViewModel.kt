@@ -12,9 +12,9 @@ import com.alexeyyuditsky.foundation.views.BaseViewModel
 import com.alexeyyuditsky.simplemvvm.view.changecolor.ChangeColorFragment
 
 class CurrentColorViewModel(
-    private val navigator: Navigator,
-    private val uiActions: UIActions,
-    private val colorsRepository: ColorsRepository
+    private val navigator: Navigator, // IntermediateNavigator
+    private val uiActions: UIActions, // AndroidUIActions
+    private val colorsRepository: ColorsRepository // InMemoryColorsRepository
 ) : BaseViewModel() {
 
     private val _currentColor = MutableLiveData<NamedColor>()
@@ -24,10 +24,8 @@ class CurrentColorViewModel(
         _currentColor.postValue(it)
     }
 
-    // --- example of listening results via model layer
-
     init {
-        colorsRepository.addListener(colorListener)
+        colorsRepository.addListener(colorListener)  // example of listening results via model layer
     }
 
     override fun onCleared() {
@@ -35,8 +33,7 @@ class CurrentColorViewModel(
         colorsRepository.removeListener(colorListener)
     }
 
-    // --- example of listening results directly from the screen
-
+    // example of listening results directly from the screen
     override fun onResult(result: Any) {
         super.onResult(result)
         if (result is NamedColor) {
@@ -44,8 +41,6 @@ class CurrentColorViewModel(
             uiActions.toast(message)
         }
     }
-
-    // ---
 
     fun changeColor() {
         val currentColor = currentColor.value ?: return

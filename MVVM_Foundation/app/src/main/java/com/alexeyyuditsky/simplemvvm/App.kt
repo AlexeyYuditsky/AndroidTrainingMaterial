@@ -9,7 +9,7 @@ import com.alexeyyuditsky.simplemvvm.model.colors.InMemoryColorsRepository
 class App : Application(), BaseApplication {
 
     /** Place your repositories here, now we have only 1 repository */
-    override val repositories: List<Repository> = listOf<Repository>(
+    override val repositories = listOf<Repository>(
         InMemoryColorsRepository(),
 
         )

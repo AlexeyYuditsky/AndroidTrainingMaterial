@@ -31,7 +31,7 @@ class ChangeColorFragment : BaseFragment(), HasScreenTitle {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val binding = FragmentChangeColorBinding.inflate(inflater, container, false)
 
@@ -53,19 +53,17 @@ class ChangeColorFragment : BaseFragment(), HasScreenTitle {
     }
 
     private fun setupLayoutManager(binding: FragmentChangeColorBinding, adapter: ColorsAdapter) {
-        // waiting for list width
-        binding.colorsRecyclerView.viewTreeObserver.addOnGlobalLayoutListener(
-            object : ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    binding.colorsRecyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    val width = binding.colorsRecyclerView.width
-                    val itemWidth = resources.getDimensionPixelSize(R.dimen.item_width)
-                    val columns = width / itemWidth
-                    binding.colorsRecyclerView.adapter = adapter
-                    binding.colorsRecyclerView.layoutManager =
-                        GridLayoutManager(requireContext(), columns)
-                }
-            })
+        binding.recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                val width = binding.recyclerView.width
+                val itemWidth = resources.getDimensionPixelSize(R.dimen.item_width)
+                val columns = width / itemWidth // 1080 / 315 = 3.4
+                binding.recyclerView.adapter = adapter
+                binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), columns)
+            }
+        })
     }
 
 }

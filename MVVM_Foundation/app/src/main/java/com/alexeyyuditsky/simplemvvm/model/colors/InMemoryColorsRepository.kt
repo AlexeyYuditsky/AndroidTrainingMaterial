@@ -7,10 +7,8 @@ class InMemoryColorsRepository : ColorsRepository {
 
     override var currentColor: NamedColor = AVAILABLE_COLORS[0]
         set(value) {
-            if (field != value) {
-                field = value
-                listeners.forEach { it(value) }
-            }
+            field = value
+            listeners.forEach { it(value) }
         }
 
     private val listeners = mutableSetOf<ColorListener>()

@@ -19,7 +19,7 @@ class StackFragmentNavigator(
     @IdRes private val containerId: Int,
     private val defaultTitle: String,
     private val animations: Animations,
-    private val initialScreenCreator: () -> BaseScreen
+    private val initialScreen: BaseScreen,
 ) : Navigator {
 
     private var result: Event<Any>? = null
@@ -39,7 +39,7 @@ class StackFragmentNavigator(
         if (savedInstanceState == null) {
             // define the initial screen that should be launched when app starts.
             launchFragment(
-                screen = initialScreenCreator(),
+                screen = initialScreen,
                 addToBackStack = false
             )
         }
@@ -96,7 +96,7 @@ class StackFragmentNavigator(
 
     private val fragmentCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
         override fun onFragmentViewCreated(
-            fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?
+            fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?,
         ) {
             notifyScreenUpdates()
             publishResult(f)
