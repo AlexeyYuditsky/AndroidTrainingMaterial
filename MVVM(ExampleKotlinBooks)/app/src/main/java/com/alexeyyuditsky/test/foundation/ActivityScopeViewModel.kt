@@ -10,8 +10,8 @@ import com.alexeyyuditsky.test.foundation.uiactions.UIActions
  * should be available from fragments' view-models (usually they are passed to the view-model constructor). */
 class ActivityScopeViewModel(
     val uiActions: UIActions,
-    val navigator: IntermediateNavigator
-) : ViewModel(), Navigator by navigator, UIActions by uiActions {
+    val navigator: IntermediateNavigator,
+) : ViewModel(), UIActions by uiActions, Navigator by navigator {
 
     override fun onCleared() {
         super.onCleared()

@@ -2,6 +2,7 @@ package com.alexeyyuditsky.test.app.view.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.model.Book
 import com.alexeyyuditsky.test.app.model.BooksRepository
 import com.alexeyyuditsky.test.foundation.navigator.Navigator
@@ -27,8 +28,11 @@ class EditBookViewModel(
         navigator.goBack(book)
     }
 
-    fun onGoToMainPressed() {
+    fun onGoToMainPressed(book: Book) {
+        booksRepository.changeBook(book)
         navigator.goToMain()
+        val message = uiActions.getString(R.string.changes_saved)
+        uiActions.toast(message)
     }
 
 }

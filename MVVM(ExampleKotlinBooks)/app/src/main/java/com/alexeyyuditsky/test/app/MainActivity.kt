@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.view.books.BooksListFragment
+import com.alexeyyuditsky.test.databinding.ActivityMainBinding
 import com.alexeyyuditsky.test.foundation.ActivityScopeViewModel
 import com.alexeyyuditsky.test.foundation.navigator.IntermediateNavigator
 import com.alexeyyuditsky.test.foundation.navigator.StackFragmentNavigator
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), FragmentsHolder 
             animations = StackFragmentNavigator.Animations(
                 R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit,
             ),
-            initialScreen = BooksListFragment.Screen()
+            initialScreen = BooksListFragment.Screen(),
         )
         navigator.onCreate(savedInstanceState = savedInstanceState)
     }
@@ -51,7 +52,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), FragmentsHolder 
         activityViewModel.navigator.setTarget(null)
     }
 
-    override fun notifyScreenUpdates(): Unit = navigator.notifyScreenUpdates()
+    override fun notifyScreenUpdates() {
+        navigator.notifyScreenUpdates()
+    }
 
     override fun getActivityScopeViewModel(): ActivityScopeViewModel = activityViewModel
 

@@ -82,13 +82,6 @@
             android:layout_margin="4dp"
             android:text="Сохранить результат" />
 
-        <Button
-            android:id="@+id/goToMainButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="На главную" />
-
     </LinearLayout>
 
 </ScrollView>

@@ -2,6 +2,7 @@ package com.alexeyyuditsky.test.app.view.description
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.model.Book
 import com.alexeyyuditsky.test.app.model.BooksRepository
 import com.alexeyyuditsky.test.app.view.edit.EditBookFragment
@@ -31,6 +32,8 @@ class BookDescriptionViewModel(
     override fun onResult(result: Any) {
         if (result is Book) {
             _book.value = booksRepository.getById(result.id)
+            val message = uiActions.getString(R.string.changes_saved)
+            uiActions.toast(message)
         }
     }
 

@@ -1,17 +1,20 @@
 package com.alexeyyuditsky.test.app.view.description
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.model.Book
 import com.alexeyyuditsky.test.databinding.FragmentDescriptionBinding
 import com.alexeyyuditsky.test.foundation.views.BaseFragment
 import com.alexeyyuditsky.test.foundation.views.BaseScreen
+import com.alexeyyuditsky.test.foundation.views.HasScreenTitle
 import com.alexeyyuditsky.test.foundation.views.screenViewModel
 import com.bumptech.glide.Glide
 
-class BookDescriptionFragment : BaseFragment() {
+class BookDescriptionFragment : BaseFragment(), HasScreenTitle {
 
     class Screen(val bookId: Long) : BaseScreen()
 
@@ -45,6 +48,10 @@ class BookDescriptionFragment : BaseFragment() {
             yearTextView.text = book.year
             descriptionTextView.text = book.description
         }
+    }
+
+    override fun getScreenTitle(): String {
+        return getString(R.string.description_fragment_title, viewModel.book.value?.name)
     }
 
 }

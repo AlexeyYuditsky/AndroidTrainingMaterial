@@ -2,6 +2,8 @@ package com.alexeyyuditsky.test.foundation.uiactions
 
 import android.content.Context
 import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 
 /** Android implementation of [UIActions]. Displaying simple toast message and getting string from resources. */
 class AndroidUIActions(

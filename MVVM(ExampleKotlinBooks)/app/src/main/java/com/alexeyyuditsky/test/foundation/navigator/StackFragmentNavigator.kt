@@ -2,19 +2,22 @@ package com.alexeyyuditsky.test.foundation.navigator
 
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import androidx.annotation.AnimRes
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.model.Book
+import com.alexeyyuditsky.test.databinding.ActivityMainBinding
 import com.alexeyyuditsky.test.foundation.utils.Event
-import com.alexeyyuditsky.test.foundation.views.ARG_SCREEN
-import com.alexeyyuditsky.test.foundation.views.BaseFragment
-import com.alexeyyuditsky.test.foundation.views.BaseScreen
-import com.alexeyyuditsky.test.foundation.views.HasScreenTitle
+import com.alexeyyuditsky.test.foundation.views.*
+import com.google.android.material.appbar.MaterialToolbar
 
 class StackFragmentNavigator(
     private val activity: AppCompatActivity,
@@ -25,6 +28,8 @@ class StackFragmentNavigator(
 ) : Navigator {
 
     private var result: Event<Any>? = null
+
+    private lateinit var toolbar: MaterialToolbar
 
     override fun launch(screen: BaseScreen) {
         launchFragment(screen)
@@ -38,15 +43,13 @@ class StackFragmentNavigator(
     }
 
     override fun goToMain() {
-        val backStackEntryCount = activity.supportFragmentManager.backStackEntryCount
-        if (backStackEntryCount > 1) {
-            repeat(backStackEntryCount) {
-                activity.supportFragmentManager.popBackStack()
-            }
-        }
+        activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
     fun onCreate(savedInstanceState: Bundle?) {
+        toolbar = activity.findViewById(R.id.toolbar)
+        activity.setSupportActionBar(toolbar)
+
         if (savedInstanceState == null) {
             launchFragment(
                 screen = initialScreen,
@@ -86,10 +89,27 @@ class StackFragmentNavigator(
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 
-        if (f is HasScreenTitle && f.getScreenTitle() != null) {
+        if (f is HasCustomAction) {
+            createCustomToolbarAction(f.getCustomAction())
+        } else {
+            toolbar.menu.clear()
+        }
+
+        if (f is HasScreenTitle) {
             activity.supportActionBar?.title = f.getScreenTitle()
         } else {
             activity.supportActionBar?.title = defaultTitle
+        }
+    }
+
+
+    private fun createCustomToolbarAction(action: CustomAction) {
+        val menuItem = toolbar.menu.add(action.textRes)
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        menuItem.icon = DrawableCompat.wrap(ContextCompat.getDrawable(activity, action.iconRes)!!)
+        menuItem.setOnMenuItemClickListener {
+            action.onCustomAction.run()
+            return@setOnMenuItemClickListener true
         }
     }
 
