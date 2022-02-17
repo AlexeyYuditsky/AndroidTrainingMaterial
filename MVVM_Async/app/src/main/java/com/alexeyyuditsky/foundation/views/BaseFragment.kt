@@ -1,8 +1,6 @@
 package com.alexeyyuditsky.foundation.views
 
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -10,7 +8,6 @@ import com.alexeyyuditsky.foundation.model.ErrorResult
 import com.alexeyyuditsky.foundation.model.PendingResult
 import com.alexeyyuditsky.foundation.model.Result
 import com.alexeyyuditsky.foundation.model.SuccessResult
-import com.alexeyyuditsky.simplemvvm.R
 
 /** Base class for all fragments */
 abstract class BaseFragment : Fragment() {

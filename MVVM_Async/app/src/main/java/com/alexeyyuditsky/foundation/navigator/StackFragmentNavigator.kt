@@ -1,6 +1,7 @@
 package com.alexeyyuditsky.foundation.navigator
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.AnimRes
 import androidx.annotation.IdRes
@@ -80,6 +81,7 @@ class StackFragmentNavigator(
 
         if (f is HasScreenTitle && f.getScreenTitle() != null) {
             // fragment has custom screen title -> display it
+                Log.d("MyLog", "if if if ")
             activity.supportActionBar?.title = f.getScreenTitle()
         } else {
             activity.supportActionBar?.title = defaultTitle
