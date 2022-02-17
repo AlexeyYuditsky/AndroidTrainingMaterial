@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 
 class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
 
-    class Screen(val id: Long) : BaseScreen()
+    class Screen(val bookId: Long) : BaseScreen()
 
     override val viewModel by screenViewModel<EditBookViewModel>()
 

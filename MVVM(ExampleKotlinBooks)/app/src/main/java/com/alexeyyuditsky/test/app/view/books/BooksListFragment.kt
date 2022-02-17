@@ -1,12 +1,13 @@
 package com.alexeyyuditsky.test.app.view.books
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.alexeyyuditsky.test.app.view.onTryAgain
+import com.alexeyyuditsky.test.app.view.renderSimpleResult
 import com.alexeyyuditsky.test.databinding.FragmentBookListBinding
 import com.alexeyyuditsky.test.foundation.views.BaseFragment
 import com.alexeyyuditsky.test.foundation.views.BaseScreen
@@ -31,9 +32,15 @@ class BooksListFragment : BaseFragment() {
         val dividerItem = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
         binding.recyclerView.addItemDecoration(dividerItem)
 
-        viewModel.booksList.observe(viewLifecycleOwner) {
-            adapter.items = it
+        viewModel.booksList.observe(viewLifecycleOwner) { result ->
+            renderSimpleResult(
+                root = binding.root,
+                result = result,
+                onSuccess = { adapter.items = it }
+            )
         }
+
+        onTryAgain(binding.root) { viewModel.tryAgain() }
 
         return binding.root
     }

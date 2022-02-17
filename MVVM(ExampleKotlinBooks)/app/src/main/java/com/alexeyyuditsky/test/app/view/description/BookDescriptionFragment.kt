@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.model.Book
+import com.alexeyyuditsky.test.app.view.onTryAgain
+import com.alexeyyuditsky.test.app.view.renderSimpleResult
 import com.alexeyyuditsky.test.databinding.FragmentDescriptionBinding
 import com.alexeyyuditsky.test.foundation.views.BaseFragment
 import com.alexeyyuditsky.test.foundation.views.BaseScreen
@@ -20,6 +22,8 @@ class BookDescriptionFragment : BaseFragment(), HasScreenTitle {
 
     override val viewModel by screenViewModel<BookDescriptionViewModel>()
 
+    override fun getScreenTitle(): String? = viewModel.screenTitle.value
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,13 +31,21 @@ class BookDescriptionFragment : BaseFragment(), HasScreenTitle {
     ): View {
         val binding = FragmentDescriptionBinding.inflate(inflater, container, false)
 
-        viewModel.book.observe(viewLifecycleOwner) {
-            initViews(binding, it)
+        viewModel.book.observe(viewLifecycleOwner) { result ->
+            renderSimpleResult(binding.root, result) {
+                initViews(binding, it)
+            }
         }
 
         binding.openScreenButton.setOnClickListener {
             viewModel.onOpenScreenPressed()
         }
+
+        viewModel.screenTitle.observe(viewLifecycleOwner) {
+            notifyScreenUpdates()
+        }
+
+        onTryAgain(binding.root) { viewModel.tryAgain() }
 
         return binding.root
     }
@@ -48,10 +60,6 @@ class BookDescriptionFragment : BaseFragment(), HasScreenTitle {
             yearTextView.text = book.year
             descriptionTextView.text = book.description
         }
-    }
-
-    override fun getScreenTitle(): String {
-        return getString(R.string.description_fragment_title, viewModel.book.value?.name)
     }
 
 }

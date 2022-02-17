@@ -95,7 +95,7 @@ class StackFragmentNavigator(
             toolbar.menu.clear()
         }
 
-        if (f is HasScreenTitle) {
+        if (f is HasScreenTitle && f.getScreenTitle() != null) {
             activity.supportActionBar?.title = f.getScreenTitle()
         } else {
             activity.supportActionBar?.title = defaultTitle

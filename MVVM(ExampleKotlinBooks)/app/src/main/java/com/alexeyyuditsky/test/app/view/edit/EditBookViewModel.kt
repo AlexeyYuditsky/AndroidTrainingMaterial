@@ -20,7 +20,7 @@ class EditBookViewModel(
     val book: LiveData<Book> = _book
 
     init {
-        _book.value = booksRepository.getById(screen.id)
+        _book.value = booksRepository.getById(screen.bookId)
     }
 
     fun onSavePressed(book: Book) {
