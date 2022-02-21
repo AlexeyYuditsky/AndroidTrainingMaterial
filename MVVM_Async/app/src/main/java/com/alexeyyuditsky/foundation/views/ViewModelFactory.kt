@@ -36,7 +36,8 @@ class ViewModelFactory(
         modelClass: Class<T>,
         handle: SavedStateHandle,
     ): T {
-        val constructor = modelClass.constructors[0]
+        val constructors = modelClass.constructors
+        val constructor = constructors.maxByOrNull { it.typeParameters.size }!!
 
         // - SavedStateHandle is also a dependency from screen VM scope, but we can obtain it only here,
         //   that's why merging it with the list of other dependencies:

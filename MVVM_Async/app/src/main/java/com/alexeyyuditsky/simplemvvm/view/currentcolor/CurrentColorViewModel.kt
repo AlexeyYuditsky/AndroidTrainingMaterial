@@ -1,7 +1,5 @@
 package com.alexeyyuditsky.simplemvvm.view.currentcolor
 
-import androidx.lifecycle.viewModelScope
-import com.alexeyyuditsky.foundation.model.ErrorResult
 import com.alexeyyuditsky.foundation.model.PendingResult
 import com.alexeyyuditsky.foundation.model.SuccessResult
 import com.alexeyyuditsky.foundation.model.takeSuccess
@@ -15,8 +13,6 @@ import com.alexeyyuditsky.foundation.views.BaseViewModel
 import com.alexeyyuditsky.foundation.views.LiveResult
 import com.alexeyyuditsky.foundation.views.MutableLiveResult
 import com.alexeyyuditsky.simplemvvm.view.changecolor.ChangeColorFragment
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class CurrentColorViewModel(
     private val navigator: Navigator, // IntermediateNavigator
@@ -32,11 +28,8 @@ class CurrentColorViewModel(
     }
 
     init {
-        viewModelScope.launch {
-            delay(2000L)
-            //_currentColor.postValue(ErrorResult(RuntimeException()))
-            colorsRepository.addListener(colorListener)  // example of listening results via model layer
-        }
+        colorsRepository.addListener(colorListener)  // example of listening results via model layer
+        load()
     }
 
     override fun onCleared() {
@@ -60,11 +53,11 @@ class CurrentColorViewModel(
     }
 
     fun onTryAgain() {
-        viewModelScope.launch {
-            _currentColor.value = PendingResult()
-            delay(2000)
-            colorsRepository.addListener(colorListener)
-        }
+        load()
+    }
+
+    private fun load() {
+        colorsRepository.getCurrentColor().into(_currentColor)
     }
 
 }

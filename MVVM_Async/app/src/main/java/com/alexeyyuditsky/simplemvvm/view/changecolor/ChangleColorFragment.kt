@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alexeyyuditsky.simplemvvm.R
@@ -30,10 +31,7 @@ class ChangeColorFragment : BaseFragment(), HasScreenTitle {
     override val viewModel by screenViewModel<ChangeColorViewModel>()
 
     /** Example of dynamic screen title */
-    override fun getScreenTitle(): String? {
-        Log.d("MyLog", viewModel.screenTitle.value.toString())
-        return viewModel.screenTitle.value
-    }
+    override fun getScreenTitle(): String? = viewModel.screenTitle.value
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,8 +46,7 @@ class ChangeColorFragment : BaseFragment(), HasScreenTitle {
         viewModel.viewState.observe(viewLifecycleOwner) { result ->
             renderSimpleResult(root = binding.root, result = result) {
                 adapter.items = it.colorsList
-                binding.saveButton.visibility =
-                    if (it.showSaveButton) View.VISIBLE else View.INVISIBLE
+                binding.saveButton.isInvisible = !it.showSaveButton
                 binding.cancelButton.isVisible = it.showCancelButton
                 binding.saveProgressBar.isVisible = it.showSaveProgressBar
             }
