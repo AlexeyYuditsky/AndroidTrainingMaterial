@@ -1,6 +1,5 @@
 package com.alexeyyuditsky.test.app.view.books
 
-import androidx.lifecycle.viewModelScope
 import com.alexeyyuditsky.test.app.model.Book
 import com.alexeyyuditsky.test.app.model.BooksListener
 import com.alexeyyuditsky.test.app.model.BooksRepository
@@ -11,8 +10,6 @@ import com.alexeyyuditsky.test.foundation.navigator.Navigator
 import com.alexeyyuditsky.test.foundation.views.BaseViewModel
 import com.alexeyyuditsky.test.foundation.views.LiveResult
 import com.alexeyyuditsky.test.foundation.views.MutableLiveResult
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class BooksListViewModel(
     private val navigator: Navigator,
@@ -27,10 +24,8 @@ class BooksListViewModel(
     }
 
     init {
-        viewModelScope.launch {
-            delay(300)
-            booksRepository.addListener(bookListener)
-        }
+        booksRepository.addListener(bookListener)
+        load()
     }
 
     override fun onBookChosen(book: Book) {
@@ -38,11 +33,12 @@ class BooksListViewModel(
     }
 
     fun tryAgain() {
-        viewModelScope.launch {
-            _booksList.postValue(PendingResult())
-            delay(1000)
-            booksRepository.addListener(bookListener)
-        }
+        _booksList.postValue(PendingResult())
+        booksRepository.addListener(bookListener)
+    }
+
+    private fun load() {
+        booksRepository.getBooks().into(_booksList)
     }
 
 }

@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.databinding.PartResultBinding
 import com.alexeyyuditsky.test.foundation.model.ErrorResult

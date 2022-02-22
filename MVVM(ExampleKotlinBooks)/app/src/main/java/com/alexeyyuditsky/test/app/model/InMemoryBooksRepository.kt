@@ -1,14 +1,25 @@
 package com.alexeyyuditsky.test.app.model
 
-class InMemoryBooksRepository : BooksRepository {
+import com.alexeyyuditsky.test.foundation.model.tasks.Task
+import com.alexeyyuditsky.test.foundation.model.tasks.TasksFactory
+
+class InMemoryBooksRepository(
+    private val tasksFactory: TasksFactory
+) : BooksRepository {
 
     private val listeners = mutableSetOf<BooksListener>()
 
-    override fun getById(id: Long): Book {
-        return AVAILABLE_BOOKS.first { it.id == id }
+    override fun getBooks(): Task<List<Book>> = tasksFactory.async {
+        Thread.sleep(1000)
+        return@async AVAILABLE_BOOKS
     }
 
-    override fun changeBook(book: Book) {
+    override fun getById(id: Long): Task<Book> = tasksFactory.async {
+        Thread.sleep(1000)
+        return@async AVAILABLE_BOOKS.first { it.id == id }
+    }
+
+    override fun changeBook(book: Book): Task<Unit> = tasksFactory.async {
         val bookIndex = AVAILABLE_BOOKS.indexOfFirst { it.id == book.id }
         AVAILABLE_BOOKS[bookIndex] = book
         listeners.forEach { it(AVAILABLE_BOOKS) }
@@ -16,7 +27,6 @@ class InMemoryBooksRepository : BooksRepository {
 
     override fun addListener(listener: BooksListener) {
         listeners += listener
-        listener(AVAILABLE_BOOKS)
     }
 
     override fun removeListener(listener: BooksListener) {

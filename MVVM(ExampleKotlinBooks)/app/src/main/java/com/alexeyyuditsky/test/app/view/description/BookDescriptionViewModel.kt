@@ -1,5 +1,6 @@
 package com.alexeyyuditsky.test.app.view.description
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
@@ -38,11 +39,7 @@ class BookDescriptionViewModel(
     }
 
     init {
-        viewModelScope.launch {
-            delay(1000)
-            _book.value = ErrorResult(RuntimeException())
-            // _book.value = SuccessResult(booksRepository.getById(screen.bookId))
-        }
+        load()
     }
 
     fun onOpenScreenPressed() {
@@ -52,18 +49,18 @@ class BookDescriptionViewModel(
 
     override fun onResult(result: Any) {
         if (result is Book) {
-            _book.value = SuccessResult(booksRepository.getById(result.id))
+            _book.value = SuccessResult(result)
             val message = uiActions.getString(R.string.changes_saved)
             uiActions.toast(message)
         }
     }
 
     fun tryAgain() {
-        viewModelScope.launch {
-            _book.value = PendingResult()
-            delay(1000)
-            _book.value = SuccessResult(booksRepository.getById(screen.bookId))
-        }
+        load()
+    }
+
+    private fun load() {
+        booksRepository.getById(screen.bookId).into(_book)
     }
 
 }

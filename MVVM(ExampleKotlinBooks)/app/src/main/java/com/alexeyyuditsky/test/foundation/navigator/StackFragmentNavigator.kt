@@ -90,6 +90,7 @@ class StackFragmentNavigator(
         }
 
         if (f is HasCustomAction) {
+            toolbar.menu.clear()
             createCustomToolbarAction(f.getCustomAction())
         } else {
             toolbar.menu.clear()

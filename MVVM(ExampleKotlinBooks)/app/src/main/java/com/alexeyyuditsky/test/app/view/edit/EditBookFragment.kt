@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.model.Book
+import com.alexeyyuditsky.test.app.view.renderSimpleResult
 import com.alexeyyuditsky.test.databinding.FragmentEditBinding
+import com.alexeyyuditsky.test.foundation.model.takeSuccess
 import com.alexeyyuditsky.test.foundation.views.*
 import com.bumptech.glide.Glide
 
@@ -15,6 +17,8 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
     class Screen(val bookId: Long) : BaseScreen()
 
     override val viewModel by screenViewModel<EditBookViewModel>()
+
+    override fun getScreenTitle(): String? = viewModel.screenTitle.value
 
     private lateinit var binding: FragmentEditBinding
 
@@ -25,8 +29,14 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
     ): View {
         binding = FragmentEditBinding.inflate(inflater, container, false)
 
-        viewModel.book.observe(viewLifecycleOwner) {
-            initViews(it)
+        viewModel.screenTitle.observe(viewLifecycleOwner) {
+            notifyScreenUpdates()
+        }
+
+        viewModel.book.observe(viewLifecycleOwner) { result ->
+            renderSimpleResult(binding.root, result) {
+                initViews(binding, it)
+            }
         }
 
         binding.saveButton.setOnClickListener {
@@ -37,7 +47,7 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
         return binding.root
     }
 
-    private fun initViews(book: Book) = binding.apply {
+    private fun initViews(binding: FragmentEditBinding, book: Book) = binding.apply {
         Glide.with(bookImageView.context)
             .load(book.image)
             .into(bookImageView)
@@ -48,7 +58,7 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
     }
 
     private fun createEditBook(): Book {
-        val currentBook = viewModel.book.value!!
+        val currentBook = viewModel.book.value.takeSuccess()!!
         return currentBook.copy(
             name = binding.nameTextView.text.toString(),
             authors = binding.authorTextView.text.toString(),
@@ -65,9 +75,5 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
             viewModel.onGoToMainPressed(editBook)
         }
     )
-
-    override fun getScreenTitle(): String {
-        return getString(R.string.edit_fragment_title, viewModel.book.value?.name)
-    }
 
 }
