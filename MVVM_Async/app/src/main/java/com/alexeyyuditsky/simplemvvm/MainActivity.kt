@@ -2,6 +2,7 @@ package com.alexeyyuditsky.simplemvvm
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.alexeyyuditsky.foundation.ActivityScopeViewModel
 import com.alexeyyuditsky.foundation.navigator.IntermediateNavigator
 import com.alexeyyuditsky.foundation.navigator.StackFragmentNavigator

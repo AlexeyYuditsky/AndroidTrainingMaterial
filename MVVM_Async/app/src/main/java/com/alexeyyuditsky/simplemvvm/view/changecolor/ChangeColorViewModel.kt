@@ -63,8 +63,7 @@ class ChangeColorViewModel(
         _saveInProgress.postValue(true)
 
         tasksFactory.async {
-            val currentColorId =
-                _currentColorId.value ?: throw IllegalStateException("Color ID should not be NULL")
+            val currentColorId = _currentColorId.value ?: throw IllegalStateException("Color ID should not be NULL")
             val currentColor = colorsRepository.getById(currentColorId).await()
             colorsRepository.setCurrentColor(currentColor).await()
             return@async currentColor

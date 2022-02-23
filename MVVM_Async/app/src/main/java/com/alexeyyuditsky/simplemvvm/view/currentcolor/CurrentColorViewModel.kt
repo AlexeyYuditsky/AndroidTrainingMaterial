@@ -1,5 +1,7 @@
 package com.alexeyyuditsky.simplemvvm.view.currentcolor
 
+import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.alexeyyuditsky.foundation.model.PendingResult
 import com.alexeyyuditsky.foundation.model.SuccessResult
 import com.alexeyyuditsky.foundation.model.takeSuccess
@@ -13,6 +15,8 @@ import com.alexeyyuditsky.foundation.views.BaseViewModel
 import com.alexeyyuditsky.foundation.views.LiveResult
 import com.alexeyyuditsky.foundation.views.MutableLiveResult
 import com.alexeyyuditsky.simplemvvm.view.changecolor.ChangeColorFragment
+import kotlinx.coroutines.*
+import java.util.concurrent.CancellationException
 
 class CurrentColorViewModel(
     private val navigator: Navigator, // IntermediateNavigator
@@ -28,8 +32,41 @@ class CurrentColorViewModel(
     }
 
     init {
-        colorsRepository.addListener(colorListener)  // example of listening results via model layer
+        colorsRepository.addListener(colorListener)
         load()
+
+        viewModelScope.launch {
+            delay(1000)
+            Log.d("MyLog", "context1 = $coroutineContext")
+            val result = withContext(Dispatchers.Default) {
+                Log.d("MyLog", "context2 = $coroutineContext")
+                val res1 = async {
+                    Log.d("MyLog", "context3 = $coroutineContext")
+                    delay(1000)
+                    return@async "res1"
+                }
+                val res2 = async {
+                    Log.d("MyLog", "context4 = $coroutineContext")
+                    delay(2000)
+                    return@async "res2"
+                }
+                val res3 = async {
+                    Log.d("MyLog", "context5 = $coroutineContext")
+                    delay(3000)
+                    return@async "res3"
+                }
+                Log.d("MyLog", "$res3")
+
+                val r1 = res1.await()
+                val r2 = res2.await()
+                val r3 = res3.await()
+
+                return@withContext "$r1\n$r2\n$r3"
+            }
+
+            Log.d("MyLog", result)
+        }
+
     }
 
     override fun onCleared() {
@@ -37,7 +74,6 @@ class CurrentColorViewModel(
         colorsRepository.removeListener(colorListener)
     }
 
-    // example of listening results directly from the screen
     override fun onResult(result: Any) {
         super.onResult(result)
         if (result is NamedColor) {

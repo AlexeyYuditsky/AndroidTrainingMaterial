@@ -73,15 +73,12 @@ class StackFragmentNavigator(
         val f = activity.supportFragmentManager.findFragmentById(containerId)
 
         if (activity.supportFragmentManager.backStackEntryCount > 0) {
-            // more than 1 screen -> show back button in the toolbar
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         } else {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 
         if (f is HasScreenTitle && f.getScreenTitle() != null) {
-            // fragment has custom screen title -> display it
-                Log.d("MyLog", "if if if ")
             activity.supportActionBar?.title = f.getScreenTitle()
         } else {
             activity.supportActionBar?.title = defaultTitle
