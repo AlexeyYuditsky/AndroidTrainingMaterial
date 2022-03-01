@@ -1,11 +1,15 @@
 package com.alexeyyuditsky.test.app.view.edit
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.model.Book
+import com.alexeyyuditsky.test.app.view.edit.EditBookViewModel.*
+import com.alexeyyuditsky.test.app.view.onTryAgain
 import com.alexeyyuditsky.test.app.view.renderSimpleResult
 import com.alexeyyuditsky.test.databinding.FragmentEditBinding
 import com.alexeyyuditsky.test.foundation.model.takeSuccess
@@ -33,28 +37,35 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
             notifyScreenUpdates()
         }
 
-        viewModel.book.observe(viewLifecycleOwner) { result ->
-            renderSimpleResult(binding.root, result) {
-                initViews(binding, it)
+        viewModel.viewState.observe(viewLifecycleOwner) { result ->
+            renderSimpleResult(binding.root, result) { viewState ->
+                initViews(binding, viewState)
             }
         }
 
-        binding.saveButton.setOnClickListener {
+        binding.saveResultButton.setOnClickListener {
             val editBook = createEditBook()
             viewModel.onSavePressed(editBook)
+        }
+
+        onTryAgain(binding.root) {
+            viewModel.tryAgain()
         }
 
         return binding.root
     }
 
-    private fun initViews(binding: FragmentEditBinding, book: Book) = binding.apply {
+    private fun initViews(binding: FragmentEditBinding, viewState: ViewState) = binding.apply {
         Glide.with(bookImageView.context)
-            .load(book.image)
+            .load(viewState.book.image)
             .into(bookImageView)
-        nameTextView.setText(book.name)
-        authorTextView.setText(book.authors)
-        yearTextView.setText(book.year)
-        descriptionTextView.setText(book.description)
+        nameTextView.setText(viewState.book.name)
+        authorTextView.setText(viewState.book.authors)
+        yearTextView.setText(viewState.book.year)
+        descriptionTextView.setText(viewState.book.description)
+        saveResultButton.isVisible = viewState.showSaveButton
+        linearContainer.isVisible = viewState.showSaveButton
+        saveProgressBar.isVisible = viewState.showSaveProgressBar
     }
 
     private fun createEditBook(): Book {

@@ -1,11 +1,9 @@
 package com.alexeyyuditsky.test.app.view.description
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.model.Book
 import com.alexeyyuditsky.test.app.view.onTryAgain
 import com.alexeyyuditsky.test.app.view.renderSimpleResult
@@ -31,18 +29,18 @@ class BookDescriptionFragment : BaseFragment(), HasScreenTitle {
     ): View {
         val binding = FragmentDescriptionBinding.inflate(inflater, container, false)
 
+        viewModel.screenTitle.observe(viewLifecycleOwner) {
+            notifyScreenUpdates()
+        }
+
         viewModel.book.observe(viewLifecycleOwner) { result ->
-            renderSimpleResult(binding.root, result) {
-                initViews(binding, it)
+            renderSimpleResult(binding.root, result) { book ->
+                initViews(binding, book)
             }
         }
 
         binding.openScreenButton.setOnClickListener {
-            viewModel.onOpenScreenPressed()
-        }
-
-        viewModel.screenTitle.observe(viewLifecycleOwner) {
-            notifyScreenUpdates()
+            viewModel.onOpenScreenForEditing()
         }
 
         onTryAgain(binding.root) { viewModel.tryAgain() }

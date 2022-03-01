@@ -1,17 +1,16 @@
 package com.alexeyyuditsky.test.app.model
 
 import com.alexeyyuditsky.test.foundation.model.Repository
-import com.alexeyyuditsky.test.foundation.model.tasks.Task
 
 typealias BooksListener = (List<Book>) -> Unit
 
 interface BooksRepository : Repository {
 
-    fun getBooks(): Task<List<Book>>
+    suspend fun getBooks(): List<Book>
 
-    fun getById(id: Long): Task<Book>
+    suspend fun getById(id: Long): Book
 
-    fun changeBook(book: Book):Task<Unit>
+    suspend fun changeBook(book: Book)
 
     fun addListener(listener: BooksListener)
 

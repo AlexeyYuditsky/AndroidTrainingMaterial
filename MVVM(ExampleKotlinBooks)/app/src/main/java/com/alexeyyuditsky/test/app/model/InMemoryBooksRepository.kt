@@ -1,25 +1,27 @@
 package com.alexeyyuditsky.test.app.model
 
-import com.alexeyyuditsky.test.foundation.model.tasks.Task
-import com.alexeyyuditsky.test.foundation.model.tasks.TasksFactory
+import com.alexeyyuditsky.test.foundation.model.coroutines.IoDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 class InMemoryBooksRepository(
-    private val tasksFactory: TasksFactory
+    private val ioDispatcher: IoDispatcher
 ) : BooksRepository {
 
     private val listeners = mutableSetOf<BooksListener>()
 
-    override fun getBooks(): Task<List<Book>> = tasksFactory.async {
-        Thread.sleep(1000)
-        return@async AVAILABLE_BOOKS
+    override suspend fun getBooks(): List<Book> = withContext(ioDispatcher.value) {
+        delay(1000)
+        return@withContext AVAILABLE_BOOKS
     }
 
-    override fun getById(id: Long): Task<Book> = tasksFactory.async {
-        Thread.sleep(1000)
-        return@async AVAILABLE_BOOKS.first { it.id == id }
+    override suspend fun getById(id: Long): Book = withContext(ioDispatcher.value) {
+        delay(1000)
+        return@withContext AVAILABLE_BOOKS.first { it.id == id }
     }
 
-    override fun changeBook(book: Book): Task<Unit> = tasksFactory.async {
+    override suspend fun changeBook(book: Book) = withContext(ioDispatcher.value) {
+        delay(1000)
         val bookIndex = AVAILABLE_BOOKS.indexOfFirst { it.id == book.id }
         AVAILABLE_BOOKS[bookIndex] = book
         listeners.forEach { it(AVAILABLE_BOOKS) }

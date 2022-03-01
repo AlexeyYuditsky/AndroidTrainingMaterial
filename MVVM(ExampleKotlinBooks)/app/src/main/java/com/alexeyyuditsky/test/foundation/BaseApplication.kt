@@ -1,12 +1,15 @@
 package com.alexeyyuditsky.test.foundation
 
-import com.alexeyyuditsky.test.foundation.model.Repository
-
-/** Implement this interface in your Application class.
- * Do not forget to add the application class into the AndroidManifest.xml file. */
+/**
+ * Implement this interface in your Application class.
+ * Do not forget to add the application class into the AndroidManifest.xml file.
+ */
 interface BaseApplication {
 
-    /** The list of repositories that can be added to the fragment view-model constructors. */
-    val repositories: List<Repository>
+    /**
+     * The list of singleton scope dependencies that can be added to the fragment
+     * view-model constructors.
+     */
+    val singletonScopeDependencies: List<Any>
 
 }

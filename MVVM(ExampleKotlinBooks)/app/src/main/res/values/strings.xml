@@ -7,6 +7,7 @@
     <string name="view_model_description_fragment_title">%s</string>
     <string name="description_1">Основанная на популярном курсе “Kotlin Essentials” от Big Nerd Ranch книга даст вам четкие объяснения ключевых концепций языка и не только познакомит вас с Kotlin, но и научит эффективно использовать его возможности, а также среду разработки IntelliJ IDEA от JetBrains. Несмотря на название издание подходит для начинающих и даст вам стартовый багаж фундаментальных знаний для создания надежных и эффективных приложений.</string>
     <string name="changes_saved">Changes saved</string>
+    <string name="changes_saved_with_name_book">%s was changed</string>
     <string name="error_please_try_again_later">Error! Please try again later</string>
     <string name="try_again">Try again</string>
     <string name="error_happened">Can\'t save color</string>
