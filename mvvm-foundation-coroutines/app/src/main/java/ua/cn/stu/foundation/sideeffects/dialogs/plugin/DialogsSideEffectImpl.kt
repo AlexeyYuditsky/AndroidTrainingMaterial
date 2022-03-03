@@ -2,8 +2,11 @@ package ua.cn.stu.foundation.sideeffects.dialogs.plugin
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.Event.*
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import ua.cn.stu.foundation.model.SuccessResult
@@ -13,24 +16,26 @@ import ua.cn.stu.foundation.sideeffects.dialogs.plugin.DialogsSideEffectMediator
 
 class DialogsSideEffectImpl(
     private val retainedState: RetainedState
-) : SideEffectImplementation(), LifecycleObserver {
+) : SideEffectImplementation() {
 
     private var dialog: Dialog? = null
 
+    private val lifecycleEventObserver = LifecycleEventObserver { _, event ->
+        when (event) {
+            ON_START -> {
+                val record = retainedState.record ?: return@LifecycleEventObserver
+                showDialog(record)
+            }
+            ON_STOP -> {
+                removeDialog()
+            }
+            else -> {}
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().lifecycle.addObserver(this)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onStart() {
-        val record = retainedState.record ?: return
-        showDialog(record)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onStop() {
-        removeDialog()
+        requireActivity().lifecycle.addObserver(lifecycleEventObserver)
     }
 
     fun showDialog(record: DialogRecord) {
@@ -67,6 +72,5 @@ class DialogsSideEffectImpl(
         dialog?.dismiss()
         dialog = null
     }
-
 
 }

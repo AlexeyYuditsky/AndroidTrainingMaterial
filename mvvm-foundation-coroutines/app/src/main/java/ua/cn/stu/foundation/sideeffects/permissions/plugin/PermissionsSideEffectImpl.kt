@@ -1,6 +1,10 @@
 package ua.cn.stu.foundation.sideeffects.permissions.plugin
 
 import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import ua.cn.stu.foundation.model.SuccessResult
 import ua.cn.stu.foundation.sideeffects.SideEffectImplementation
@@ -14,6 +18,7 @@ class PermissionsSideEffectImpl(
         ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), REQUEST_CODE)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -26,7 +31,8 @@ class PermissionsSideEffectImpl(
             if (granted[0] == PackageManager.PERMISSION_GRANTED) {
                 emitter.emit(SuccessResult(PermissionStatus.GRANTED))
             } else {
-                val showRationale = requireActivity().shouldShowRequestPermissionRationale(permissions[0])
+                val showRationale =
+                    requireActivity().shouldShowRequestPermissionRationale(permissions[0])
                 if (showRationale) {
                     emitter.emit(SuccessResult(PermissionStatus.DENIED))
                 } else {

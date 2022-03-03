@@ -79,12 +79,8 @@ class CurrentColorViewModel(
             dialogs.show(createPermissionAlreadyGrantedDialog())
         } else {
             when (permissions.requestPermission(permission)) {
-                PermissionStatus.GRANTED -> {
-                    toasts.toast(resources.getString(R.string.permissions_grated))
-                }
-                PermissionStatus.DENIED -> {
-                    toasts.toast(resources.getString(R.string.permissions_denied))
-                }
+                PermissionStatus.GRANTED -> toasts.toast(resources.getString(R.string.permissions_grated))
+                PermissionStatus.DENIED -> toasts.toast(resources.getString(R.string.permissions_denied))
                 PermissionStatus.DENIED_FOREVER -> {
                     if (dialogs.show(createAskForLaunchingAppSettingsDialog())) {
                         intents.openAppSettings()

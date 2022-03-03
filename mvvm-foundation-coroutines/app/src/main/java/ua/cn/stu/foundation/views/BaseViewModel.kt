@@ -8,7 +8,6 @@ import kotlinx.coroutines.*
 import ua.cn.stu.foundation.model.ErrorResult
 import ua.cn.stu.foundation.model.Result
 import ua.cn.stu.foundation.model.SuccessResult
-import ua.cn.stu.foundation.utils.Event
 
 typealias LiveResult<T> = LiveData<Result<T>>
 typealias MutableLiveResult<T> = MutableLiveData<Result<T>>
@@ -19,9 +18,10 @@ typealias MediatorLiveResult<T> = MediatorLiveData<Result<T>>
  */
 open class BaseViewModel : ViewModel() {
 
-    private val coroutineContext = SupervisorJob() + Dispatchers.Main.immediate + CoroutineExceptionHandler { _, throwable ->
-        // you can add some exception handling here
-    }
+    private val coroutineContext =
+        SupervisorJob() + Dispatchers.Main.immediate + CoroutineExceptionHandler { _, throwable ->
+            // you can add some exception handling here
+        }
 
     // custom scope which cancels jobs immediately when back button is pressed
     protected val viewModelScope = CoroutineScope(coroutineContext)
@@ -35,9 +35,7 @@ open class BaseViewModel : ViewModel() {
      * Override this method in child classes if you want to listen for results
      * from other screens
      */
-    open fun onResult(result: Any) {
-
-    }
+    open fun onResult(result: Any) {}
 
     /**
      * Override this method in child classes if you want to control go-back behaviour.

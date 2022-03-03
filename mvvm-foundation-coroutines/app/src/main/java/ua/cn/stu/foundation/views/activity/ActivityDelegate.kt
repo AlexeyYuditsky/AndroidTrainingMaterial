@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Lifecycle.Event.*
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import ua.cn.stu.foundation.ActivityScopeViewModel
@@ -25,7 +27,7 @@ import ua.cn.stu.foundation.utils.viewModelCreator
  */
 class ActivityDelegate(
     private val activity: AppCompatActivity
-) : LifecycleObserver {
+) {
 
     internal val sideEffectPluginsManager = SideEffectPluginsManager()
 
@@ -33,8 +35,28 @@ class ActivityDelegate(
 
     private val implementersHolder = SideEffectImplementationsHolder()
 
+    private val lifecycleEventObserver = LifecycleEventObserver { _, event ->
+        when (event) {
+            ON_RESUME -> {
+                sideEffectPluginsManager.plugins.forEach {
+                    activityViewModel.sideEffectMediatorsHolder.setTargetWithPlugin(
+                        it,
+                        implementersHolder
+                    )
+                }
+            }
+            ON_PAUSE -> {
+                activityViewModel.sideEffectMediatorsHolder.removeTargets()
+            }
+            ON_DESTROY -> {
+                implementersHolder.clear()
+            }
+            else -> {}
+        }
+    }
+
     init {
-        activity.lifecycle.addObserver(this)
+        activity.lifecycle.addObserver(lifecycleEventObserver)
     }
 
     /**
@@ -47,6 +69,7 @@ class ActivityDelegate(
         }
         implementersHolder.implementations.forEach { it.onCreate(savedInstanceState) }
     }
+
 
     /**
      * Call this method from [AppCompatActivity.onSaveInstanceState]
@@ -124,23 +147,6 @@ class ActivityDelegate(
 
     fun getActivityScopeViewModel(): ActivityScopeViewModel {
         return activityViewModel
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    private fun onResume() {
-        sideEffectPluginsManager.plugins.forEach {
-            activityViewModel.sideEffectMediatorsHolder.setTargetWithPlugin(it, implementersHolder)
-        }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    private fun onPause() {
-        activityViewModel.sideEffectMediatorsHolder.removeTargets()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    private fun onDestroy() {
-        implementersHolder.clear()
     }
 
     private fun setupSideEffectMediator(plugin: SideEffectPlugin<*, *>) {

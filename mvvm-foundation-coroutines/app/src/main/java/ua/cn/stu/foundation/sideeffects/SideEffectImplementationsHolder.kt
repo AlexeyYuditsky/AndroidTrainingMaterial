@@ -1,13 +1,12 @@
 package ua.cn.stu.foundation.sideeffects
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 @Suppress("UNCHECKED_CAST")
 class SideEffectImplementationsHolder {
 
     private val _implementations = mutableMapOf<Class<*>, Any>()
-    val implementations: Collection<SideEffectImplementation>
+    val implementations: List<SideEffectImplementation>
         get() = _implementations.values.filterIsInstance<SideEffectImplementation>()
 
     fun <Mediator, Implementation> getWithPlugin(plugin: SideEffectPlugin<Mediator, Implementation>): Implementation? {
@@ -22,7 +21,6 @@ class SideEffectImplementationsHolder {
         val sideEffectMediators = sideEffectMediatorsHolder.get(plugin.mediatorClass)
         val target = plugin.createImplementation(sideEffectMediators)
         if (target != null && target is SideEffectImplementation) {
-            /** */
             _implementations[plugin.mediatorClass] = target
             target.injectActivity(activity)
         }

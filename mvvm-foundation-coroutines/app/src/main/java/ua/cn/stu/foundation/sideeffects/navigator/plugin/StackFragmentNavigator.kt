@@ -7,9 +7,8 @@ import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
+import androidx.lifecycle.LifecycleEventObserver
 import ua.cn.stu.foundation.sideeffects.SideEffectImplementation
 import ua.cn.stu.foundation.sideeffects.navigator.Navigator
 import ua.cn.stu.foundation.utils.Event
@@ -23,9 +22,20 @@ class StackFragmentNavigator(
     private val defaultTitle: String,
     private val animations: Animations,
     private val initialScreenCreator: BaseScreen
-) : SideEffectImplementation(), Navigator, LifecycleObserver {
+) : SideEffectImplementation(), Navigator {
 
     private var result: Event<Any>? = null
+
+    private val lifecycleEventObserver = LifecycleEventObserver { _, event ->
+        when (event) {
+            ON_DESTROY -> {
+                requireActivity().supportFragmentManager.unregisterFragmentLifecycleCallbacks(
+                    fragmentCallbacks
+                )
+            }
+            else -> {}
+        }
+    }
 
     override fun launch(screen: BaseScreen) {
         launchFragment(screen)
@@ -39,19 +49,17 @@ class StackFragmentNavigator(
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        requireActivity().lifecycle.addObserver(this)
+        requireActivity().lifecycle.addObserver(lifecycleEventObserver)
         if (savedInstanceState == null) {
             launchFragment(
                 screen = initialScreenCreator,
                 addToBackStack = false
             )
         }
-        requireActivity().supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentCallbacks, false)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-        requireActivity().supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentCallbacks)
+        requireActivity().supportFragmentManager.registerFragmentLifecycleCallbacks(
+            fragmentCallbacks,
+            false
+        )
     }
 
     override fun onBackPressed(): Boolean {
@@ -94,13 +102,12 @@ class StackFragmentNavigator(
 
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         if (addToBackStack) transaction.addToBackStack(null)
-        transaction
-            .setCustomAnimations(
-                animations.enterAnim,
-                animations.exitAnim,
-                animations.popEnterAnim,
-                animations.popExitAnim,
-            )
+        transaction.setCustomAnimations(
+            animations.enterAnim,
+            animations.exitAnim,
+            animations.popEnterAnim,
+            animations.popExitAnim,
+        )
             .replace(containerId, fragment)
             .commit()
     }
@@ -118,7 +125,12 @@ class StackFragmentNavigator(
     }
 
     private val fragmentCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
-        override fun onFragmentViewCreated(fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?) {
+        override fun onFragmentViewCreated(
+            fm: FragmentManager,
+            f: Fragment,
+            v: View,
+            savedInstanceState: Bundle?
+        ) {
             onRequestUpdates()
             publishResults(f)
         }

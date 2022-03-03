@@ -2,6 +2,7 @@ package ua.cn.stu.foundation.sideeffects
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 /**

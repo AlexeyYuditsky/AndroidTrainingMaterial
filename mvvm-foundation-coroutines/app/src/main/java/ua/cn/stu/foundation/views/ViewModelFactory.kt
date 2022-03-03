@@ -1,5 +1,6 @@
 package ua.cn.stu.foundation.views
 
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
@@ -21,9 +22,9 @@ inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<
         (requireActivity() as ActivityDelegateHolder).delegate.getActivityScopeViewModel()
 
     // forming the list of available dependencies:
-    // - singleton scope dependencies (repositories) -> from App class
-    // - activity VM scope dependencies -> from ActivityScopeViewModel
     // - screen VM scope dependencies -> screen args
+    // - activity VM scope dependencies -> from ActivityScopeViewModel
+    // - singleton scope dependencies (repositories) -> from App class
     val dependencies =
         listOf(screen) + activityScopeViewModel.sideEffectMediators + application.singletonScopeDependencies
 

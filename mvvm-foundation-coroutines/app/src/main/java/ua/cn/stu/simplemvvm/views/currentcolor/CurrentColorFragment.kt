@@ -18,7 +18,11 @@ class CurrentColorFragment : BaseFragment() {
 
     override val viewModel by screenViewModel<CurrentColorViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val binding = FragmentCurrentColorBinding.inflate(inflater, container, false)
         viewModel.currentColor.observe(viewLifecycleOwner) { result ->
             renderSimpleResult(
@@ -33,6 +37,7 @@ class CurrentColorFragment : BaseFragment() {
         binding.changeColorButton.setOnClickListener {
             viewModel.changeColor()
         }
+
         binding.askPermissionsButton.setOnClickListener {
             viewModel.requestPermission()
         }
