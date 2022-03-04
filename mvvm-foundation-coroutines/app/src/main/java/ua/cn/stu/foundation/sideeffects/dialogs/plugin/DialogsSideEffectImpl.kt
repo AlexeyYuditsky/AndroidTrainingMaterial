@@ -34,7 +34,6 @@ class DialogsSideEffectImpl(
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         requireActivity().lifecycle.addObserver(lifecycleEventObserver)
     }
 
