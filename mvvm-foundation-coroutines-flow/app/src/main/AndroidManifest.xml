@@ -3,7 +3,6 @@
     package="ua.cn.stu.simplemvvm">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -14,8 +13,7 @@
         android:theme="@style/Theme.SpaceXHistory"
         android:name="ua.cn.stu.simplemvvm.App">
 
-        <activity android:name="ua.cn.stu.simplemvvm.MainActivity"
-            android:exported="true">
+        <activity android:name="ua.cn.stu.simplemvvm.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

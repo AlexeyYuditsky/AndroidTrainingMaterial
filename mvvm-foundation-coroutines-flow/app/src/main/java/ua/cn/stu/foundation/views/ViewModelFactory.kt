@@ -15,7 +15,7 @@ import java.lang.reflect.Constructor
  */
 inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<VM> {
     val application = requireActivity().application as BaseApplication
-    val screen = requireArguments().getParcelable<BaseScreen>(ARG_SCREEN) as BaseScreen
+    val screen = requireArguments().getSerializable(ARG_SCREEN) as BaseScreen
 
     val activityScopeViewModel = (requireActivity() as ActivityDelegateHolder).delegate.getActivityScopeViewModel()
 
