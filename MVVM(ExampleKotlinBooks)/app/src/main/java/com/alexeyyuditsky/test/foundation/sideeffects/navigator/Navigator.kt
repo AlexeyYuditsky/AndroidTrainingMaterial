@@ -19,6 +19,6 @@ interface Navigator {
      */
     fun goBack(result: Any? = null)
 
-    fun goToMain(result: Any? = null)
+    fun goToMainScreen(result: Any? = null)
 
 }

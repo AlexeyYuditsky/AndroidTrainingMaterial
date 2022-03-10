@@ -48,7 +48,7 @@ class BookDescriptionViewModel(
 
     override fun onResult(result: Any) {
         if (result is Book) {
-            _book.postValue(SuccessResult(result))
+            _book.value = SuccessResult(result)
             val message = resources.getString(R.string.changes_saved)
             toasts.toast(message)
         }

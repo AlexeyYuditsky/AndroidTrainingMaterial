@@ -1,18 +1,17 @@
 package com.alexeyyuditsky.test.app.view.edit
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.app.model.Book
+import com.alexeyyuditsky.test.app.view.collectFlow
 import com.alexeyyuditsky.test.app.view.edit.EditBookViewModel.*
 import com.alexeyyuditsky.test.app.view.onTryAgain
 import com.alexeyyuditsky.test.app.view.renderSimpleResult
 import com.alexeyyuditsky.test.databinding.FragmentEditBinding
-import com.alexeyyuditsky.test.foundation.model.takeSuccess
 import com.alexeyyuditsky.test.foundation.views.*
 import com.bumptech.glide.Glide
 
@@ -20,11 +19,13 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
 
     class Screen(val bookId: Long) : BaseScreen()
 
+    private lateinit var binding: FragmentEditBinding
+
+    private lateinit var currentBook: Book
+
     override val viewModel by screenViewModel<EditBookViewModel>()
 
     override fun getScreenTitle(): String? = viewModel.screenTitle.value
-
-    private lateinit var binding: FragmentEditBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +38,7 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
             notifyScreenUpdates()
         }
 
-        viewModel.viewState.observe(viewLifecycleOwner) { result ->
+        collectFlow(viewModel.viewState) { result ->
             renderSimpleResult(binding.root, result) { viewState ->
                 initViews(binding, viewState)
             }
@@ -65,11 +66,15 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
         descriptionTextView.setText(viewState.book.description)
         saveResultButton.isVisible = viewState.showSaveButton
         linearContainer.isVisible = viewState.showSaveButton
-        saveProgressBar.isVisible = viewState.showSaveProgressBar
+
+        saveProgressGroup.isVisible = viewState.showSaveProgressBar
+        saveProgressBar.progress = viewState.saveProgressPercentage
+        savingPercentageTextView.text = viewState.saveProgressPercentageMessage
+
+        currentBook = viewState.book
     }
 
     private fun createEditBook(): Book {
-        val currentBook = viewModel.book.value.takeSuccess()!!
         return currentBook.copy(
             name = binding.nameTextView.text.toString(),
             authors = binding.authorTextView.text.toString(),
@@ -83,7 +88,7 @@ class EditBookFragment : BaseFragment(), HasCustomAction, HasScreenTitle {
         textRes = R.string.done,
         onCustomAction = Runnable {
             val editBook = createEditBook()
-            viewModel.onGoToMainPressed(editBook)
+            viewModel.onSavePressed(editBook, goToMainScreen = true)
         }
     )
 

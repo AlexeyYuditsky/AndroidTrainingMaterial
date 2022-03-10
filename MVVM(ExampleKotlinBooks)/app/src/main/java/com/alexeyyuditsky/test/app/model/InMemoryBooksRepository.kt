@@ -1,14 +1,21 @@
 package com.alexeyyuditsky.test.app.model
 
+import android.util.Log
 import com.alexeyyuditsky.test.foundation.model.coroutines.IoDispatcher
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 
 class InMemoryBooksRepository(
     private val ioDispatcher: IoDispatcher
 ) : BooksRepository {
 
-    private val listeners = mutableSetOf<BooksListener>()
+    private val booksListFlow = MutableSharedFlow<List<Book>>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
     override suspend fun getBooks(): List<Book> = withContext(ioDispatcher.value) {
         delay(1000)
@@ -20,20 +27,23 @@ class InMemoryBooksRepository(
         return@withContext AVAILABLE_BOOKS.first { it.id == id }
     }
 
-    override suspend fun changeBook(book: Book) = withContext(ioDispatcher.value) {
-        delay(1000)
+    override fun changeBook(book: Book): Flow<Int> = flow {
+        var progress = 0
+
+        while (progress < 100) {
+            progress++
+            delay(10)
+            emit(progress)
+        }
+
         val bookIndex = AVAILABLE_BOOKS.indexOfFirst { it.id == book.id }
         AVAILABLE_BOOKS[bookIndex] = book
-        listeners.forEach { it(AVAILABLE_BOOKS) }
-    }
 
-    override fun addListener(listener: BooksListener) {
-        listeners += listener
-    }
+        booksListFlow.emit(AVAILABLE_BOOKS)
 
-    override fun removeListener(listener: BooksListener) {
-        listeners -= listener
-    }
+    }.flowOn(ioDispatcher.value)
+
+    override fun listenBooksList(): Flow<List<Book>> = booksListFlow
 
     companion object {
         private val AVAILABLE_BOOKS = mutableListOf(

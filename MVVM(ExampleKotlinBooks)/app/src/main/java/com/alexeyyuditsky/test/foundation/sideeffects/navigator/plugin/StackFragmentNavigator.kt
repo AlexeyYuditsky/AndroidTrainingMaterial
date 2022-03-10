@@ -43,7 +43,7 @@ class StackFragmentNavigator(
         requireActivity().onBackPressed()
     }
 
-    override fun goToMain(result: Any?) {
+    override fun goToMainScreen(result: Any?) {
         if (result != null) {
             this.result = Event(result)
         }

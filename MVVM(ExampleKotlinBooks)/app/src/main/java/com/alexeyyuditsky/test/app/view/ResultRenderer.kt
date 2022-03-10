@@ -4,13 +4,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.view.children
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.databinding.PartResultBinding
-import com.alexeyyuditsky.test.foundation.model.ErrorResult
-import com.alexeyyuditsky.test.foundation.model.PendingResult
-import com.alexeyyuditsky.test.foundation.model.Result
-import com.alexeyyuditsky.test.foundation.model.SuccessResult
+import com.alexeyyuditsky.test.foundation.model.*
 import com.alexeyyuditsky.test.foundation.views.BaseFragment
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * Default [Result] rendering.
@@ -41,6 +44,19 @@ fun <T> BaseFragment.renderSimpleResult(
             onSuccess(successData)
         }
     )
+}
+
+/**
+ * Collect items from the specified [Flow] only when fragment is at least in STARTED state.
+ */
+fun <T> BaseFragment.collectFlow(flow: Flow<T>, onCollect: (T) -> Unit) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            flow.collect {
+                onCollect(it)
+            }
+        }
+    }
 }
 
 /**

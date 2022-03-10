@@ -1,6 +1,7 @@
 package com.alexeyyuditsky.test.app.model
 
 import com.alexeyyuditsky.test.foundation.model.Repository
+import kotlinx.coroutines.flow.Flow
 
 typealias BooksListener = (List<Book>) -> Unit
 
@@ -10,10 +11,8 @@ interface BooksRepository : Repository {
 
     suspend fun getById(id: Long): Book
 
-    suspend fun changeBook(book: Book)
+    fun changeBook(book: Book): Flow<Int>
 
-    fun addListener(listener: BooksListener)
-
-    fun removeListener(listener: BooksListener)
+    fun listenBooksList(): Flow<List<Book>>
 
 }

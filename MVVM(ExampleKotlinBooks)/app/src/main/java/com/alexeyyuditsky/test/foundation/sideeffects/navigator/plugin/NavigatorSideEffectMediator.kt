@@ -14,7 +14,7 @@ class NavigatorSideEffectMediator : SideEffectMediator<Navigator>(), Navigator {
         it.goBack(result)
     }
 
-    override fun goToMain(result: Any?) = target {
-        it.goToMain(result)
+    override fun goToMainScreen(result: Any?) = target {
+        it.goToMainScreen(result)
     }
 }
