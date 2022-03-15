@@ -1,7 +1,12 @@
 package com.alexeyyuditsky.test.app
 
+import android.os.Bundle
+import android.util.Log
 import com.alexeyyuditsky.test.R
+import com.alexeyyuditsky.test.app.model.InMemoryBooksRepository
 import com.alexeyyuditsky.test.app.view.books.BooksListFragment
+import com.alexeyyuditsky.test.foundation.SingletonScopeDependencies
+import com.alexeyyuditsky.test.foundation.model.coroutines.IoDispatcher
 import com.alexeyyuditsky.test.foundation.sideeffects.SideEffectPluginsManager
 import com.alexeyyuditsky.test.foundation.sideeffects.dialogs.plugin.DialogsPlugin
 import com.alexeyyuditsky.test.foundation.sideeffects.intents.plugin.IntentsPlugin
@@ -17,6 +22,11 @@ import com.alexeyyuditsky.test.foundation.views.activity.BaseActivity
  * for all screens.
  */
 class MainActivity : BaseActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        InitializerDependencies.initDependencies()
+        super.onCreate(savedInstanceState)
+    }
 
     override fun registerPlugins(manager: SideEffectPluginsManager) = manager.run {
         val navigator = createNavigator()

@@ -1,12 +1,11 @@
 package com.alexeyyuditsky.test.foundation.views
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
-import com.alexeyyuditsky.test.foundation.BaseApplication
+import com.alexeyyuditsky.test.foundation.SingletonScopeDependencies
 import com.alexeyyuditsky.test.foundation.views.BaseScreen.Companion.ARG_SCREEN
 import com.alexeyyuditsky.test.foundation.views.activity.ActivityDelegateHolder
 import java.lang.reflect.Constructor
@@ -15,18 +14,16 @@ import java.lang.reflect.Constructor
  * Use this method for getting view-models from your fragments
  */
 inline fun <reified VM : ViewModel> BaseFragment.screenViewModel() = viewModels<VM> {
-    val application = requireActivity().application as BaseApplication
     val screen = requireArguments().getParcelable<BaseScreen>(ARG_SCREEN) as BaseScreen
-
-    val activityScopeViewModel =
-        (requireActivity() as ActivityDelegateHolder).delegate.getActivityScopeViewModel()
+    val activityScopeViewModel = (requireActivity() as ActivityDelegateHolder)
+        .delegate.getActivityScopeViewModel()
 
     // forming the list of available dependencies:
     // - singleton scope dependencies (repositories) -> from App class
     // - activity VM scope dependencies -> from ActivityScopeViewModel
     // - screen VM scope dependencies -> screen args
-    val dependencies =
-        listOf(screen) + activityScopeViewModel.sideEffectMediators + application.singletonScopeDependencies
+    val dependencies = listOf(screen) + activityScopeViewModel.sideEffectMediators +
+            SingletonScopeDependencies.getSingletonScopeDependencies()
 
     // creating factory
     ViewModelFactory(dependencies, this)

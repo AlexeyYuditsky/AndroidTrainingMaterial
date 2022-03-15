@@ -26,7 +26,7 @@ class BooksListFragment : BaseFragment() {
         savedInstanceState: Bundle?,
     ): View {
         val binding = FragmentBookListBinding.inflate(inflater, container, false)
-
+context
         val adapter = BooksAdapter(viewModel)
         binding.recyclerView.adapter = adapter
 
