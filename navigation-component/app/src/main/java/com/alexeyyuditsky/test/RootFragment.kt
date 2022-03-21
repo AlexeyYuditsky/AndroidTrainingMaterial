@@ -21,38 +21,24 @@ class RootFragment : Fragment(R.layout.fragment_root) {
         binding = FragmentRootBinding.bind(view)
 
         binding.openGreenBoxButton.setOnClickListener {
-            openBox(Color.rgb(100, 255, 100))
+            openBox(Color.rgb(100, 255, 100), getString(R.string.green))
         }
         binding.openYellowBoxButton.setOnClickListener {
-            openBox(Color.rgb(255, 255, 100))
+            openBox(Color.rgb(255, 255, 100), getString(R.string.yellow))
         }
 
-        parentFragmentManager.setFragmentResultListener(
-            BoxFragment.REQUEST_CODE,
-            viewLifecycleOwner
-        ) { _, result ->
-            val number = result.getInt(BoxFragment.EXTRA_RANDOM_NUMBER)
+        listenResult<Int>(BoxFragment.EXTRA_RANDOM_NUMBER) {
             Toast.makeText(
                 requireContext(),
-                getString(R.string.generated_number, number),
+                getString(R.string.generated_number, it),
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
 
-    private fun openBox(color: Int) {
-        findNavController().navigate(
-            R.id.action_rootFragment_to_boxFragment,
-            bundleOf(BoxFragment.ARG_COLOR to color),
-            navOptions {
-                anim {
-                    enter = R.anim.enter
-                    exit = R.anim.exit
-                    popEnter = R.anim.pop_enter
-                    popExit = R.anim.pop_exit
-                }
-            }
-        )
+    private fun openBox(color: Int, colorName: String) {
+        val direction = RootFragmentDirections.actionRootFragmentToBoxFragment(color, colorName)
+        findNavController().navigate(direction)
     }
 
 }
