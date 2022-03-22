@@ -11,16 +11,12 @@ import kotlin.random.Random
 
 class BoxFragment : Fragment(R.layout.fragment_box) {
 
-    private lateinit var binding: FragmentBoxBinding
-
     private val args: BoxFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentBoxBinding.bind(view).apply {
-
+        FragmentBoxBinding.bind(view).apply {
             root.setBackgroundColor(args.color)
-
             goBackButton.setOnClickListener {
                 findNavController().popBackStack()
             }
@@ -31,7 +27,6 @@ class BoxFragment : Fragment(R.layout.fragment_box) {
                 publishResults(EXTRA_RANDOM_NUMBER, Random.nextInt(100))
                 findNavController().popBackStack()
             }
-
         }
     }
 

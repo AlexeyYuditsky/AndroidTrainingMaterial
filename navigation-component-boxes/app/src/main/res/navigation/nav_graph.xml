@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/menuFragment">
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.alexeyyuditsky.test.fragments.MenuFragment"
+        android:label="fragment_menu"
+        tools:layout="@layout/fragment_menu">
+        <action
+            android:id="@+id/action_menuFragment_to_boxSelectionFragment"
+            app:destination="@id/boxSelectionFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_menuFragment_to_optionsFragment"
+            app:destination="@id/optionsFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_menuFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/boxSelectionFragment"
+        android:name="com.alexeyyuditsky.test.fragments.BoxSelectionFragment"
+        android:label="fragment_box_selection"
+        tools:layout="@layout/fragment_box_selection">
+        <action
+            android:id="@+id/action_boxSelectionFragment_to_boxFragment"
+            app:destination="@id/boxFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/boxFragment"
+        android:name="com.alexeyyuditsky.test.fragments.BoxFragment"
+        android:label="fragment_box"
+        tools:layout="@layout/fragment_box" />
+
+    <fragment
+        android:id="@+id/optionsFragment"
+        android:name="com.alexeyyuditsky.test.fragments.OptionsFragment"
+        android:label="fragment_options"
+        tools:layout="@layout/fragment_options" />
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.alexeyyuditsky.test.fragments.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+
+</navigation>

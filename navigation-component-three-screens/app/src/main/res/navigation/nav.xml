@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.alexeyyuditsky.test.MainFragment"
+        android:label="Main Screen"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_secondFragment"
+            app:destination="@id/secondFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/secondFragment"
+        android:name="com.alexeyyuditsky.test.SecondFragment"
+        android:label="{screenName}"
+        tools:layout="@layout/fragment_second">
+        <action
+            android:id="@+id/action_secondFragment_to_thirdFragment"
+            app:destination="@id/thirdFragment" />
+        <argument
+            android:name="color"
+            app:argType="integer" />
+        <argument
+            android:name="screenName"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/thirdFragment"
+        android:name="com.alexeyyuditsky.test.ThirdFragment"
+        android:label="{screenName}"
+        tools:layout="@layout/fragment_third">
+        <argument
+            android:name="color"
+            app:argType="integer" />
+        <argument
+            android:name="screenName"
+            app:argType="string" />
+        <argument
+            android:name="screenNameForToast"
+            app:argType="string" />
+    </fragment>
+
+</navigation>
