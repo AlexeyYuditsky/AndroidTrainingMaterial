@@ -20,7 +20,7 @@ import java.util.regex.Pattern
 /**
  * Container for all screens in the app.
  */
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity() {
 
     // view-model is used for observing username to be displayed in the toolbar
     private val viewModel by viewModelCreator { MainActivityViewModel(Repositories.accountsRepository) }
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        val binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
         setSupportActionBar(binding.toolbar)
 
         // preparing root nav controller
@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return args.isSignedIn
     }
 
-    private fun getMainNavigationGraphId(): Int = R.id.main_graph
+    private fun getMainNavigationGraphId(): Int = R.navigation.main_graph
 
     private fun getTabsDestination(): Int = R.id.tabsFragment
 

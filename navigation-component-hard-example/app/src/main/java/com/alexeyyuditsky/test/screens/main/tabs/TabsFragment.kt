@@ -3,6 +3,8 @@ package com.alexeyyuditsky.test.screens.main.tabs
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.databinding.FragmentTabsBinding
 
@@ -14,7 +16,9 @@ class TabsFragment : Fragment(R.layout.fragment_tabs) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTabsBinding.bind(view)
 
-        TODO("Connect Nav Component to the BottomNavigationView here")
+        val navHost = childFragmentManager.findFragmentById(R.id.tabsContainer) as NavHostFragment
+        val navController = navHost.navController
+        NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
     }
 
 }
