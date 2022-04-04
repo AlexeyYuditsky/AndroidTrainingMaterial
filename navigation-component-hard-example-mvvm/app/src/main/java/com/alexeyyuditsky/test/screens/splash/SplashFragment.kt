@@ -25,13 +25,13 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSplashBinding.bind(view)
-
         renderAnimations()
+        observeNavigateToMainScreenEvent()
+    }
 
-        viewModel.launchMainScreenEvent.observe(viewLifecycleOwner) { event ->
-            event.get()?.let { value ->
-                launchMainScreen(value)
-            }
+    private fun observeNavigateToMainScreenEvent() = viewModel.navigateToMainScreenEvent.observe(viewLifecycleOwner) {
+        it.get()?.let { value ->
+            launchMainScreen(value)
         }
     }
 

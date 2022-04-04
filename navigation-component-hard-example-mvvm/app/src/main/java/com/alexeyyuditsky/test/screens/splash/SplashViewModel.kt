@@ -12,12 +12,12 @@ class SplashViewModel(
     accountsRepository: AccountsRepository
 ) : ViewModel() {
 
-    private val _launchMainScreenEvent = MutableLiveData<Event<Boolean>>()
-    val launchMainScreenEvent: LiveData<Event<Boolean>> = _launchMainScreenEvent
+    private val _navigateToMainScreenEvent = MutableLiveData<Event<Boolean>>()
+    val navigateToMainScreenEvent: LiveData<Event<Boolean>> = _navigateToMainScreenEvent
 
     init {
         viewModelScope.launch {
-            _launchMainScreenEvent.value = Event(accountsRepository.isSignedIn())
+            _navigateToMainScreenEvent.value = Event(accountsRepository.isSignedIn())
         }
     }
 

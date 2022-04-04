@@ -1,9 +1,13 @@
 package com.alexeyyuditsky.test.screens.main.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.Repositories
 import com.alexeyyuditsky.test.databinding.FragmentSignInBinding
@@ -22,6 +26,27 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         binding.createAccountButton.setOnClickListener { onCreateAccountButtonPressed() }
 
         observeState()
+        observeClearPasswordEvent()
+        observeShowAuthErrorMessageEvent()
+        observeNavigateToTabsScreenEvent()
+    }
+
+    private fun observeNavigateToTabsScreenEvent() = viewModel.navigateToTabsScreenEvent.observe(viewLifecycleOwner) {
+        it.get()?.let {
+            findNavController().navigate(R.id.action_signInFragment_to_tabsFragment)
+        }
+    }
+
+    private fun observeShowAuthErrorMessageEvent() = viewModel.showAuthErrorToastEvent.observe(viewLifecycleOwner) {
+        it.get()?.let {
+            Toast.makeText(requireContext(), R.string.invalid_email_or_password, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun observeClearPasswordEvent() = viewModel.clearPasswordEvent.observe(viewLifecycleOwner) {
+        it.get()?.let {
+            binding.passwordEditText.text?.clear()
+        }
     }
 
     private fun onSignInButtonPressed() {
@@ -31,19 +56,21 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         )
     }
 
-    private fun observeState() = viewModel.state.observe(viewLifecycleOwner) {
-        binding.emailTextInput.error = if (it.emptyEmailError) getString(R.string.field_is_empty) else null
-        binding.passwordTextInput.error = if (it.signInInProgress) getString(R.string.field_is_empty) else null
+    private fun observeState() = viewModel.state.observe(viewLifecycleOwner) { state ->
+        binding.emailTextInput.error = if (state.emptyEmailError) getString(R.string.field_is_empty) else null
+        binding.passwordTextInput.error = if (state.emptyPasswordError) getString(R.string.field_is_empty) else null
 
-        binding.emailEditText.isEnabled = it.enableViews
-        binding.passwordEditText.isEnabled = it.enableViews
-        binding.signInButton.isEnabled = it.enableViews
-        binding.createAccountButton.isEnabled = it.enableViews
-        binding.progressBar.isVisible = it.showProgress
+        binding.linearLayout.children.forEach { it.isEnabled = state.enableViews }
+
+        binding.progressBar.isVisible = state.showProgress
     }
 
     private fun onCreateAccountButtonPressed() {
-        TODO("Not yet implemented")
+        val email = binding.emailEditText.text.toString()
+        val emailArg = email.ifBlank { null }
+
+        val direction = SignInFragmentDirections.actionSignInFragmentToSignUpFragment(emailArg)
+        findNavController().navigate(direction)
     }
 
 }
