@@ -1,11 +1,13 @@
 package com.alexeyyuditsky.test.model.accounts
 
-import android.util.Log
+import com.alexeyyuditsky.test.model.AccountAlreadyExistsException
 import com.alexeyyuditsky.test.model.AuthException
 import com.alexeyyuditsky.test.model.EmptyFieldException
 import com.alexeyyuditsky.test.model.Field
 import com.alexeyyuditsky.test.model.accounts.entities.Account
+import com.alexeyyuditsky.test.model.accounts.entities.SignUpData
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class InMemoryAccountsRepository : AccountsRepository {
@@ -23,7 +25,7 @@ class InMemoryAccountsRepository : AccountsRepository {
     )
 
     init {
-        //currentAccountFlow.value = accounts[0].account
+        currentAccountFlow.value = accounts[0].account
     }
 
     override suspend fun isSignedIn(): Boolean {
@@ -37,15 +39,38 @@ class InMemoryAccountsRepository : AccountsRepository {
 
         delay(1000)
 
-        val accountRecord = getAccountRecordByEmail(email, password)
-        accountRecord?.let {
+        val accountRecord = getAccountRecordByEmail(email)
+        if (accountRecord != null && accountRecord.password == password) {
             currentAccountFlow.value = accountRecord.account
-        } ?: throw AuthException()
+        } else {
+            throw AuthException()
+        }
     }
 
-    private fun getAccountRecordByEmail(email: String, password: String): AccountRecord? {
-        return accounts.firstOrNull { it.account.email == email && it.password == password }
+    override suspend fun signUp(signUpData: SignUpData) {
+        signUpData.validate()
+
+        delay(1000)
+
+        val accountRecord = getAccountRecordByEmail(signUpData.email)
+        if (accountRecord != null) throw AccountAlreadyExistsException()
+        val newAccount = Account(
+            email = signUpData.email,
+            username = signUpData.username
+        )
+        accounts.add(
+            AccountRecord(
+                account = newAccount,
+                password = signUpData.password
+            )
+        )
     }
+
+    private fun getAccountRecordByEmail(email: String): AccountRecord? {
+        return accounts.firstOrNull { it.account.email == email }
+    }
+
+    override fun getAccount(): Flow<Account?> = currentAccountFlow
 
     class AccountRecord(
         val account: Account,

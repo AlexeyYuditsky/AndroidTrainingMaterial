@@ -44,7 +44,7 @@ class SignInViewModel(
     }
 
     private fun handleAuthException() {
-        _state.value = state.value?.copy(
+        _state.value = State(
             signInInProgress = false
         )
         _clearPasswordEvent.value = Event(Unit)
@@ -52,18 +52,18 @@ class SignInViewModel(
     }
 
     private fun handleEmptyFieldException(e: EmptyFieldException) {
-        _state.value = state.value?.copy(
+        _state.value = State(
             emptyEmailError = e.field == Field.Email,
             emptyPasswordError = e.field == Field.Password,
             signInInProgress = false
-        ) ?: throw IllegalStateException("Value is empty")
+        )
     }
 
     private fun showProgress() {
         _state.value = State(signInInProgress = true)
     }
 
-    data class State(
+    class State(
         val emptyEmailError: Boolean = false,
         val emptyPasswordError: Boolean = false,
         val signInInProgress: Boolean = false

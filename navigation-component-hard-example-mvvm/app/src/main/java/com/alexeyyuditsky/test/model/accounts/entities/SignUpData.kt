@@ -14,6 +14,6 @@ class SignUpData(
         if (email.isBlank()) throw EmptyFieldException(Field.Email)
         if (username.isBlank()) throw EmptyFieldException(Field.Username)
         if (password.isBlank()) throw EmptyFieldException(Field.Password)
-        if (repeatPassword.isBlank()) throw PasswordMismatchException()
+        if (repeatPassword != password) throw PasswordMismatchException()
     }
 }

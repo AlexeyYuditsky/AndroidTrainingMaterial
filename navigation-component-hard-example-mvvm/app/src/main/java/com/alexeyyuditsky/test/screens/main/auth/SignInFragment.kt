@@ -60,7 +60,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         binding.emailTextInput.error = if (state.emptyEmailError) getString(R.string.field_is_empty) else null
         binding.passwordTextInput.error = if (state.emptyPasswordError) getString(R.string.field_is_empty) else null
 
-        binding.linearLayout.children.forEach { it.isEnabled = state.enableViews }
+        binding.container.children.forEach { it.isEnabled = state.enableViews }
 
         binding.progressBar.isVisible = state.showProgress
     }

@@ -9,3 +9,5 @@ class EmptyFieldException(
 class AuthException : AppException()
 
 class PasswordMismatchException : AppException()
+
+class AccountAlreadyExistsException : AppException()
