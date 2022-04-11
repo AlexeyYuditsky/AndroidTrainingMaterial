@@ -30,7 +30,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun onLogoutButtonPressed() {
         val topLevelHost =
             requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment?
-        topLevelHost?.navController?.navigate(R.id.action_tabsFragment_to_signInFragment)
+        //topLevelHost?.navController?.navigate(R.id.action_tabsFragment_to_signInFragment)
         (requireActivity() as MainActivity).toolbarTextViewListener("")
     }
 

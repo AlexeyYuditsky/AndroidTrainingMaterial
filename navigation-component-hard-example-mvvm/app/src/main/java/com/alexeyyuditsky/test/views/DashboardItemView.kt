@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.databinding.PartDashboardItemBinding
+import com.alexeyyuditsky.test.model.boxes.entities.Box
 
 class DashboardItemView(
     context: Context,
@@ -41,6 +42,13 @@ class DashboardItemView(
         inflater.inflate(R.layout.part_dashboard_item, this, true)
         binding = PartDashboardItemBinding.bind(this)
         parseAttributes(attributesSet, defStyleAttr, defStyleRes)
+    }
+
+    fun setBox(box: Box) {
+        val colorName = context.getString(box.colorNameRes)
+        val boxTitle = context.getString(R.string.box_title, colorName)
+        setupTitle(boxTitle)
+        setupColors(box.colorValue)
     }
 
     private fun parseAttributes(attributesSet: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
@@ -85,7 +93,7 @@ class DashboardItemView(
             val red = Color.red(color)
             val green = Color.green(color)
             val blue = Color.blue(color)
-            return Color.argb(64, red, green, blue)
+            return Color.argb(50, red, green, blue)
         }
     }
 

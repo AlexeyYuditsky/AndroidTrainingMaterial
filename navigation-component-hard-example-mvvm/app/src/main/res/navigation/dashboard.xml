@@ -21,8 +21,14 @@
         android:label="{colorName} box"
         tools:layout="@layout/fragment_box" >
         <argument
+            android:name="boxId"
+            app:argType="integer" />
+        <argument
             android:name="colorName"
             app:argType="string" />
+        <argument
+            android:name="colorValue"
+            app:argType="integer" />
     </fragment>
 
 </navigation>
