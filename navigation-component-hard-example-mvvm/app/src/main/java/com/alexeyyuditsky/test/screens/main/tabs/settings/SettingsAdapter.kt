@@ -11,24 +11,20 @@ import com.alexeyyuditsky.test.model.boxes.entities.Box
 
 class SettingsAdapter(
     private val listener: Listener
-) : RecyclerView.Adapter<SettingsAdapter.Holder>(), View.OnClickListener {
+) : RecyclerView.Adapter<SettingsAdapter.Holder>() {
 
     private var settings: List<BoxSetting> = emptyList()
 
-    override fun onClick(v: View?) {
-        val checkBox = v as CheckBox
-        val box = v.tag as Box
-        if (checkBox.isChecked) {
-            listener.enableBox(box)
-        } else {
-            listener.enableBox(box)
-        }
+    private val checkBoxListener = View.OnClickListener {
+        val checkBox = it as CheckBox
+        val box = it.tag as Box
+        if (checkBox.isChecked) listener.enableBox(box) else listener.disableBox(box)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val inflater = LayoutInflater.from(parent.context)
         val checkBox = inflater.inflate(R.layout.item_setting, parent, false) as CheckBox
-        checkBox.setOnClickListener(this)
+        checkBox.setOnClickListener(checkBoxListener)
         return Holder(checkBox)
     }
 
@@ -37,9 +33,7 @@ class SettingsAdapter(
         val context = holder.itemView.context
         holder.checkBox.tag = setting.box
 
-        if (holder.checkBox.isChecked != setting.enabled) {
-            holder.checkBox.isChecked = setting.enabled
-        }
+        if (holder.checkBox.isChecked != setting.enabled) holder.checkBox.isChecked = setting.enabled
 
         val colorName = context.getString(setting.box.colorNameRes)
         holder.checkBox.text = context.getString(R.string.enable_checkbox, colorName)

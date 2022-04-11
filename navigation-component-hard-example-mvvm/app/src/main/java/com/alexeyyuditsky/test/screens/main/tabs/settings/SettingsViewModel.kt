@@ -31,11 +31,11 @@ class SettingsViewModel(
     }
 
     override fun enableBox(box: Box) {
-        
+        viewModelScope.launch { boxesRepository.activateBox(box) }
     }
 
     override fun disableBox(box: Box) {
-
+        viewModelScope.launch { boxesRepository.deactivateBox(box) }
     }
 
 }

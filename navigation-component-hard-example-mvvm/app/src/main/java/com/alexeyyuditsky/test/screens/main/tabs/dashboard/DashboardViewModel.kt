@@ -1,5 +1,6 @@
 package com.alexeyyuditsky.test.screens.main.tabs.dashboard
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,6 +19,7 @@ class DashboardViewModel(
     init {
         viewModelScope.launch {
             boxesRepository.getBoxes(onlyActive = true).collect {
+                Log.d("MyLog", it.toString())
                 _boxes.value = it
             }
         }

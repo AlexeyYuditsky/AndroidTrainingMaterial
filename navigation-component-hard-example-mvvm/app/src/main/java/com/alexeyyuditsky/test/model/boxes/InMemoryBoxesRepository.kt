@@ -1,14 +1,12 @@
 package com.alexeyyuditsky.test.model.boxes
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.util.Log
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.model.accounts.AccountsRepository
 import com.alexeyyuditsky.test.model.boxes.entities.Box
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 class InMemoryBoxesRepository(
     private val accountsRepository: AccountsRepository
@@ -38,6 +36,20 @@ class InMemoryBoxesRepository(
 
     override fun getBoxes(onlyActive: Boolean): Flow<List<Box>> = activeBoxesFlow.map { activeIdentifiers ->
         boxes.filter { if (onlyActive) activeIdentifiers.contains(it.id) else true }
+    }
+
+    override suspend fun activateBox(box: Box) {
+        val account = accountsRepository.getAccount().firstOrNull() ?: return
+        val activeBoxes = allActiveBoxes[account.email] ?: return
+        activeBoxes.add(box.id)
+        reconstructFlow.tryEmit(Unit)
+    }
+
+    override suspend fun deactivateBox(box: Box) {
+        val account = accountsRepository.getAccount().firstOrNull() ?: return
+        val activeBoxes = allActiveBoxes[account.email] ?: return
+        activeBoxes.remove(box.id)
+        reconstructFlow.tryEmit(Unit)
     }
 
 }

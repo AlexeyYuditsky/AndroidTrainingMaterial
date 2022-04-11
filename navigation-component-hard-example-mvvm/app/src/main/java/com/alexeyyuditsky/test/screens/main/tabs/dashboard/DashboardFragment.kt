@@ -33,11 +33,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private fun renderBoxes(boxes: List<Box>) {
         clearBoxViews()
         if (boxes.isEmpty()) {
-            binding.boxesContainer.isVisible = false
             binding.noBoxesTextView.isVisible = true
+            binding.flowView.isVisible = false
         } else {
             binding.noBoxesTextView.isVisible = false
-            binding.boxesContainer.isVisible = true
+            binding.flowView.isVisible = true
             createBoxes(boxes)
         }
     }
