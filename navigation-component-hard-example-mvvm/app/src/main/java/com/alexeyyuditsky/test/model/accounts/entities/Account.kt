@@ -11,7 +11,7 @@ data class Account(
 
     companion object {
         fun getCurrentDate(): String {
-            return SimpleDateFormat("HH:mm, dd.MM.yyyy", Locale.US).format(Date())
+            return SimpleDateFormat("dd.MM.yyyy", Locale.US).format(Date())
         }
     }
 

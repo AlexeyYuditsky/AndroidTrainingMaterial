@@ -56,6 +56,11 @@
         <action
             android:id="@+id/action_tabsFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_tabsFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/tabsFragment"
+            app:popUpToInclusive="true"/>
         <argument
             android:name="isSignedIn"
             app:argType="boolean" />
@@ -65,10 +70,6 @@
         android:id="@+id/editProfileFragment"
         android:name="com.alexeyyuditsky.test.screens.main.tabs.profile.EditProfileFragment"
         android:label="Edit Profile"
-        tools:layout="@layout/fragment_edit_profile">
-        <argument
-            android:name="username"
-            app:argType="string" />
-    </fragment>
+        tools:layout="@layout/fragment_edit_profile"/>
 
 </navigation>

@@ -14,4 +14,8 @@ interface AccountsRepository {
 
     fun getAccount(): Flow<Account?>
 
+    fun logout()
+
+    suspend fun updateAccountUsername(newUsername: String)
+
 }

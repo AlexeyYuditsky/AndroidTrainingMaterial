@@ -19,7 +19,6 @@ class DashboardViewModel(
     init {
         viewModelScope.launch {
             boxesRepository.getBoxes(onlyActive = true).collect {
-                Log.d("MyLog", it.toString())
                 _boxes.value = it
             }
         }

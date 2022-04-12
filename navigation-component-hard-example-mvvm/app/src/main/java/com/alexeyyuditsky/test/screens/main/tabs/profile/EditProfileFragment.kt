@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.Repositories
 import com.alexeyyuditsky.test.databinding.FragmentEditProfileBinding
+import com.alexeyyuditsky.test.utils.findTopNavController
 import com.alexeyyuditsky.test.utils.viewModelCreator
 
 class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {

@@ -12,17 +12,16 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.alexeyyuditsky.test.databinding.ActivityMainBinding
 import com.alexeyyuditsky.test.screens.main.tabs.TabsFragment
+import com.alexeyyuditsky.test.utils.viewModelCreator
 import java.util.regex.Pattern
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private var navController: NavController? = null
+    private val viewModel by viewModelCreator { MainActivityViewModel(Repositories.accountsRepository) }
 
-    val toolbarTextViewListener: (String) -> Unit = { title ->
-        binding.toolbarTextView.text = title
-    }
+    private var navController: NavController? = null
 
     private val fragmentListener = object : FragmentManager.FragmentLifecycleCallbacks() {
         override fun onFragmentViewCreated(
@@ -47,6 +46,10 @@ class MainActivity : AppCompatActivity() {
         setNavControllerListener()
 
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
+
+        viewModel.username.observe(this) {
+            binding.toolbarTextView.text = it
+        }
     }
 
     override fun onDestroy() {
@@ -89,8 +92,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun findNavController() {
-        val navHost =
-            supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
+        val navHost = supportFragmentManager
+            .findFragmentById(R.id.fragmentContainer) as NavHostFragment
         navController = navHost.navController
     }
 

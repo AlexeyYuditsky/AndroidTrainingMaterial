@@ -20,11 +20,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSettingsBinding.bind(view)
 
-        val adapter = setupList()
-        viewModel.boxSettings.observe(viewLifecycleOwner) { adapter.renderSettings(it) }
+        val adapter = createAdapter()
+        viewModel.boxSettings.observe(viewLifecycleOwner) { adapter.settings = it }
     }
 
-    private fun setupList(): SettingsAdapter {
+    private fun createAdapter(): SettingsAdapter {
         val adapter = SettingsAdapter(viewModel)
         binding.settingsList.adapter = adapter
         return adapter

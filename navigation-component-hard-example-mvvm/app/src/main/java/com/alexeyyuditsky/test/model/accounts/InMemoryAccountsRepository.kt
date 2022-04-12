@@ -72,8 +72,25 @@ class InMemoryAccountsRepository : AccountsRepository {
 
     override fun getAccount(): Flow<Account?> = currentAccountFlow
 
-    class AccountRecord(
-        val account: Account,
+    override fun logout() {
+        currentAccountFlow.value = null
+    }
+
+    override suspend fun updateAccountUsername(newUsername: String) {
+        if (newUsername.isBlank()) throw EmptyFieldException(Field.Username)
+
+        delay(1000)
+        val currentAccount = currentAccountFlow.value ?: throw AuthException()
+
+        val updatedAccount = currentAccount.copy(username = newUsername)
+        currentAccountFlow.value = updatedAccount
+
+        val currentRecord = getAccountRecordByEmail(currentAccount.email) ?: throw AuthException()
+        currentRecord.account = updatedAccount
+    }
+
+    data class AccountRecord(
+        var account: Account,
         val password: String
     )
 
