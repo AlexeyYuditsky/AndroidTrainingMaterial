@@ -5,7 +5,7 @@ CREATE TABLE "accounts" (
   "email"	    TEXT NOT NULL UNIQUE COLLATE NOCASE,
   "username" 	TEXT NOT NULL,
   "password" 	TEXT NOT NULL,
-  "created_at"  INTEGER NOT NULL
+  "created_at"  TEXT NOT NULL
 );
 
 CREATE TABLE "boxes" (
@@ -37,4 +37,4 @@ VALUES
     ("Blue", "#000088"),
     ("Yellow", "#888800"),
     ("Violet", "#8800FF"),
-    ("Black", "#000000");
+    ("Black", "#000000")
