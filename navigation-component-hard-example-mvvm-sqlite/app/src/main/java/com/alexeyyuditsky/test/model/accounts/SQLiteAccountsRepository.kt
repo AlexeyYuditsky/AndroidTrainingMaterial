@@ -5,14 +5,17 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import androidx.core.content.contentValuesOf
 import com.alexeyyuditsky.test.model.AccountAlreadyExistsException
+import com.alexeyyuditsky.test.model.AuthException
+import com.alexeyyuditsky.test.model.EmptyFieldException
+import com.alexeyyuditsky.test.model.Field
 import com.alexeyyuditsky.test.model.accounts.entities.Account
 import com.alexeyyuditsky.test.model.accounts.entities.SignUpData
 import com.alexeyyuditsky.test.model.settings.AppSettings
 import com.alexeyyuditsky.test.model.sqlite.AccountsTable
-import com.alexeyyuditsky.test.model.sqlite.BoxesTable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 
 class SQLiteAccountsRepository(
     private val db: SQLiteDatabase,
@@ -28,7 +31,14 @@ class SQLiteAccountsRepository(
     }
 
     override suspend fun signIn(email: String, password: String) {
-        TODO("Not yet implemented")
+        if (email.isBlank()) throw EmptyFieldException(Field.Email)
+        if (password.isBlank()) throw EmptyFieldException(Field.Password)
+
+        delay(1000)
+
+        val accountId = findAccountByEmailAndPassword(email, password)
+        appSettings.setCurrentAccountId(accountId)
+        currentAccountIdFlow.value = AccountId(accountId)
     }
 
     override suspend fun signUp(signUpData: SignUpData) {
@@ -38,7 +48,13 @@ class SQLiteAccountsRepository(
     }
 
     override fun getAccount(): Flow<Account?> {
-        TODO("Not yet implemented")
+        val currentAccountId = currentAccountIdFlow.value
+        val account = Account(
+            id = 1,
+            email = "admin",
+            username = "admin"
+        )
+        return flowOf(account)
     }
 
     override fun logout() {
@@ -65,6 +81,24 @@ class SQLiteAccountsRepository(
             val appExtension = AccountAlreadyExistsException()
             appExtension.initCause(e)
             throw appExtension
+        }
+    }
+
+    private fun findAccountByEmailAndPassword(email: String, password: String): Long {
+        val cursor = db.rawQuery(
+            "SELECT ${AccountsTable.COLUMN_ID}, ${AccountsTable.COLUMN_PASSWORD} " +
+                    "FROM ${AccountsTable.TABLE_NAME} " +
+                    "WHERE email = ?",
+            arrayOf(email)
+        )
+        return cursor.use {
+            if (cursor.count == 0) throw AuthException()
+            cursor.moveToFirst()
+
+            val accountPassword = cursor.getString(cursor.getColumnIndexOrThrow(AccountsTable.COLUMN_PASSWORD))
+            if (accountPassword != password) throw AuthException()
+
+            cursor.getLong(cursor.getColumnIndexOrThrow(AccountsTable.COLUMN_ID))
         }
     }
 
