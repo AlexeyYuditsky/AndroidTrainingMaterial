@@ -17,6 +17,7 @@ class InMemoryAccountsRepository : AccountsRepository {
     private val accounts = mutableListOf(
         AccountRecord(
             account = Account(
+                id = 0,
                 email = "admin",
                 username = "admin"
             ),
@@ -55,6 +56,7 @@ class InMemoryAccountsRepository : AccountsRepository {
         val accountRecord = getAccountRecordByEmail(signUpData.email)
         if (accountRecord != null) throw AccountAlreadyExistsException()
         val newAccount = Account(
+            id = 0,
             email = signUpData.email,
             username = signUpData.username
         )

@@ -27,8 +27,9 @@ CREATE TABLE "accounts_boxes_settings" (
 
 INSERT INTO "accounts" ("email", "username", "password", "created_at")
 VALUES
-    ("admin@google.com", "admin", "123", 0),
-    ("tester@google.com", "tester", "321", 0);
+    ("admin", "admin", "123", 0),
+    ("tester", "tester", "321", 0),
+    ("admin123", "admin", "456", 0);
 
 INSERT INTO "boxes" ("color_name", "color_value")
 VALUES

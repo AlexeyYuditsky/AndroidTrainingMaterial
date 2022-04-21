@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 data class Account(
-    val id:Long,
+    val id: Long,
     val email: String,
     val username: String,
     val createdAt: String = getCurrentDate()
