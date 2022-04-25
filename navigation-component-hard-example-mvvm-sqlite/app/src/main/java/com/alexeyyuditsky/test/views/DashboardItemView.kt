@@ -13,27 +13,12 @@ import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.databinding.PartDashboardItemBinding
 import com.alexeyyuditsky.test.model.boxes.entities.Box
 
-class DashboardItemView(
+class DashboardItemView @JvmOverloads constructor(
     context: Context,
-    attributesSet: AttributeSet?,
-    defStyleAttr: Int,
-    defStyleRes: Int
+    attributesSet: AttributeSet? = null,
+    defStyleAttr: Int = R.attr.dashboardItemStyle,
+    defStyleRes: Int = R.style.DefaultDashboardItemStyle
 ) : FrameLayout(context, attributesSet, defStyleAttr, defStyleRes) {
-
-    constructor(context: Context, attributesSet: AttributeSet?, defStyleAttr: Int) : this(
-        context,
-        attributesSet,
-        defStyleAttr,
-        R.style.DefaultDashboardItemStyle
-    )
-
-    constructor(context: Context, attributesSet: AttributeSet?) : this(
-        context,
-        attributesSet,
-        R.attr.dashboardItemStyle
-    )
-
-    constructor(context: Context) : this(context, null)
 
     private val binding: PartDashboardItemBinding
 
@@ -45,7 +30,7 @@ class DashboardItemView(
     }
 
     fun setBox(box: Box) {
-        val colorName = context.getString(box.colorNameRes)
+        val colorName = box.colorName
         val boxTitle = context.getString(R.string.box_title, colorName)
         setupTitle(boxTitle)
         setupColors(box.colorValue)

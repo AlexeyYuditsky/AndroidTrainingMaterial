@@ -11,3 +11,5 @@ class AuthException : AppException()
 class PasswordMismatchException : AppException()
 
 class AccountAlreadyExistsException : AppException()
+
+class StorageException: AppException()

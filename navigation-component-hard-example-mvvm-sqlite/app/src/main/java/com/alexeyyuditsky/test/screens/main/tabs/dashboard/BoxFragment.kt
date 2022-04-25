@@ -15,7 +15,7 @@ class BoxFragment : Fragment(R.layout.fragment_box) {
 
     private lateinit var binding: FragmentBoxBinding
 
-    private val viewModel by viewModelCreator { BoxViewModel(getBoxId(), Repositories.boxesRepository) }
+    private val viewModel by viewModelCreator { BoxViewModel(getBoxId()) }
 
     private val args by navArgs<BoxFragmentArgs>()
 
@@ -41,7 +41,7 @@ class BoxFragment : Fragment(R.layout.fragment_box) {
         findNavController().popBackStack()
     }
 
-    private fun getBoxId(): Int = args.boxId
+    private fun getBoxId(): Long = args.boxId
 
     private fun getColorName(): String = args.colorName
 

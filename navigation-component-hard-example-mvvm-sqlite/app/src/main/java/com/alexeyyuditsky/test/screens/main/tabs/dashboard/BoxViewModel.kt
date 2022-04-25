@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class BoxViewModel(
-    boxId: Int,
-    boxesRepository: BoxesRepository
+    boxId: Long,
+   // boxesRepository: BoxesRepository
 ) : ViewModel() {
 
     private val _shouldExitEvent = MutableLiveData<Event<Boolean>>()
@@ -19,9 +19,9 @@ class BoxViewModel(
 
     init {
         viewModelScope.launch {
-            boxesRepository.getBoxes(onlyActive = true)
+           /* boxesRepository.getBoxes(onlyActive = true)
                 .map { boxes -> boxes.firstOrNull { it.id == boxId } }
-                .collect { currentBox -> _shouldExitEvent.value = Event(currentBox == null) }
+                .collect { currentBox -> _shouldExitEvent.value = Event(currentBox == null) }*/
         }
     }
 

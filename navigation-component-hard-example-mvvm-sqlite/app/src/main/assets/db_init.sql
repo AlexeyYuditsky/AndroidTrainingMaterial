@@ -27,9 +27,9 @@ CREATE TABLE "accounts_boxes_settings" (
 
 INSERT INTO "accounts" ("email", "username", "password", "created_at")
 VALUES
-    ("admin", "admin", "123", 0),
-    ("tester", "tester", "321", 0),
-    ("admin123", "admin", "456", 0);
+    ("admin", "admin", "123", "10.02.2012"),
+    ("tester", "tester", "321", "12.05.2017"),
+    ("admin123", "admin", "456", "13.01.2019");
 
 INSERT INTO "boxes" ("color_name", "color_value")
 VALUES
@@ -38,4 +38,12 @@ VALUES
     ("Blue", "#000088"),
     ("Yellow", "#888800"),
     ("Violet", "#8800FF"),
-    ("Black", "#000000")
+    ("Black", "#000000");
+
+INSERT INTO "accounts_boxes_settings" ("account_id", "box_id", "is_active")
+VALUES
+    (1, 1, 1),
+    (1, 2, 0),
+    (1, 3, 1),
+    (1, 4, 0),
+    (2, 1, 0)

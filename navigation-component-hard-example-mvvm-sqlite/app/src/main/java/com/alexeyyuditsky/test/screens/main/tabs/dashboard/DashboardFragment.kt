@@ -46,14 +46,15 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         val width = resources.getDimensionPixelSize(R.dimen.dashboard_item_width)
         val height = resources.getDimensionPixelSize(R.dimen.dashboard_item_height)
         val generatedIdentifiers = boxes.map { box ->
+            val id = View.generateViewId()
             val dashboardItemView = DashboardItemView(requireContext())
             dashboardItemView.setBox(box)
-            dashboardItemView.id = box.id
+            dashboardItemView.id = id
             dashboardItemView.tag = box
             dashboardItemView.setOnClickListener(boxClickListener)
             val params = ConstraintLayout.LayoutParams(width, height)
             binding.boxesContainer.addView(dashboardItemView, params)
-            return@map box.id
+            return@map id
         }.toIntArray()
         binding.flowView.referencedIds = generatedIdentifiers
     }
@@ -66,7 +67,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         val box = it.tag as Box
         val direction = DashboardFragmentDirections.actionDashboardFragmentToBoxFragment(
             box.id,
-            getString(box.colorNameRes),
+            box.colorName,
             box.colorValue
         )
         findNavController().navigate(direction)
