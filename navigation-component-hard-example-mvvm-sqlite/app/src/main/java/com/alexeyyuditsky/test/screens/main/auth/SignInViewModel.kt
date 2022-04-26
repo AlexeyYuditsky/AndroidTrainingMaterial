@@ -7,8 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.alexeyyuditsky.test.model.AuthException
 import com.alexeyyuditsky.test.model.EmptyFieldException
 import com.alexeyyuditsky.test.model.Field
+import com.alexeyyuditsky.test.model.StorageException
 import com.alexeyyuditsky.test.model.accounts.AccountsRepository
 import com.alexeyyuditsky.test.utils.Event
+import com.alexeyyuditsky.test.utils.requireValue
 import kotlinx.coroutines.launch
 
 class SignInViewModel(
@@ -36,11 +38,18 @@ class SignInViewModel(
             handleEmptyFieldException(e)
         } catch (e: AuthException) {
             handleAuthException()
+        } catch (e: StorageException) {
+            handleStorageException()
         }
     }
 
     private fun launchTabsScreen() {
         _navigateToTabsScreenEvent.value = Event(Unit)
+    }
+
+    private fun handleStorageException() {
+        _showAuthErrorToastEvent.value = Event(Unit)
+        _state.value = _state.requireValue().copy(signInInProgress = false)
     }
 
     private fun handleAuthException() {
@@ -63,7 +72,7 @@ class SignInViewModel(
         _state.value = State(signInInProgress = true)
     }
 
-    class State(
+    data class State(
         val emptyEmailError: Boolean = false,
         val emptyPasswordError: Boolean = false,
         val signInInProgress: Boolean = false

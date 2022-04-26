@@ -39,11 +39,3 @@ VALUES
     ("Yellow", "#888800"),
     ("Violet", "#8800FF"),
     ("Black", "#000000");
-
-INSERT INTO "accounts_boxes_settings" ("account_id", "box_id", "is_active")
-VALUES
-    (1, 1, 1),
-    (1, 2, 0),
-    (1, 3, 1),
-    (1, 4, 0),
-    (2, 1, 0)

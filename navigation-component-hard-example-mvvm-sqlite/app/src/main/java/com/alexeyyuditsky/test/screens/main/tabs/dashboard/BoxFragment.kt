@@ -15,7 +15,7 @@ class BoxFragment : Fragment(R.layout.fragment_box) {
 
     private lateinit var binding: FragmentBoxBinding
 
-    private val viewModel by viewModelCreator { BoxViewModel(getBoxId()) }
+    private val viewModel by viewModelCreator { BoxViewModel(getBoxId(), Repositories.boxesRepository) }
 
     private val args by navArgs<BoxFragmentArgs>()
 

@@ -20,7 +20,9 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
     private lateinit var binding: FragmentSplashBinding
 
-    private val viewModel by viewModelCreator { SplashViewModel(Repositories.accountsRepository) }
+    private val viewModel by viewModelCreator {
+        SplashViewModel(Repositories.accountsRepository)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

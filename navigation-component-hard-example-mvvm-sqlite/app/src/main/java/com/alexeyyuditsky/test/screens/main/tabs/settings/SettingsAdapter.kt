@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.model.boxes.entities.Box
 
-class SettingsAdapter(
-    private val listener: Listener
-) : RecyclerView.Adapter<SettingsAdapter.Holder>() {
+class SettingsAdapter(private val listener: Listener) : RecyclerView.Adapter<SettingsAdapter.Holder>() {
 
     var settings: List<BoxSetting> = emptyList()
 
@@ -29,17 +28,23 @@ class SettingsAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val setting = settings[position]
-        val context = holder.itemView.context
         holder.checkBox.tag = setting.box
 
-        if (holder.checkBox.isChecked != setting.enabled) holder.checkBox.isChecked = setting.enabled
+        if (holder.checkBox.isChecked != setting.enabled) {
+            holder.checkBox.isChecked = setting.enabled
+        }
 
-        val colorName = context.getString(setting.box.colorNameRes)
-        holder.checkBox.text = context.getString(R.string.enable_checkbox, colorName)
-
+        val colorName = setting.box.colorName
+        holder.checkBox.text = holder.itemView.context.getString(R.string.enable_checkbox, colorName)
     }
 
     override fun getItemCount(): Int = settings.size
+
+    fun renderSettings(settings: List<BoxSetting>) {
+        val diffResult = DiffUtil.calculateDiff(BoxSettingsDiffCallback(this.settings, settings))
+        this.settings = settings
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     class Holder(val checkBox: CheckBox) : RecyclerView.ViewHolder(checkBox)
 

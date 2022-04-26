@@ -3,7 +3,9 @@ package com.alexeyyuditsky.test.screens.main.tabs.settings
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.Repositories
 import com.alexeyyuditsky.test.databinding.FragmentSettingsBinding
@@ -21,7 +23,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding = FragmentSettingsBinding.bind(view)
 
         val adapter = createAdapter()
-        viewModel.boxSettings.observe(viewLifecycleOwner) { adapter.settings = it }
+        viewModel.boxSettings.observe(viewLifecycleOwner) {
+            adapter.renderSettings(it)
+        }
+
+        viewModel.showErrorMessageEvent.observe(viewLifecycleOwner) {
+            it.get()?.let { message ->
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun createAdapter(): SettingsAdapter {

@@ -49,13 +49,6 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         }
     }
 
-    private fun onSignInButtonPressed() {
-        viewModel.signIn(
-            email = binding.emailEditText.text.toString(),
-            password = binding.passwordEditText.text.toString()
-        )
-    }
-
     private fun observeState() = viewModel.state.observe(viewLifecycleOwner) { state ->
         binding.emailTextInput.error = if (state.emptyEmailError) getString(R.string.field_is_empty) else null
         binding.passwordTextInput.error = if (state.emptyPasswordError) getString(R.string.field_is_empty) else null
@@ -63,6 +56,13 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         binding.container.children.forEach { it.isEnabled = state.enableViews }
 
         binding.progressBar.isVisible = state.showProgress
+    }
+
+    private fun onSignInButtonPressed() {
+        viewModel.signIn(
+            email = binding.emailEditText.text.toString(),
+            password = binding.passwordEditText.text.toString()
+        )
     }
 
     private fun onCreateAccountButtonPressed() {

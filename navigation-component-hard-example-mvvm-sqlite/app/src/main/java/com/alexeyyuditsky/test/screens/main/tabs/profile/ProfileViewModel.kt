@@ -24,7 +24,7 @@ class ProfileViewModel(
         }
     }
 
-    fun logout() {
+    fun logout() = viewModelScope.launch {
         accountsRepository.logout()
     }
 

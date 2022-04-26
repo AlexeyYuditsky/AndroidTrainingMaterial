@@ -1,5 +1,6 @@
 package com.alexeyyuditsky.test.screens.main.auth
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

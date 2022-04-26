@@ -6,16 +6,20 @@ import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
 import android.util.Log
 import com.alexeyyuditsky.test.model.AuthException
+import com.alexeyyuditsky.test.model.StorageException
 import com.alexeyyuditsky.test.model.accounts.AccountsRepository
 import com.alexeyyuditsky.test.model.boxes.entities.Box
 import com.alexeyyuditsky.test.model.settings.AppSettings
 import com.alexeyyuditsky.test.model.sqlite.AccountsBoxesSettingsTable
 import com.alexeyyuditsky.test.model.sqlite.BoxesTable
+import com.alexeyyuditsky.test.model.sqlite.wrapSQLiteException
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 
 class SQLiteBoxesRepository(
     private val db: SQLiteDatabase,
-    private val accountsRepository: AccountsRepository
+    private val accountsRepository: AccountsRepository,
+    private val ioDispatcher: CoroutineDispatcher
 ) : BoxesRepository {
 
     private val reconstructFlow = MutableSharedFlow<Unit>(replay = 1).also { it.tryEmit(Unit) }
@@ -23,14 +27,14 @@ class SQLiteBoxesRepository(
     override suspend fun getBoxes(onlyActive: Boolean): Flow<List<Box>> {
         return combine(accountsRepository.getAccount(), reconstructFlow) { account, _ ->
             queryBoxes(onlyActive, account?.id)
-        }
+        }.flowOn(ioDispatcher)
     }
 
-    override suspend fun activateBox(box: Box) {
+    override suspend fun activateBox(box: Box) = wrapSQLiteException(ioDispatcher) {
         setActivateFlagForBox(box, true)
     }
 
-    override suspend fun deactivateBox(box: Box) {
+    override suspend fun deactivateBox(box: Box) = wrapSQLiteException(ioDispatcher) {
         setActivateFlagForBox(box, false)
     }
 

@@ -35,12 +35,12 @@ interface AccountsRepository {
     /**
      * Get the account info of the current signed-in user.
      */
-    fun getAccount(): Flow<Account?>
+    suspend fun getAccount(): Flow<Account?>
 
     /**
      * Sign-out from the app.
      */
-    fun logout()
+    suspend fun logout()
 
     /**
      * Change the username of the current signed-in user.

@@ -15,9 +15,7 @@ class SharedPreferencesAppSettings(
             .apply()
     }
 
-    override fun getCurrentAccountId(): Long {
-        return sharedPreferences.getLong(PREF_CURRENT_ACCOUNT_ID, NO_ACCOUNT_ID)
-    }
+    override fun getCurrentAccountId(): Long = sharedPreferences.getLong(PREF_CURRENT_ACCOUNT_ID, NO_ACCOUNT_ID)
 
     companion object {
         private const val PREF_CURRENT_ACCOUNT_ID = "currentAccountId"
