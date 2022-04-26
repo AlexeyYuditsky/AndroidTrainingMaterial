@@ -13,14 +13,11 @@ import com.alexeyyuditsky.test.model.accounts.entities.SignUpData
 import com.alexeyyuditsky.test.model.settings.AppSettings
 import com.alexeyyuditsky.test.model.sqlite.AccountsTable
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.*
 
 class SQLiteAccountsRepository(
     private val db: SQLiteDatabase,
-    private val appSettings: AppSettings,
-    /* private val ioDispatcher: CoroutineDispatcher*/
+    private val appSettings: AppSettings
 ) : AccountsRepository {
 
     private val currentAccountIdFlow = MutableStateFlow(AccountId(appSettings.getCurrentAccountId()))
@@ -33,9 +30,7 @@ class SQLiteAccountsRepository(
     override suspend fun signIn(email: String, password: String) {
         if (email.isBlank()) throw EmptyFieldException(Field.Email)
         if (password.isBlank()) throw EmptyFieldException(Field.Password)
-
         delay(1000)
-
         val accountId = findAccountByEmailAndPassword(email, password)
         appSettings.setCurrentAccountId(accountId)
         currentAccountIdFlow.value = AccountId(accountId)
@@ -48,35 +43,63 @@ class SQLiteAccountsRepository(
     }
 
     override fun getAccount(): Flow<Account?> {
-        val currentAccountId = currentAccountIdFlow.value
-        val account = Account(
-            id = 1,
-            email = "admin",
-            username = "admin"
-        )
-        return flowOf(account)
+        return currentAccountIdFlow.map { accountId ->
+            getAccountById(accountId.value)
+        }
     }
 
     override fun logout() {
-        TODO("Not yet implemented")
+        appSettings.setCurrentAccountId(AppSettings.NO_ACCOUNT_ID)
+        currentAccountIdFlow.value = AccountId(AppSettings.NO_ACCOUNT_ID)
     }
 
     override suspend fun updateAccountUsername(newUsername: String) {
-        TODO("Not yet implemented")
+        if (newUsername.isBlank()) throw EmptyFieldException(Field.Username)
+        delay(1000)
+        val accountId = appSettings.getCurrentAccountId()
+        updateUsernameForAccountId(accountId, newUsername)
+        currentAccountIdFlow.value = AccountId(accountId)
+    }
+
+    private fun updateUsernameForAccountId(accountId: Long, newUsername: String) {
+        val sql = "UPDATE ${AccountsTable.TABLE_NAME} " +
+                "SET ${AccountsTable.COLUMN_USERNAME} = ? " +
+                "WHERE ${AccountsTable.COLUMN_ID} = ?"
+        val cursor = db.rawQuery(sql, arrayOf(newUsername, accountId.toString()))
+        cursor.moveToFirst()
+        cursor.close()
+    }
+
+    private fun getAccountById(accountId: Long): Account? {
+        if (accountId == AppSettings.NO_ACCOUNT_ID) return null
+
+        val sql = "SELECT * FROM ${AccountsTable.TABLE_NAME} " +
+                "WHERE ${AccountsTable.COLUMN_ID} = ?"
+        val cursor = db.rawQuery(sql, arrayOf(accountId.toString()))
+        return cursor.use {
+            if (cursor.count == 0) return@use null
+            cursor.moveToFirst()
+            return@use Account(
+                id = cursor.getLong(cursor.getColumnIndexOrThrow(AccountsTable.COLUMN_ID)),
+                email = cursor.getString(cursor.getColumnIndexOrThrow(AccountsTable.COLUMN_EMAIL)),
+                username = cursor.getString(cursor.getColumnIndexOrThrow(AccountsTable.COLUMN_USERNAME)),
+                createdAt = cursor.getString(cursor.getColumnIndexOrThrow(AccountsTable.COLUMN_CREATED_AT))
+            )
+        }
     }
 
     private fun createAccount(signUpData: SignUpData) {
         try {
-            db.insertOrThrow(
-                AccountsTable.TABLE_NAME,
-                null,
-                contentValuesOf(
-                    AccountsTable.COLUMN_EMAIL to signUpData.email,
-                    AccountsTable.COLUMN_USERNAME to signUpData.username,
-                    AccountsTable.COLUMN_PASSWORD to signUpData.password,
-                    AccountsTable.COLUMN_CREATED_AT to signUpData.createdAt
-                )
+            val sql = "INSERT INTO ${AccountsTable.TABLE_NAME} " +
+                    "(${AccountsTable.COLUMN_EMAIL}, ${AccountsTable.COLUMN_USERNAME}, " +
+                    "${AccountsTable.COLUMN_PASSWORD}, ${AccountsTable.COLUMN_CREATED_AT}) " +
+                    "VALUES (?, ?, ?, ?)"
+            val cursor = db.rawQuery(
+                sql,
+                arrayOf(signUpData.email, signUpData.username, signUpData.password, signUpData.createdAt)
             )
+            cursor.moveToFirst()
+            cursor.close()
         } catch (e: SQLiteConstraintException) {
             val appExtension = AccountAlreadyExistsException()
             appExtension.initCause(e)
@@ -88,7 +111,7 @@ class SQLiteAccountsRepository(
         val cursor = db.rawQuery(
             "SELECT ${AccountsTable.COLUMN_ID}, ${AccountsTable.COLUMN_PASSWORD} " +
                     "FROM ${AccountsTable.TABLE_NAME} " +
-                    "WHERE email = ?",
+                    "WHERE ${AccountsTable.COLUMN_EMAIL} = ?",
             arrayOf(email)
         )
         return cursor.use {
