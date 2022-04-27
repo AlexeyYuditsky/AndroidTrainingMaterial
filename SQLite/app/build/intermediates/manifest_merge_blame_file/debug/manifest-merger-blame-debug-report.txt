@@ -1,0 +1,135 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.alexeyyuditsky.sqlite"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="31" />
+9-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.REORDER_TASKS" />
+11-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:24:5-72
+11-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:24:22-69
+12
+13    <application
+13-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:5:5-22:19
+14        android:allowBackup="true"
+14-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:6:9-35
+15        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+15-->[androidx.core:core:1.7.0] C:\Users\1\.gradle\caches\transforms-3\35ed52c242bda7e772930f0e6308400d\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
+16        android:debuggable="true"
+17        android:icon="@mipmap/ic_launcher"
+17-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:7:9-43
+18        android:label="@string/app_name"
+18-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:8:9-41
+19        android:roundIcon="@mipmap/ic_launcher_round"
+19-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:9:9-54
+20        android:supportsRtl="true"
+20-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:10:9-35
+21        android:testOnly="true"
+22        android:theme="@style/Theme.Test" >
+22-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:11:9-42
+23        <activity
+23-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:13:9-20:20
+24            android:name="com.alexeyyuditsky.sqlite.MainActivity"
+24-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:14:13-41
+25            android:exported="true" >
+25-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:15:13-36
+26            <intent-filter>
+26-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:16:13-19:29
+27                <action android:name="android.intent.action.MAIN" />
+27-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:17:17-69
+27-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:17:25-66
+28
+29                <category android:name="android.intent.category.LAUNCHER" />
+29-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:18:17-77
+29-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:18:27-74
+30            </intent-filter>
+31        </activity>
+32
+33        <uses-library
+33-->[androidx.window:window:1.0.0] C:\Users\1\.gradle\caches\transforms-3\cfb109e2e9f45ad3cb4c5626e47ee1fe\transformed\window-1.0.0\AndroidManifest.xml:25:9-27:40
+34            android:name="androidx.window.extensions"
+34-->[androidx.window:window:1.0.0] C:\Users\1\.gradle\caches\transforms-3\cfb109e2e9f45ad3cb4c5626e47ee1fe\transformed\window-1.0.0\AndroidManifest.xml:26:13-54
+35            android:required="false" />
+35-->[androidx.window:window:1.0.0] C:\Users\1\.gradle\caches\transforms-3\cfb109e2e9f45ad3cb4c5626e47ee1fe\transformed\window-1.0.0\AndroidManifest.xml:27:13-37
+36        <uses-library
+36-->[androidx.window:window:1.0.0] C:\Users\1\.gradle\caches\transforms-3\cfb109e2e9f45ad3cb4c5626e47ee1fe\transformed\window-1.0.0\AndroidManifest.xml:28:9-30:40
+37            android:name="androidx.window.sidecar"
+37-->[androidx.window:window:1.0.0] C:\Users\1\.gradle\caches\transforms-3\cfb109e2e9f45ad3cb4c5626e47ee1fe\transformed\window-1.0.0\AndroidManifest.xml:29:13-51
+38            android:required="false" />
+38-->[androidx.window:window:1.0.0] C:\Users\1\.gradle\caches\transforms-3\cfb109e2e9f45ad3cb4c5626e47ee1fe\transformed\window-1.0.0\AndroidManifest.xml:30:13-37
+39
+40        <provider
+40-->[androidx.emoji2:emoji2:1.0.0] C:\Users\1\.gradle\caches\transforms-3\2a619117dad273e166878aabffe947bb\transformed\emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+41            android:name="androidx.startup.InitializationProvider"
+41-->[androidx.emoji2:emoji2:1.0.0] C:\Users\1\.gradle\caches\transforms-3\2a619117dad273e166878aabffe947bb\transformed\emoji2-1.0.0\AndroidManifest.xml:27:13-67
+42            android:authorities="com.alexeyyuditsky.sqlite.androidx-startup"
+42-->[androidx.emoji2:emoji2:1.0.0] C:\Users\1\.gradle\caches\transforms-3\2a619117dad273e166878aabffe947bb\transformed\emoji2-1.0.0\AndroidManifest.xml:28:13-68
+43            android:exported="false" >
+43-->[androidx.emoji2:emoji2:1.0.0] C:\Users\1\.gradle\caches\transforms-3\2a619117dad273e166878aabffe947bb\transformed\emoji2-1.0.0\AndroidManifest.xml:29:13-37
+44            <meta-data
+44-->[androidx.emoji2:emoji2:1.0.0] C:\Users\1\.gradle\caches\transforms-3\2a619117dad273e166878aabffe947bb\transformed\emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+45                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+45-->[androidx.emoji2:emoji2:1.0.0] C:\Users\1\.gradle\caches\transforms-3\2a619117dad273e166878aabffe947bb\transformed\emoji2-1.0.0\AndroidManifest.xml:32:17-75
+46                android:value="androidx.startup" />
+46-->[androidx.emoji2:emoji2:1.0.0] C:\Users\1\.gradle\caches\transforms-3\2a619117dad273e166878aabffe947bb\transformed\emoji2-1.0.0\AndroidManifest.xml:33:17-49
+47            <meta-data
+47-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\1\.gradle\caches\transforms-3\2b6520bd91b6e332b9bc9f994c786017\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+48                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+48-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\1\.gradle\caches\transforms-3\2b6520bd91b6e332b9bc9f994c786017\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
+49                android:value="androidx.startup" />
+49-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\1\.gradle\caches\transforms-3\2b6520bd91b6e332b9bc9f994c786017\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+50        </provider>
+51
+52        <activity
+52-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:27:9-34:20
+53            android:name="androidx.test.core.app.InstrumentationActivityInvoker$BootstrapActivity"
+53-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:28:13-99
+54            android:exported="true"
+54-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:29:13-36
+55            android:theme="@android:style/Theme" >
+55-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:30:13-49
+56            <intent-filter>
+56-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:31:13-33:29
+57                <action android:name="android.intent.action.MAIN" />
+57-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:17:17-69
+57-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:17:25-66
+58            </intent-filter>
+59        </activity>
+60        <activity
+60-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:35:9-42:20
+61            android:name="androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity"
+61-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:36:13-95
+62            android:exported="true"
+62-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:37:13-36
+63            android:theme="@android:style/Theme" >
+63-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:38:13-49
+64            <intent-filter>
+64-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:31:13-33:29
+65                <action android:name="android.intent.action.MAIN" />
+65-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:17:17-69
+65-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:17:25-66
+66            </intent-filter>
+67        </activity>
+68        <activity
+68-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:43:9-50:20
+69            android:name="androidx.test.core.app.InstrumentationActivityInvoker$EmptyFloatingActivity"
+69-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:44:13-103
+70            android:exported="true"
+70-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:45:13-36
+71            android:theme="@android:style/Theme.Dialog" >
+71-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:46:13-56
+72            <intent-filter>
+72-->[androidx.test:core:1.4.0] C:\Users\1\.gradle\caches\transforms-3\72a2158e63c8659587dd0379480f86d9\transformed\core-1.4.0\AndroidManifest.xml:31:13-33:29
+73                <action android:name="android.intent.action.MAIN" />
+73-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:17:17-69
+73-->C:\Users\1\Desktop\AndroidTrainingMaterial\SQLite\app\src\main\AndroidManifest.xml:17:25-66
+74            </intent-filter>
+75        </activity>
+76    </application>
+77
+78</manifest>
