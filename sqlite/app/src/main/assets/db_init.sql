@@ -1,22 +1,15 @@
-create table companies (
-	id				integer primary key autoincrement,
-	company_name	text
+CREATE TABLE products
+(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    company TEXT NOT NULL,
+    product_count INTEGER,
+    price INTEGER
 );
-
-create table users (
-	id				integer primary key autoincrement,
-	name 			text not null,
-	age				integer not null,
-	company_id		integer not null,
-	foreign key (company_id) references companies (id)
-);
-
-insert into companies values
-(?, 'lerya'),
-(?, 'eldorado'),
-(?, 'lenta');
-
-insert into users values
-(?, 'ivan', 19, 1),
-(?, 'alex', 20, 2),
-(?, 'pasha', 17, 3)
+   
+INSERT INTO products VALUES
+(?, 'iPhone 13', 'Apple', 3, 76000),
+(?, 'iPhone 12', 'Apple', 2, 51000),
+(?, 'Galaxy S21', 'Samsung', 2, 56000),
+(?, 'Galaxy S20', 'Samsung', 1, 41000),
+(?, 'P40 Pro', 'Huawei', 5, 36000)

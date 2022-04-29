@@ -37,18 +37,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun getData() {
         lifecycleScope.launch {
             try {
-                val sql = "select users.*, companies.* " +
-                        "from users " +
-                        "inner join companies " +
-                        "on users.id = companies.id"
+                val sql = "select * from products"
                 database.rawQuery(sql, null).use {
                     while (it.moveToNext()) {
-                        binding.textView1.text = "id\n${it.getString(it.getColumnIndexOrThrow("id"))}"
-                        binding.textView2.text = "name\n${it.getString(it.getColumnIndexOrThrow("name"))}"
-                        binding.textView3.text = "age\n${it.getString(it.getColumnIndexOrThrow("age"))}"
-                        binding.textView4.text = "company_id\n${it.getString(it.getColumnIndexOrThrow("company_id"))}"
-                        binding.textView5.text = "id\n${it.getString(it.getColumnIndexOrThrow("id"))}"
-                        binding.textView6.text = "company_name\n${it.getString(it.getColumnIndexOrThrow("company_name"))}"
+                        binding.textView1.text = it.getString(it.getColumnIndexOrThrow("id"))
+                        binding.textView2.text = it.getString(it.getColumnIndexOrThrow("name"))
+                        binding.textView3.text = it.getString(it.getColumnIndexOrThrow("company"))
+                        binding.textView4.text = it.getString(it.getColumnIndexOrThrow("product_count"))
+                        binding.textView5.text = it.getString(it.getColumnIndexOrThrow("price"))
+                       // binding.textView6.text = "company_name\n${it.getString(it.getColumnIndexOrThrow("company_name"))}"
                         delay(2000)
                     }
                 }
