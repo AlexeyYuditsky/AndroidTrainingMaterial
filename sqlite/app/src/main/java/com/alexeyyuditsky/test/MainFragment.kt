@@ -5,6 +5,7 @@ import android.database.SQLException
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.alexeyyuditsky.test.databinding.FragmentMainBinding
@@ -37,19 +38,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun getData() {
         lifecycleScope.launch {
             try {
-                val sql = "select company, count(*) as models, sum(product_count) as units " +
-                        "from products " +
-                        "group by company " +
-                        "having units > 2 " +
-                        "order by units desc"
+                val sql = "select name, created_at, items_count, price " +
+                        "from customers left join orders " +
+                        "on orders.customer_id = customers.id"
                 database.rawQuery(sql, null).use {
                     while (it.moveToNext()) {
-                        //binding.textView1.text = it.getString(it.getColumnIndexOrThrow("id"))
-                        //binding.textView2.text = it.getString(it.getColumnIndexOrThrow("name"))
-                        binding.textView3.text = it.getString(it.getColumnIndexOrThrow("company"))
-                        binding.textView4.text = it.getString(it.getColumnIndexOrThrow("models"))
-                        binding.textView5.text = it.getString(it.getColumnIndexOrThrow("units"))
-                       // binding.textView6.text = "company_name\n${it.getString(it.getColumnIndexOrThrow("company_name"))}"
+                        binding.textView1.isVisible = false
+                        binding.textView2.text = it.getString(it.getColumnIndexOrThrow("name"))
+                        binding.textView3.text = it.getString(it.getColumnIndexOrThrow("created_at"))
+                        binding.textView4.text = it.getString(it.getColumnIndexOrThrow("items_count"))
+                        binding.textView5.text = it.getString(it.getColumnIndexOrThrow("price"))
+                        binding.textView6.isVisible = false
                         delay(2000)
                     }
                 }
