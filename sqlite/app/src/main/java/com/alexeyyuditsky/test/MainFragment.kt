@@ -45,9 +45,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     while (it.moveToNext()) {
                         binding.textView1.isVisible = false
                         binding.textView2.text = it.getString(it.getColumnIndexOrThrow("name"))
-                        binding.textView3.text = it.getString(it.getColumnIndexOrThrow("created_at"))
-                        binding.textView4.text = it.getString(it.getColumnIndexOrThrow("items_count"))
-                        binding.textView5.text = it.getString(it.getColumnIndexOrThrow("price"))
+                        binding.textView3.text = it.getString(it.getColumnIndexOrThrow("created_at")) ?: "Null"
+                        binding.textView4.text = it.getString(it.getColumnIndexOrThrow("items_count")) ?: "Null"
+                        binding.textView5.text = it.getString(it.getColumnIndexOrThrow("price")) ?: "Null"
                         binding.textView6.isVisible = false
                         delay(2000)
                     }
