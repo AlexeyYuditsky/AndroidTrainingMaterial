@@ -37,14 +37,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun getData() {
         lifecycleScope.launch {
             try {
-                val sql = "select * from products"
+                val sql = "select company, count(*) as models, sum(product_count) as units " +
+                        "from products " +
+                        "group by company " +
+                        "having units > 2 " +
+                        "order by units desc"
                 database.rawQuery(sql, null).use {
                     while (it.moveToNext()) {
-                        binding.textView1.text = it.getString(it.getColumnIndexOrThrow("id"))
-                        binding.textView2.text = it.getString(it.getColumnIndexOrThrow("name"))
+                        //binding.textView1.text = it.getString(it.getColumnIndexOrThrow("id"))
+                        //binding.textView2.text = it.getString(it.getColumnIndexOrThrow("name"))
                         binding.textView3.text = it.getString(it.getColumnIndexOrThrow("company"))
-                        binding.textView4.text = it.getString(it.getColumnIndexOrThrow("product_count"))
-                        binding.textView5.text = it.getString(it.getColumnIndexOrThrow("price"))
+                        binding.textView4.text = it.getString(it.getColumnIndexOrThrow("models"))
+                        binding.textView5.text = it.getString(it.getColumnIndexOrThrow("units"))
                        // binding.textView6.text = "company_name\n${it.getString(it.getColumnIndexOrThrow("company_name"))}"
                         delay(2000)
                     }
