@@ -38,16 +38,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun getData() {
         lifecycleScope.launch {
             try {
-                val sql = "select name, created_at, items_count, price " +
-                        "from customers left join orders " +
-                        "on orders.customer_id = customers.id"
+                val sql = "select *, strftime('%H:%M, %d.%m.%Y', created_at) as date from users"
                 database.rawQuery(sql, null).use {
                     while (it.moveToNext()) {
-                        binding.textView1.isVisible = false
-                        binding.textView2.text = it.getString(it.getColumnIndexOrThrow("name"))
-                        binding.textView3.text = it.getString(it.getColumnIndexOrThrow("created_at")) ?: "Null"
-                        binding.textView4.text = it.getString(it.getColumnIndexOrThrow("items_count")) ?: "Null"
-                        binding.textView5.text = it.getString(it.getColumnIndexOrThrow("price")) ?: "Null"
+                        binding.textView1.text = it.getString(it.getColumnIndexOrThrow("created_at")) + " |"
+                        binding.textView2.text = it.getString(it.getColumnIndexOrThrow("name")) + " |"
+                        binding.textView3.text = it.getString(it.getColumnIndexOrThrow("date")) ?: "NULL"
+                        binding.textView4.isVisible = false
+                        binding.textView5.isVisible = false
                         binding.textView6.isVisible = false
                         delay(2000)
                     }
