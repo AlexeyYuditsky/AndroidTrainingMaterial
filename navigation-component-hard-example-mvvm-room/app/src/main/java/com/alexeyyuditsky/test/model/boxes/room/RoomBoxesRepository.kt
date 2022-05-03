@@ -1,22 +1,18 @@
-package com.alexeyyuditsky.test.model.boxes
+package com.alexeyyuditsky.test.model.boxes.room
 
 import android.database.Cursor
-import android.database.CursorJoiner
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Color
-import android.util.Log
-import com.alexeyyuditsky.test.model.AuthException
-import com.alexeyyuditsky.test.model.StorageException
 import com.alexeyyuditsky.test.model.accounts.AccountsRepository
+import com.alexeyyuditsky.test.model.boxes.BoxesRepository
 import com.alexeyyuditsky.test.model.boxes.entities.Box
-import com.alexeyyuditsky.test.model.settings.AppSettings
 import com.alexeyyuditsky.test.model.sqlite.AccountsBoxesSettingsTable
 import com.alexeyyuditsky.test.model.sqlite.BoxesTable
 import com.alexeyyuditsky.test.model.sqlite.wrapSQLiteException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 
-class SQLiteBoxesRepository(
+class RoomBoxesRepository(
     private val db: SQLiteDatabase,
     private val accountsRepository: AccountsRepository,
     private val ioDispatcher: CoroutineDispatcher

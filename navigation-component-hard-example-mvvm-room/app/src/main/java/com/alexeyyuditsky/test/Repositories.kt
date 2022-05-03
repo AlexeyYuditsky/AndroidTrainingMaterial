@@ -2,10 +2,12 @@ package com.alexeyyuditsky.test
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.Room
 import com.alexeyyuditsky.test.model.accounts.AccountsRepository
-import com.alexeyyuditsky.test.model.accounts.SQLiteAccountsRepository
+import com.alexeyyuditsky.test.model.accounts.room.RoomAccountsRepository
 import com.alexeyyuditsky.test.model.boxes.BoxesRepository
-import com.alexeyyuditsky.test.model.boxes.SQLiteBoxesRepository
+import com.alexeyyuditsky.test.model.boxes.room.RoomBoxesRepository
+import com.alexeyyuditsky.test.model.room.AppDatabase
 import com.alexeyyuditsky.test.model.settings.AppSettings
 import com.alexeyyuditsky.test.model.settings.SharedPreferencesAppSettings
 import com.alexeyyuditsky.test.model.sqlite.AppSQLiteHelper
@@ -18,7 +20,13 @@ object Repositories {
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
-    private val database: SQLiteDatabase by lazy {
+    private val database: AppDatabase by lazy {
+        Room.databaseBuilder(applicationContext, AppDatabase::class.java, "database.db")
+            .createFromAsset("initial_database.db")
+            .build()
+    }
+
+    private val database1: SQLiteDatabase by lazy {
         AppSQLiteHelper(applicationContext).writableDatabase
     }
 
@@ -27,11 +35,11 @@ object Repositories {
     }
 
     val accountsRepository: AccountsRepository by lazy {
-        SQLiteAccountsRepository(database, appSettings, ioDispatcher)
+        RoomAccountsRepository(database.getAccountsDao(), appSettings, ioDispatcher)
     }
 
     val boxesRepository: BoxesRepository by lazy {
-        SQLiteBoxesRepository(database, accountsRepository, ioDispatcher)
+        RoomBoxesRepository(database1, accountsRepository, ioDispatcher)
     }
 
     fun init(context: Context) {

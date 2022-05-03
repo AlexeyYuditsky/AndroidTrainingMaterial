@@ -8,7 +8,6 @@ import com.alexeyyuditsky.test.model.EmptyFieldException
 import com.alexeyyuditsky.test.model.accounts.AccountsRepository
 import com.alexeyyuditsky.test.model.accounts.entities.Account
 import com.alexeyyuditsky.test.utils.Event
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class EditProfileViewModel(
