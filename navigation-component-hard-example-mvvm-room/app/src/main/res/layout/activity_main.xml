@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".screens.MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -14,7 +15,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <TextView
-            android:id="@+id/toolbarTextView"
+            android:id="@+id/usernameTextView"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -33,9 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/main_graph"
-        tools:context=".MainActivity" />
+        app:navGraph="@navigation/main_graph" />
 
 </LinearLayout>
-
-

@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.alexeyyuditsky.test.screens.main.tabs.profile.ProfileFragment"
-        android:label="Profile"
+        android:name="com.alexeyyuditsky.room.screens.tabs.profile.ProfileFragment"
+        android:label="@string/screen_profile"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>

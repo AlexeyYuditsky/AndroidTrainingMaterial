@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.alexeyyuditsky.test.screens.main.tabs.settings.SettingsFragment"
-        android:label="Settings"
+        android:name="com.alexeyyuditsky.room.screens.tabs.settings.SettingsFragment"
+        android:label="@string/screen_settings"
         tools:layout="@layout/fragment_settings" />
 
 </navigation>
