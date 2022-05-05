@@ -40,7 +40,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
             binding.saveButton.isEnabled = false
             binding.usernameTextInput.isEnabled = false
         } else {
-            binding.progressBar.isVisible = true
+            binding.progressBar.isVisible = false
             binding.saveButton.isEnabled = true
             binding.usernameTextInput.isEnabled = true
         }
