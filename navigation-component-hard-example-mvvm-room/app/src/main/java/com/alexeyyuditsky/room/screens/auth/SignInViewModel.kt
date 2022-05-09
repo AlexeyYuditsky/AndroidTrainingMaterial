@@ -19,13 +19,13 @@ class SignInViewModel(
     private val _state = MutableLiveData(State())
     val state = _state.share()
 
-    private val _clearPasswordEvent = MutableUnitLiveEvent()
+    private val _clearPasswordEvent = MutableLiveEvent<Unit>()
     val clearPasswordEvent = _clearPasswordEvent.share()
 
     private val _showAuthErrorToastEvent = MutableLiveEvent<Int>()
     val showAuthToastEvent = _showAuthErrorToastEvent.share()
 
-    private val _navigateToTabsEvent = MutableUnitLiveEvent()
+    private val _navigateToTabsEvent = MutableLiveEvent<Unit>()
     val navigateToTabsEvent = _navigateToTabsEvent.share()
 
     fun signIn(email: String, password: String) = viewModelScope.launch {
@@ -69,11 +69,11 @@ class SignInViewModel(
         _state.value = State(signInInProgress = true)
     }
 
-    private fun clearPasswordField() = _clearPasswordEvent.publishEvent()
+    private fun clearPasswordField() = _clearPasswordEvent.publishEvent(Unit)
 
     private fun showAuthErrorToast() = _showAuthErrorToastEvent.publishEvent(R.string.invalid_email_or_password)
 
-    private fun launchTabsScreen() = _navigateToTabsEvent.publishEvent()
+    private fun launchTabsScreen() = _navigateToTabsEvent.publishEvent(Unit)
 
     data class State(
         val emptyEmailError: Boolean = false,

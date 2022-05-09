@@ -1,6 +1,8 @@
 package com.alexeyyuditsky.room.model.accounts.room
 
 import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
+import androidx.room.ColumnInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -28,7 +30,7 @@ class RoomAccountsRepository(
     }
 
     override suspend fun isSignedIn(): Boolean {
-        delay(2000)
+        delay(1000)
         return appSettings.getCurrentAccountId() != AppSettings.NO_ACCOUNT_ID
     }
 
@@ -41,8 +43,6 @@ class RoomAccountsRepository(
         val accountId = findAccountIdByEmailAndPassword(email, password)
         appSettings.setCurrentAccountId(accountId)
         currentAccountIdFlow.get().value = AccountId(accountId)
-
-        return@wrapSQLiteException
     }
 
     override suspend fun signUp(signUpData: SignUpData) = wrapSQLiteException(ioDispatcher) {
@@ -77,7 +77,6 @@ class RoomAccountsRepository(
         updateUsernameForAccountId(accountId, newUsername)
 
         currentAccountIdFlow.get().value = AccountId(accountId)
-        return@wrapSQLiteException
     }
 
     private suspend fun findAccountIdByEmailAndPassword(email: String, password: String): Long {

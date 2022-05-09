@@ -3,7 +3,6 @@ package com.alexeyyuditsky.room.screens.tabs.profile
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import com.alexeyyuditsky.room.model.accounts.AccountsRepository
 import com.alexeyyuditsky.room.model.accounts.entities.Account
@@ -37,7 +36,7 @@ class ProfileViewModel(
     }
 
     private fun restartAppFromLoginScreen() {
-        _restartFromLoginEvent.publishEvent()
+        _restartFromLoginEvent.publishEvent(Unit)
     }
 
 }

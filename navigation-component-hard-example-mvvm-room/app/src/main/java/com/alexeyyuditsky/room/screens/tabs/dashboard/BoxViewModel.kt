@@ -2,7 +2,6 @@ package com.alexeyyuditsky.room.screens.tabs.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import com.alexeyyuditsky.room.model.boxes.BoxesRepository

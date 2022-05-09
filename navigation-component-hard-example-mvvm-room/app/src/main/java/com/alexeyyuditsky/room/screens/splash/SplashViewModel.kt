@@ -2,11 +2,11 @@ package com.alexeyyuditsky.room.screens.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import com.alexeyyuditsky.room.model.accounts.AccountsRepository
 import com.alexeyyuditsky.room.utils.MutableLiveEvent
 import com.alexeyyuditsky.room.utils.publishEvent
 import com.alexeyyuditsky.room.utils.share
+import kotlinx.coroutines.launch
 
 /**
  * SplashViewModel checks whether user is signed-in or not.

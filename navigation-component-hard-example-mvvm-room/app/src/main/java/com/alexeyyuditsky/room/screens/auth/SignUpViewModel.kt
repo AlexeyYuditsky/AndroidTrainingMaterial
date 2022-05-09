@@ -15,7 +15,7 @@ class SignUpViewModel(
     private val accountsRepository: AccountsRepository
 ) : ViewModel() {
 
-    private val _goBackEvent = MutableUnitLiveEvent()
+    private val _goBackEvent = MutableLiveEvent<Unit>()
     val goBackEvent = _goBackEvent.share()
 
     private val _showToastEvent = MutableLiveEvent<Int>()
@@ -78,7 +78,7 @@ class SignUpViewModel(
 
     private fun processStorageException() = _showToastEvent.publishEvent(R.string.storage_error)
 
-    private fun goBack() = _goBackEvent.publishEvent()
+    private fun goBack() = _goBackEvent.publishEvent(Unit)
 
     data class State(
         @StringRes val emailErrorMessageRes: Int = NO_ERROR_MESSAGE,

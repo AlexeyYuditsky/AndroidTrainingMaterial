@@ -3,10 +3,13 @@ package com.alexeyyuditsky.room.screens.splash
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import com.alexeyyuditsky.room.R
 import com.alexeyyuditsky.room.Repositories
 import com.alexeyyuditsky.room.databinding.FragmentSplashBinding
+import com.alexeyyuditsky.room.utils.LiveEvent
 import com.alexeyyuditsky.room.utils.observeEvent
 import com.alexeyyuditsky.room.utils.viewModelCreator
 

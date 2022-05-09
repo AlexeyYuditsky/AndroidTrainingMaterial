@@ -4,13 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alexeyyuditsky.room.R
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import com.alexeyyuditsky.room.model.StorageException
 import com.alexeyyuditsky.room.model.boxes.BoxesRepository
 import com.alexeyyuditsky.room.model.boxes.entities.Box
 import com.alexeyyuditsky.room.model.boxes.entities.BoxAndSettings
-import com.alexeyyuditsky.room.screens.tabs.settings.SettingsAdapter
 import com.alexeyyuditsky.room.utils.MutableLiveEvent
 import com.alexeyyuditsky.room.utils.publishEvent
 import com.alexeyyuditsky.room.utils.share
