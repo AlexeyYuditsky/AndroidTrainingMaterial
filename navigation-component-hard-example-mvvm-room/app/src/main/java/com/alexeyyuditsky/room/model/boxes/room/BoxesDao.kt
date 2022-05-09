@@ -11,10 +11,9 @@ import com.alexeyyuditsky.room.model.boxes.room.entities.BoxDbEntity
 @Dao
 interface BoxesDao {
 
-    @Query("SELECT * " +
-            "FROM boxes " +
+    @Query("SELECT * FROM boxes " +
             "LEFT JOIN accounts_boxes_settings " +
-            "  ON boxes.id = accounts_boxes_settings.box_id AND accounts_boxes_settings.account_id = :accountId")
+            "ON boxes.id = accounts_boxes_settings.box_id AND accounts_boxes_settings.account_id = :accountId")
     fun getBoxesAndSettings(accountId: Long): Flow<Map<BoxDbEntity, AccountBoxSettingDbEntity?>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

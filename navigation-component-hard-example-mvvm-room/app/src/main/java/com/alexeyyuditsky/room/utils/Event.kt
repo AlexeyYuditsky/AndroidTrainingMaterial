@@ -10,21 +10,17 @@ class Event<T>(
     fun get(): T? = _value?.apply { _value = null }
 }
 
-/**
- * Convert mutable live-data into non-mutable live-data.
- */
-fun <T> MutableLiveData<T>.share(): LiveData<T> = this
-
 // type aliases for live-data instances which contain events
 typealias MutableLiveEvent<T> = MutableLiveData<Event<T>>
 typealias LiveEvent<T> = LiveData<Event<T>>
-typealias EventListener<T> = (T) -> Unit
+
+fun <T> MutableLiveData<T>.share(): LiveData<T> = this
 
 fun <T> MutableLiveEvent<T>.publishEvent(value: T) {
     this.value = Event(value)
 }
 
-fun <T> LiveEvent<T>.observeEvent(lifecycleOwner: LifecycleOwner, listener: EventListener<T>) {
+fun <T> LiveEvent<T>.observeEvent(lifecycleOwner: LifecycleOwner, listener: (T) -> Unit) {
     this.observe(lifecycleOwner) {
         it?.get()?.let { value ->
             listener(value)

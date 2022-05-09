@@ -37,4 +37,5 @@ data class AccountDbEntity(
             createdAt = System.currentTimeMillis()
         )
     }
+
 }

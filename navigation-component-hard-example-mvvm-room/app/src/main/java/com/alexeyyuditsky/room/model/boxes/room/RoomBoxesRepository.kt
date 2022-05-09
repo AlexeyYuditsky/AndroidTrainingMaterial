@@ -1,5 +1,6 @@
 package com.alexeyyuditsky.room.model.boxes.room
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import com.alexeyyuditsky.room.model.AuthException
@@ -19,8 +20,11 @@ class RoomBoxesRepository(
     override suspend fun getBoxesAndSettings(onlyActive: Boolean): Flow<List<BoxAndSettings>> {
         return accountsRepository.getAccount()
             .flatMapLatest { account ->
-                if (account == null) return@flatMapLatest flowOf(emptyList())
-                queryBoxesAndSettings(account.id)
+                if (account == null) {
+                    flowOf(emptyList())
+                } else {
+                    queryBoxesAndSettings(account.id)
+                }
             }
             .mapLatest { boxAndSettings ->
                 if (onlyActive) {

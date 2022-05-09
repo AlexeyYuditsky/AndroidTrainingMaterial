@@ -3,6 +3,7 @@ package com.alexeyyuditsky.room.screens.tabs.dashboard
 import android.os.Bundle
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.alexeyyuditsky.room.R
@@ -31,11 +32,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private fun renderBoxes(boxes: List<Box>) {
         clearBoxViews()
         if (boxes.isEmpty()) {
-            binding.noBoxesTextView.visibility = View.VISIBLE
-            binding.boxesContainer.visibility = View.INVISIBLE
+            binding.noBoxesTextView.isVisible = true
+            binding.boxesContainer.isVisible = false
         } else {
-            binding.noBoxesTextView.visibility = View.INVISIBLE
-            binding.boxesContainer.visibility = View.VISIBLE
+            binding.noBoxesTextView.isVisible = false
+            binding.boxesContainer.isVisible = true
             createBoxes(boxes)
         }
     }
