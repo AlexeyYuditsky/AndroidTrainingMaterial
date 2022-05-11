@@ -8,7 +8,7 @@ import com.alexeyyuditsky.room.model.boxes.entities.Box
 
 @Entity(tableName = "boxes")
 data class BoxDbEntity(
-    @PrimaryKey @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "id") @PrimaryKey val id: Long,
     @ColumnInfo(name = "color_name") val colorName: String,
     @ColumnInfo(name = "color_value") val colorValue: String
 ) {

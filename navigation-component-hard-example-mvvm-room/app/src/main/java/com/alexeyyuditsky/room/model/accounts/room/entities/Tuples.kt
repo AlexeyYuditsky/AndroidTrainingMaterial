@@ -9,6 +9,6 @@ data class AccountSignInTuple(
 )
 
 data class AccountUpdateUsernameTuple(
-    @ColumnInfo(name = "id") @PrimaryKey val id: Long,
+    @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "username") val username: String
 )

@@ -1,6 +1,6 @@
 package com.alexeyyuditsky.room.model.boxes.room
 
-import android.util.Log
+import android.graphics.Color
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import com.alexeyyuditsky.room.model.AuthException
@@ -47,9 +47,14 @@ class RoomBoxesRepository(
         return boxesDao.getBoxesAndSettings(accountId)
             .map { entities ->
                 entities.map {
-                    val boxEntity = it.key
-                    val settingsEntity = it.value
-                    BoxAndSettings(boxEntity.toBox(), settingsEntity == null || settingsEntity.isActive)
+                    BoxAndSettings(
+                        box = Box(
+                            id = it.boxId,
+                            colorName = it.colorName,
+                            colorValue = Color.parseColor(it.colorValue)
+                        ),
+                        isActive = it.isActive,
+                    )
                 }
             }
     }

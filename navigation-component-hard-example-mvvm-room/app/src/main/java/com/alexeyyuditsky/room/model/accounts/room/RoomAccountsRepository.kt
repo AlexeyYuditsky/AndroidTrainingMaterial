@@ -97,11 +97,13 @@ class RoomAccountsRepository(
     }
 
     private fun getAccountById(accountId: Long): Flow<Account?> {
-        return accountsDao.getById(accountId).map { it?.toAccount() }
+        return accountsDao.getById(accountId).map { accountDbEntity -> accountDbEntity?.toAccount() }
     }
 
     private suspend fun updateUsernameForAccountId(accountId: Long, newUsername: String) {
-        accountsDao.updateUsername(AccountUpdateUsernameTuple(accountId, newUsername))
+        accountsDao.updateUsername(
+            AccountUpdateUsernameTuple(accountId, newUsername)
+        )
     }
 
     private class AccountId(val value: Long)
