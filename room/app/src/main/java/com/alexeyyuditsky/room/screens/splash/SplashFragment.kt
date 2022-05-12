@@ -34,8 +34,8 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     }
 
     private fun renderAnimations() {
-        binding.loadingIndicator.alpha = 0f
-        binding.loadingIndicator.animate()
+        binding.progressBar.alpha = 0f
+        binding.progressBar.animate()
             .alpha(0.7f)
             .setDuration(1000)
             .start()
