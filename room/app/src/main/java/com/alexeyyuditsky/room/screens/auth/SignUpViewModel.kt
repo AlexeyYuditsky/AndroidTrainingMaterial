@@ -15,7 +15,7 @@ class SignUpViewModel(
     private val accountsRepository: AccountsRepository
 ) : ViewModel() {
 
-    private val _goBackEvent = MutableUnitLiveEvent()
+    private val _goBackEvent = MutableLiveEvent<Unit>()
     val goBackEvent = _goBackEvent.share()
 
     private val _showToastEvent = MutableLiveEvent<Int>()
@@ -47,24 +47,18 @@ class SignUpViewModel(
 
     private fun processEmptyFieldException(e: EmptyFieldException) {
         _state.value = when (e.field) {
-            Field.Email -> _state.requireValue()
-                .copy(emailErrorMessageRes = R.string.field_is_empty)
-            Field.Username -> _state.requireValue()
-                .copy(usernameErrorMessageRes = R.string.field_is_empty)
-            Field.Password -> _state.requireValue()
-                .copy(passwordErrorMessageRes = R.string.field_is_empty)
-            else -> throw IllegalStateException("Unknown field")
+            Field.Email -> _state.value?.copy(emailErrorMessageRes = R.string.field_is_empty)
+            Field.Username -> _state.value?.copy(usernameErrorMessageRes = R.string.field_is_empty)
+            Field.Password -> _state.value?.copy(passwordErrorMessageRes = R.string.field_is_empty)
         }
     }
 
     private fun processPasswordMismatchException() {
-        _state.value = _state.requireValue()
-            .copy(repeatPasswordErrorMessageRes = R.string.password_mismatch)
+        _state.value = _state.value?.copy(repeatPasswordErrorMessageRes = R.string.password_mismatch)
     }
 
     private fun processAccountAlreadyExistsException() {
-        _state.value = _state.requireValue()
-            .copy(emailErrorMessageRes = R.string.account_already_exists)
+        _state.value = _state.value?.copy(emailErrorMessageRes = R.string.account_already_exists)
     }
 
     private fun showProgress() {
@@ -72,14 +66,14 @@ class SignUpViewModel(
     }
 
     private fun hideProgress() {
-        _state.value = _state.requireValue().copy(signUpInProgress = false)
+        _state.value = _state.value?.copy(signUpInProgress = false)
     }
 
     private fun showSuccessSignUpMessage() = _showToastEvent.publishEvent(R.string.sign_up_success)
 
     private fun processStorageException() = _showToastEvent.publishEvent(R.string.storage_error)
 
-    private fun goBack() = _goBackEvent.publishEvent()
+    private fun goBack() = _goBackEvent.publishEvent(Unit)
 
     data class State(
         @StringRes val emailErrorMessageRes: Int = NO_ERROR_MESSAGE,

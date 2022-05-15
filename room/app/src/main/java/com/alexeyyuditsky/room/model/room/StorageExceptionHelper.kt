@@ -9,9 +9,9 @@ import com.alexeyyuditsky.room.model.StorageException
 /**
  * Converts any [SQLiteException] into in-app [StorageException]
  */
-suspend fun <T> wrapSQLiteException(dispatcher: CoroutineDispatcher, block: suspend CoroutineScope.() -> T): T {
+suspend fun wrapSQLiteException(dispatcher: CoroutineDispatcher, block: suspend CoroutineScope.() -> Unit) {
     try {
-        return withContext(dispatcher, block)
+        withContext(dispatcher, block)
     } catch (e: SQLiteException) {
         val appException = StorageException()
         appException.initCause(e)

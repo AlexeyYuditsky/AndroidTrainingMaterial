@@ -13,6 +13,7 @@ class ViewModelFactory<VM : ViewModel>(
     private val viewModelCreator: ViewModelCreator<VM>
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
         return viewModelCreator() as T
     }
 }

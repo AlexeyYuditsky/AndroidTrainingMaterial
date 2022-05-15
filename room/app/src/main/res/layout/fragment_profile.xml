@@ -89,7 +89,7 @@
 
         <Button
             android:id="@+id/editProfileButton"
-            style="@style/GlobalTextInputStyle.Big"
+            style="@style/GlobalTextInputStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_space"
@@ -102,7 +102,7 @@
 
         <Button
             android:id="@+id/logoutButton"
-            style="@style/GlobalTextInputStyle.Secondary.Big"
+            style="@style/GlobalTextInputStyle.Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium_space"

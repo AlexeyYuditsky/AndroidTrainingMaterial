@@ -25,17 +25,9 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="GlobalTextInputStyle.Big">
-        <item name="android:minWidth">@dimen/big_width</item>
-    </style>
-
     <style name="GlobalTextInputStyle.Secondary">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="GlobalTextInputStyle.Secondary.Big">
-        <item name="android:minWidth">@dimen/big_width</item>
     </style>
 
     <style name="DefaultDashboardItemStyle">

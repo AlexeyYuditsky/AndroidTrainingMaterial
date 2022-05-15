@@ -1,6 +1,7 @@
 package com.alexeyyuditsky.room.screens.splash
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -26,24 +27,22 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     }
 
     private fun launchMainScreen(isSignedIn: Boolean) {
-        if (isSignedIn) {
-            findNavController().navigate(R.id.action_splashFragment_to_tabsFragment)
-        } else {
-            findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
-        }
+        findNavController().navigate(
+            if (isSignedIn) R.id.action_splashFragment_to_tabsFragment
+            else R.id.action_splashFragment_to_signInFragment
+        )
     }
 
     private fun renderAnimations() {
         binding.progressBar.alpha = 0f
         binding.progressBar.animate()
-            .alpha(0.7f)
+            .alpha(1f)
             .setDuration(1000)
             .start()
 
         binding.pleaseWaitTextView.alpha = 0f
         binding.pleaseWaitTextView.animate()
             .alpha(1f)
-            .setStartDelay(500)
             .setDuration(1000)
             .start()
     }

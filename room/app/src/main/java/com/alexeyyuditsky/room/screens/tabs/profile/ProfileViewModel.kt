@@ -36,7 +36,7 @@ class ProfileViewModel(
     }
 
     private fun restartAppFromLoginScreen() {
-        _restartFromLoginEvent.publishEvent()
+        _restartFromLoginEvent.publishEvent(Unit)
     }
 
 }

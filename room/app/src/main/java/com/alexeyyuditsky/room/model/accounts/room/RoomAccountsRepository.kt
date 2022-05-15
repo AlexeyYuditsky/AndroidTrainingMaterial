@@ -39,14 +39,11 @@ class RoomAccountsRepository(
     override suspend fun signIn(email: String, password: CharArray) = wrapSQLiteException(ioDispatcher) {
         if (email.isBlank()) throw EmptyFieldException(Field.Email)
         if (password.isEmpty()) throw EmptyFieldException(Field.Password)
-
         delay(1000)
 
         val accountId = findAccountIdByEmailAndPassword(email, password)
         appSettings.setCurrentAccountId(accountId)
         currentAccountIdFlow.get().value = AccountId(accountId)
-
-        return@wrapSQLiteException
     }
 
     override suspend fun signUp(signUpData: SignUpData) = wrapSQLiteException(ioDispatcher) {

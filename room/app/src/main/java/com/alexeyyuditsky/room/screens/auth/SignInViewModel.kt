@@ -19,13 +19,13 @@ class SignInViewModel(
     private val _state = MutableLiveData(State())
     val state = _state.share()
 
-    private val _clearPasswordEvent = MutableUnitLiveEvent()
+    private val _clearPasswordEvent = MutableLiveEvent<Unit>()
     val clearPasswordEvent = _clearPasswordEvent.share()
 
     private val _showAuthErrorToastEvent = MutableLiveEvent<Int>()
     val showAuthToastEvent = _showAuthErrorToastEvent.share()
 
-    private val _navigateToTabsEvent = MutableUnitLiveEvent()
+    private val _navigateToTabsEvent = MutableLiveEvent<Unit>()
     val navigateToTabsEvent = _navigateToTabsEvent.share()
 
     fun signIn(email: String, password: CharArray) = viewModelScope.launch {
@@ -43,7 +43,7 @@ class SignInViewModel(
     }
 
     private fun processEmptyFieldException(e: EmptyFieldException) {
-        _state.value = _state.requireValue().copy(
+        _state.value = _state.value?.copy(
             emptyEmailError = e.field == Field.Email,
             emptyPasswordError = e.field == Field.Password,
             signInInProgress = false
@@ -51,29 +51,25 @@ class SignInViewModel(
     }
 
     private fun processAuthException() {
-        _state.value = _state.requireValue().copy(
-            signInInProgress = false
-        )
+        _state.value = _state.value?.copy(signInInProgress = false)
         clearPasswordField()
         showAuthErrorToast()
     }
 
     private fun processStorageException() {
         _showAuthErrorToastEvent.publishEvent(R.string.storage_error)
-        _state.value = _state.requireValue().copy(
-            signInInProgress = false
-        )
+        _state.value = _state.value?.copy(signInInProgress = false)
     }
 
     private fun showProgress() {
         _state.value = State(signInInProgress = true)
     }
 
-    private fun clearPasswordField() = _clearPasswordEvent.publishEvent()
+    private fun clearPasswordField() = _clearPasswordEvent.publishEvent(Unit)
 
     private fun showAuthErrorToast() = _showAuthErrorToastEvent.publishEvent(R.string.invalid_email_or_password)
 
-    private fun launchTabsScreen() = _navigateToTabsEvent.publishEvent()
+    private fun launchTabsScreen() = _navigateToTabsEvent.publishEvent(Unit)
 
     data class State(
         val emptyEmailError: Boolean = false,
@@ -83,4 +79,5 @@ class SignInViewModel(
         val showProgress: Boolean get() = signInInProgress
         val enableViews: Boolean get() = !signInInProgress
     }
+
 }

@@ -11,7 +11,6 @@ import com.alexeyyuditsky.room.model.EmptyFieldException
 import com.alexeyyuditsky.room.model.StorageException
 import com.alexeyyuditsky.room.model.accounts.AccountsRepository
 import com.alexeyyuditsky.room.utils.MutableLiveEvent
-import com.alexeyyuditsky.room.utils.MutableUnitLiveEvent
 import com.alexeyyuditsky.room.utils.publishEvent
 import com.alexeyyuditsky.room.utils.share
 
@@ -25,7 +24,7 @@ class EditProfileViewModel(
     private val _saveInProgress = MutableLiveData(false)
     val saveInProgress = _saveInProgress.share()
 
-    private val _goBackEvent = MutableUnitLiveEvent()
+    private val _goBackEvent = MutableLiveEvent<Unit>()
     val goBackEvent = _goBackEvent.share()
 
     private val _showErrorEvent = MutableLiveEvent<Int>()
@@ -56,7 +55,7 @@ class EditProfileViewModel(
         }
     }
 
-    private fun goBack() = _goBackEvent.publishEvent()
+    private fun goBack() = _goBackEvent.publishEvent(Unit)
 
     private fun showProgress() {
         _saveInProgress.value = true

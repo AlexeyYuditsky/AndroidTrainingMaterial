@@ -1,6 +1,6 @@
 package com.alexeyyuditsky.room.model
 
-open class AppException : RuntimeException()
+abstract class AppException : RuntimeException()
 
 class EmptyFieldException(
     val field: Field
@@ -12,4 +12,4 @@ class AccountAlreadyExistsException : AppException()
 
 class AuthException : AppException()
 
-class StorageException: AppException()
+class StorageException : AppException()

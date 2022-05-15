@@ -3,6 +3,7 @@ package com.alexeyyuditsky.room.screens.auth
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.alexeyyuditsky.room.R
@@ -45,7 +46,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         binding.passwordTextInput.isEnabled = it.enableViews
         binding.signInButton.isEnabled = it.enableViews
         binding.signUpButton.isEnabled = it.enableViews
-        binding.progressBar.visibility = if (it.showProgress) View.VISIBLE else View.INVISIBLE
+        binding.progressBar.isVisible = it.showProgress
     }
 
     private fun observeShowAuthErrorMessageEvent() = viewModel.showAuthToastEvent.observeEvent(viewLifecycleOwner) {
@@ -62,11 +63,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
     private fun onSignUpButtonPressed() {
         val email = binding.emailEditText.text.toString()
-        val emailArg = if (email.isBlank())
-            null
-        else {
-            email
-        }
+        val emailArg = email.ifBlank { null }
 
         val direction = SignInFragmentDirections.actionSignInFragmentToSignUpFragment(emailArg)
         findNavController().navigate(direction)
