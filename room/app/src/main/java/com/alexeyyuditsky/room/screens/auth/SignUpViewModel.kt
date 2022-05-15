@@ -24,24 +24,22 @@ class SignUpViewModel(
     private val _state = MutableLiveData(State())
     val state = _state.share()
 
-    fun signUp(signUpData: SignUpData) {
-        viewModelScope.launch {
-            showProgress()
-            try {
-                accountsRepository.signUp(signUpData)
-                showSuccessSignUpMessage()
-                goBack()
-            } catch (e: EmptyFieldException) {
-                processEmptyFieldException(e)
-            } catch (e: PasswordMismatchException) {
-                processPasswordMismatchException()
-            } catch (e: AccountAlreadyExistsException) {
-                processAccountAlreadyExistsException()
-            } catch (e: StorageException) {
-                processStorageException()
-            } finally {
-                hideProgress()
-            }
+    fun signUp(signUpData: SignUpData) = viewModelScope.launch {
+        showProgress()
+        try {
+            accountsRepository.signUp(signUpData)
+            showSuccessSignUpMessage()
+            goBack()
+        } catch (e: EmptyFieldException) {
+            processEmptyFieldException(e)
+        } catch (e: PasswordMismatchException) {
+            processPasswordMismatchException()
+        } catch (e: AccountAlreadyExistsException) {
+            processAccountAlreadyExistsException()
+        } catch (e: StorageException) {
+            processStorageException()
+        } finally {
+            hideProgress()
         }
     }
 

@@ -13,6 +13,7 @@ data class SignUpData(
     val password: CharArray,
     val repeatPassword: CharArray
 ) {
+
     fun validate() {
         if (email.isBlank()) throw EmptyFieldException(Field.Email)
         if (username.isBlank()) throw EmptyFieldException(Field.Username)

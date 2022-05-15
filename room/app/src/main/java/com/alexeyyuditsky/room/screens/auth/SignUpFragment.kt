@@ -1,9 +1,11 @@
 package com.alexeyyuditsky.room.screens.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,8 +23,6 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
     private lateinit var binding: FragmentSignUpBinding
 
     private val viewModel by viewModelCreator { SignUpViewModel(Repositories.accountsRepository) }
-
-    private val args by navArgs<SignUpFragmentArgs>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +60,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         fillError(binding.passwordTextInput, state.passwordErrorMessageRes)
         fillError(binding.repeatPasswordTextInput, state.repeatPasswordErrorMessageRes)
 
-        binding.progressBar.visibility = if (state.showProgress) View.VISIBLE else View.INVISIBLE
+        binding.progressBar.isVisible = state.showProgress
     }
 
     private fun observeShowSuccessSignUpMessageEvent() = viewModel.showToastEvent.observeEvent(viewLifecycleOwner) {
@@ -77,9 +77,13 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         }
     }
 
+    private fun getEmailArgument(): String? {
+        val args by navArgs<SignUpFragmentArgs>()
+        return args.email
+    }
+
     private fun observeGoBackEvent() = viewModel.goBackEvent.observeEvent(viewLifecycleOwner) {
         findNavController().popBackStack()
     }
 
-    private fun getEmailArgument(): String? = args.email
 }
