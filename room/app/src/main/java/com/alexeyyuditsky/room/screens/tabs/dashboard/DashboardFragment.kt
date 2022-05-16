@@ -3,7 +3,9 @@ package com.alexeyyuditsky.room.screens.tabs.dashboard
 import android.os.Bundle
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.alexeyyuditsky.room.R
 import com.alexeyyuditsky.room.Repositories
@@ -11,6 +13,7 @@ import com.alexeyyuditsky.room.databinding.FragmentDashboardBinding
 import com.alexeyyuditsky.room.model.boxes.entities.Box
 import com.alexeyyuditsky.room.utils.viewModelCreator
 import com.alexeyyuditsky.room.views.DashboardItemView
+import kotlinx.coroutines.flow.collectLatest
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
@@ -30,19 +33,17 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private fun renderBoxes(boxes: List<Box>) {
         clearBoxViews()
         if (boxes.isEmpty()) {
-            binding.noBoxesTextView.visibility = View.VISIBLE
-            binding.boxesContainer.visibility = View.INVISIBLE
+            binding.noBoxesTextView.isVisible = true
+            binding.boxesContainer.isVisible = false
         } else {
-            binding.noBoxesTextView.visibility = View.INVISIBLE
-            binding.boxesContainer.visibility = View.VISIBLE
+            binding.noBoxesTextView.isVisible = false
+            binding.boxesContainer.isVisible = true
             createBoxes(boxes)
         }
     }
 
     private fun createBoxes(boxes: List<Box>) {
-
         // let's create boxes here by using dynamic view generation
-
         val width = resources.getDimensionPixelSize(R.dimen.dashboard_item_width)
         val height = resources.getDimensionPixelSize(R.dimen.dashboard_item_height)
         val generatedIdentifiers = boxes.map { box ->

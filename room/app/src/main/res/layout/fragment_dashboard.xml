@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,17 +15,15 @@
             android:id="@+id/flowView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:flow_wrapMode="chain"
-            app:flow_horizontalStyle="packed"
+            app:constraint_referenced_ids="greenBox,yellowBox"
             app:flow_horizontalGap="@dimen/medium_space"
+            app:flow_horizontalStyle="packed"
             app:flow_verticalGap="@dimen/medium_space"
-            app:constraint_referenced_ids="greenBox,yellowBox"/>
-
-        <!-- This is an example, real items are derived from the model: -->
+            app:flow_wrapMode="chain"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.alexeyyuditsky.room.views.DashboardItemView
             android:id="@+id/greenBox"
@@ -48,8 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="16sp"
         android:text="@string/no_boxes"
-        android:visibility="gone"/>
+        android:textSize="16sp"
+        android:visibility="gone" />
 
 </FrameLayout>

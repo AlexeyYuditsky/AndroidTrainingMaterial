@@ -18,11 +18,11 @@ class RoomBoxesRepository(
 ) : BoxesRepository {
 
     override suspend fun getBoxesAndSettings(onlyActive: Boolean): Flow<List<BoxAndSettings>> {
-        return accountsRepository.getAccount()
+        return accountsRepository.getAccount() // = Flow(Account(id=1, username=admin, email=admin, createdAt=0))
             .flatMapLatest { account ->
                 if (account == null) return@flatMapLatest flowOf(emptyList())
                 queryBoxesAndSettings(account.id)
-            }
+            } //
             .mapLatest { boxAndSettings ->
                 if (onlyActive) {
                     boxAndSettings.filter { it.isActive }
@@ -41,7 +41,7 @@ class RoomBoxesRepository(
     }
 
     private fun queryBoxesAndSettings(accountId: Long): Flow<List<BoxAndSettings>> {
-        return boxesDao.getBoxesAndSettings(accountId)
+        return boxesDao.getBoxesAndSettings(accountId) //
             .map { entities ->
                 entities.map {
                     val boxEntity = it.boxDbEntity

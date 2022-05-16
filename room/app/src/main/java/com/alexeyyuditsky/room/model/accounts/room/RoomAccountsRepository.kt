@@ -1,9 +1,8 @@
 package com.alexeyyuditsky.room.model.accounts.room
 
 import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
 import com.alexeyyuditsky.room.Repositories
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import com.alexeyyuditsky.room.model.AccountAlreadyExistsException
 import com.alexeyyuditsky.room.model.AuthException
@@ -20,6 +19,9 @@ import com.alexeyyuditsky.room.model.room.wrapSQLiteException
 import com.alexeyyuditsky.room.model.settings.AppSettings
 import com.alexeyyuditsky.room.utils.AsyncLoader
 import com.alexeyyuditsky.room.utils.security.SecurityUtils
+import kotlinx.coroutines.*
+import kotlin.coroutines.suspendCoroutine
+import kotlin.system.measureTimeMillis
 
 class RoomAccountsRepository(
     private val accountsDao: AccountsDao,
@@ -33,7 +35,7 @@ class RoomAccountsRepository(
     }
 
     override suspend fun isSignedIn(): Boolean {
-        delay(1000)
+        delay(100)
         return appSettings.getCurrentAccountId() != AppSettings.NO_ACCOUNT_ID
     }
 
@@ -59,14 +61,14 @@ class RoomAccountsRepository(
     }
 
     override suspend fun getAccount(): Flow<Account?> {
-        return currentAccountIdFlow.get()
+        return currentAccountIdFlow.get() // = MutableStateFlow(AccountId(appSettings.getCurrentAccountId()))
             .flatMapLatest { accountId ->
                 if (accountId.value == AppSettings.NO_ACCOUNT_ID) {
                     flowOf(null)
                 } else {
                     getAccountById(accountId.value)
                 }
-            }
+            } // = Flow(Account(id=1, username=admin, email=admin, createdAt=0))
             .flowOn(ioDispatcher)
     }
 
@@ -134,4 +136,32 @@ class RoomAccountsRepository(
 
     private class AccountId(val value: Long)
 
+}
+
+fun main() = runBlocking {
+    simple1().zip(simple2()) { a, b -> "$a, $b"}
+        .collect {
+            println(it)
+        }
+}
+
+fun simple1(): Flow<Int> = flow {
+    repeat(3) {
+        delay(100)
+        emit(it)
+    }
+}
+
+fun simple2(): Flow<Char> = flow {
+    repeat(3) {
+        delay(800)
+        emit('a')
+    }
+}
+
+fun simple3(): Flow<Char> = flow {
+    repeat(3) {
+        delay(800)
+        emit('b')
+    }
 }
