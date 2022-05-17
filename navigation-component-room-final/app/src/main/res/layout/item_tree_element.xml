@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingStart="6dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="4dp"
+    android:paddingBottom="6dp"
+    tools:ignore="ContentDescription">
+
+    <ImageView
+        android:id="@+id/expandCollapseIndicatorImageView"
+        android:layout_width="@dimen/tree_level_size"
+        android:layout_height="@dimen/tree_level_size"
+        android:padding="2dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@id/attributesTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black"
+        tools:src="@drawable/ic_plus" />
+
+    <TextView
+        android:id="@+id/attributesTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tree_level_size"
+        android:ellipsize="end"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Account Id: 1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
