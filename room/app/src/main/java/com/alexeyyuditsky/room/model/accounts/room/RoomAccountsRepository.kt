@@ -96,7 +96,7 @@ class RoomAccountsRepository(
                         boxesAndSettings = accountAndSettingsTuple.settings.map {
                             BoxAndSettings(
                                 box = it.boxDbEntity.toBox(),
-                                isActive = it.accountBoxSettingsDbEntity.settings.isActive
+                                isActive = it.accountBoxSettingsDbEntity.isActive
                             )
                         }
                     )

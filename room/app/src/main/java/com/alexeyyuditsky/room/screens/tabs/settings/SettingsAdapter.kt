@@ -16,14 +16,11 @@ class SettingsAdapter(
 
     private var settings: List<BoxAndSettings> = emptyList()
 
-    override fun onClick(v: View?) {
+    override fun onClick(v: View) {
         val checkBox = v as CheckBox
         val box = v.tag as Box
-        if (checkBox.isChecked) {
-            listener.enableBox(box)
-        } else {
-            listener.disableBox(box)
-        }
+        if (checkBox.isChecked) listener.enableBox(box)
+        else listener.disableBox(box)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -60,4 +57,5 @@ class SettingsAdapter(
         fun enableBox(box: Box)
         fun disableBox(box: Box)
     }
+
 }

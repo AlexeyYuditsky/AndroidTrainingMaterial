@@ -2,12 +2,12 @@ package com.alexeyyuditsky.room.screens.tabs.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import com.alexeyyuditsky.room.model.boxes.BoxesRepository
 import com.alexeyyuditsky.room.utils.MutableLiveEvent
 import com.alexeyyuditsky.room.utils.publishEvent
 import com.alexeyyuditsky.room.utils.share
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class BoxViewModel(
     private val boxId: Long,
@@ -26,4 +26,5 @@ class BoxViewModel(
                 }
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.alexeyyuditsky.room.screens.tabs.settings
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -54,4 +55,5 @@ class SettingsViewModel(
     private fun showStorageErrorMessage() {
         _showErrorMessageEvent.publishEvent(R.string.storage_error)
     }
+
 }

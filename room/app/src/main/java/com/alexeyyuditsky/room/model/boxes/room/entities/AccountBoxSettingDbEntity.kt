@@ -29,5 +29,5 @@ import com.alexeyyuditsky.room.model.accounts.room.entities.AccountDbEntity
 data class AccountBoxSettingDbEntity(
     @ColumnInfo(name = "account_id") val accountId: Long,
     @ColumnInfo(name = "box_id") val boxId: Long,
-    @Embedded val settings: SettingsTuple
+    @ColumnInfo(name = "is_active") val isActive: Boolean
 )

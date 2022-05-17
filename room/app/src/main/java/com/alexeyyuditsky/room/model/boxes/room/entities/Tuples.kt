@@ -1,19 +1,21 @@
 package com.alexeyyuditsky.room.model.boxes.room.entities
 
-import androidx.room.ColumnInfo
 import androidx.room.Embedded
+import androidx.room.Relation
+import com.alexeyyuditsky.room.model.accounts.room.entities.AccountDbEntity
 
-/**
- * Tuple containing only setting itself without IDs.
- */
-data class SettingsTuple(
-    @ColumnInfo(name = "is_active") val isActive: Boolean
-)
+data class SettingWithEntitiesTuple(
+    @Embedded val accountBoxSettingDbEntity: AccountBoxSettingDbEntity,
 
-/**
- * Tuple for joining box data and settings data.
- */
-data class BoxAndSettingsTuple(
-    @Embedded val boxDbEntity: BoxDbEntity,
-    @Embedded val settingDbEntity: AccountBoxSettingDbEntity?
+    @Relation(
+        parentColumn = "account_id",
+        entityColumn = "id"
+    )
+    val accountDbEntity: AccountDbEntity,
+
+    @Relation(
+        parentColumn = "box_id",
+        entityColumn = "id"
+    )
+    val boxDbEntity: BoxDbEntity
 )

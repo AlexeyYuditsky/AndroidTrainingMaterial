@@ -13,16 +13,12 @@ import com.alexeyyuditsky.room.R
 import com.alexeyyuditsky.room.databinding.PartDashboardItemBinding
 import com.alexeyyuditsky.room.model.boxes.entities.Box
 
-class DashboardItemView(
+class DashboardItemView @JvmOverloads constructor(
     context: Context,
-    attributesSet: AttributeSet?,
-    defStyleAttr: Int,
-    defStyleRes: Int
+    attributesSet: AttributeSet? = null,
+    defStyleAttr: Int = R.attr.dashboardItemStyle,
+    defStyleRes: Int = R.style.DefaultDashboardItemStyle
 ) : FrameLayout(context, attributesSet, defStyleAttr, defStyleRes) {
-
-    constructor(context: Context, attributesSet: AttributeSet?, defStyleAttr: Int) : this(context, attributesSet, defStyleAttr, R.style.DefaultDashboardItemStyle)
-    constructor(context: Context, attributesSet: AttributeSet?) : this(context, attributesSet, R.attr.dashboardItemStyle)
-    constructor(context: Context) : this(context, null)
 
     private val binding: PartDashboardItemBinding
 
@@ -47,7 +43,8 @@ class DashboardItemView(
         val color: Int
         val title: String
         if (attributesSet != null) {
-            val typedArray = context.obtainStyledAttributes(attributesSet, R.styleable.DashboardItemView, defStyleAttr, defStyleRes)
+            val typedArray =
+                context.obtainStyledAttributes(attributesSet, R.styleable.DashboardItemView, defStyleAttr, defStyleRes)
             color = typedArray.getColor(R.styleable.DashboardItemView_color, defaultColor)
             title = typedArray.getString(R.styleable.DashboardItemView_title) ?: defaultTitle
             typedArray.recycle()
@@ -69,7 +66,8 @@ class DashboardItemView(
         val backgroundDrawable = GradientDrawable()
         backgroundDrawable.color = ColorStateList.valueOf(bgColor)
         backgroundDrawable.setStroke(resources.getDimensionPixelSize(R.dimen.dashboard_item_stroke_width), strokeColor)
-        backgroundDrawable.cornerRadius = resources.getDimensionPixelSize(R.dimen.dashboard_item_corner_radius).toFloat()
+        backgroundDrawable.cornerRadius =
+            resources.getDimensionPixelSize(R.dimen.dashboard_item_corner_radius).toFloat()
 
         binding.titleTextView.setTextColor(strokeColor)
         background = RippleDrawable(ColorStateList.valueOf(Color.BLACK), backgroundDrawable, null)

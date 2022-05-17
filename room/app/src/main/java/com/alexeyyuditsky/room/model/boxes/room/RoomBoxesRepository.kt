@@ -1,15 +1,15 @@
 package com.alexeyyuditsky.room.model.boxes.room
 
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import android.util.Log
 import com.alexeyyuditsky.room.model.AuthException
 import com.alexeyyuditsky.room.model.accounts.AccountsRepository
 import com.alexeyyuditsky.room.model.boxes.BoxesRepository
 import com.alexeyyuditsky.room.model.boxes.entities.Box
 import com.alexeyyuditsky.room.model.boxes.entities.BoxAndSettings
 import com.alexeyyuditsky.room.model.boxes.room.entities.AccountBoxSettingDbEntity
-import com.alexeyyuditsky.room.model.boxes.room.entities.SettingsTuple
 import com.alexeyyuditsky.room.model.room.wrapSQLiteException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.*
 
 class RoomBoxesRepository(
     private val accountsRepository: AccountsRepository,
@@ -22,7 +22,7 @@ class RoomBoxesRepository(
             .flatMapLatest { account ->
                 if (account == null) return@flatMapLatest flowOf(emptyList())
                 queryBoxesAndSettings(account.id)
-            } //
+            }  // Flow<List<BoxAndSettings>>
             .mapLatest { boxAndSettings ->
                 if (onlyActive) {
                     boxAndSettings.filter { it.isActive }
@@ -41,17 +41,17 @@ class RoomBoxesRepository(
     }
 
     private fun queryBoxesAndSettings(accountId: Long): Flow<List<BoxAndSettings>> {
-        return boxesDao.getBoxesAndSettings(accountId) //
+        return boxesDao.getBoxesAndSettings(accountId) // Flow<List<SettingWithEntitiesTuple>>
             .map { entities ->
                 entities.map {
                     val boxEntity = it.boxDbEntity
-                    val settingEntity = it.settingDbEntity
+                    val accountBoxSettings = it.accountBoxSettingDbEntity
                     BoxAndSettings(
                         box = boxEntity.toBox(),
-                        isActive = settingEntity.settings.isActive
+                        isActive = accountBoxSettings.isActive
                     )
                 }
-            }
+            } // Flow<List<BoxAndSettings>>
     }
 
     private suspend fun setActiveFlagForBox(box: Box, isActive: Boolean) {
@@ -60,8 +60,9 @@ class RoomBoxesRepository(
             AccountBoxSettingDbEntity(
                 accountId = account.id,
                 boxId = box.id,
-                settings = SettingsTuple(isActive = isActive)
+                isActive = isActive
             )
         )
     }
+
 }

@@ -1,6 +1,7 @@
 package com.alexeyyuditsky.room.screens.tabs.settings
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -22,7 +23,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding = FragmentSettingsBinding.bind(view)
 
         val adapter = setupList()
-        viewModel.boxSettings.observe(viewLifecycleOwner) { adapter.renderSettings(it) }
+        viewModel.boxSettings.observe(viewLifecycleOwner) {
+            adapter.renderSettings(it)
+        }
 
         viewModel.showErrorMessageEvent.observeEvent(viewLifecycleOwner) {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
@@ -30,7 +33,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun setupList(): SettingsAdapter {
-        binding.settingsList.layoutManager = LinearLayoutManager(requireContext())
         val adapter = SettingsAdapter(viewModel)
         binding.settingsList.adapter = adapter
         return adapter

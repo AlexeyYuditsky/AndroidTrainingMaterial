@@ -8,7 +8,6 @@ import com.alexeyyuditsky.room.model.accounts.room.entities.AccountDbEntity
 import com.alexeyyuditsky.room.model.boxes.room.BoxesDao
 import com.alexeyyuditsky.room.model.boxes.room.entities.AccountBoxSettingDbEntity
 import com.alexeyyuditsky.room.model.boxes.room.entities.BoxDbEntity
-import com.alexeyyuditsky.room.model.boxes.room.views.SettingDbView
 
 @Database(
     version = 3,
@@ -16,9 +15,6 @@ import com.alexeyyuditsky.room.model.boxes.room.views.SettingDbView
         AccountDbEntity::class,
         BoxDbEntity::class,
         AccountBoxSettingDbEntity::class
-    ],
-    views = [
-        SettingDbView::class
     ],
     autoMigrations = [
         AutoMigration(

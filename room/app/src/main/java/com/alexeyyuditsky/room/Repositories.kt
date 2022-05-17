@@ -28,9 +28,7 @@ object Repositories {
             .build()
     }
 
-    private val appSettings: AppSettings by lazy {
-        SharedPreferencesAppSettings(applicationContext)
-    }
+    private val appSettings: AppSettings by lazy { SharedPreferencesAppSettings(applicationContext) }
 
     val accountsRepository: AccountsRepository by lazy {
         RoomAccountsRepository(database.getAccountsDao(), appSettings, securityUtils, ioDispatcher)

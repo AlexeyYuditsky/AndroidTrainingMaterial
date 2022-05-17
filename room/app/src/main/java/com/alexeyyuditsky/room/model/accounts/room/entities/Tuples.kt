@@ -3,7 +3,6 @@ package com.alexeyyuditsky.room.model.accounts.room.entities
 import androidx.room.*
 import com.alexeyyuditsky.room.model.boxes.room.entities.AccountBoxSettingDbEntity
 import com.alexeyyuditsky.room.model.boxes.room.entities.BoxDbEntity
-import com.alexeyyuditsky.room.model.boxes.room.views.SettingDbView
 
 /**
  * Fetch only ID and password from 'accounts' table.
@@ -48,7 +47,7 @@ data class AccountAndAllSettingsTuple(
     @Relation(
         parentColumn = "id",
         entityColumn = "account_id",
-        entity = SettingDbView::class
+        entity = AccountBoxSettingDbEntity::class
     )
     val settings: List<SettingAndBoxTuple>
 )
@@ -57,7 +56,7 @@ data class AccountAndAllSettingsTuple(
  * Helper tuple class for [AccountAndAllSettingsTuple] with nested relation.
  */
 data class SettingAndBoxTuple(
-    @Embedded val accountBoxSettingsDbEntity: SettingDbView,
+    @Embedded val accountBoxSettingsDbEntity: AccountBoxSettingDbEntity,
     @Relation(
         parentColumn = "box_id",
         entityColumn = "id"
