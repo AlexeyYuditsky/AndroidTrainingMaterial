@@ -1,8 +1,10 @@
 package com.alexeyyuditsky.room.screens.tabs.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.alexeyyuditsky.room.R
 import com.alexeyyuditsky.room.Repositories
@@ -28,7 +30,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding.logoutButton.setOnClickListener { onLogoutButtonPressed() }
 
         observeAccountDetails()
-        observeRestartAppFromLoginScreenEvent()
     }
 
     private fun observeAccountDetails() {
@@ -37,10 +38,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             if (account == null) return@observe
             binding.emailTextView.text = account.email
             binding.usernameTextView.text = account.username
-            binding.createdAtTextView.text = if (account.createdAt == Account.UNKNOWN_CREATED_AT)
-                getString(R.string.placeholder)
-            else
-                formatter.format(Date(account.createdAt))
+            binding.createdAtTextView.text =
+                if (account.createdAt == Account.UNKNOWN_CREATED_AT) getString(R.string.placeholder)
+                else formatter.format(Date(account.createdAt))
         }
     }
 
@@ -48,19 +48,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         findTopNavController().navigate(R.id.editProfileFragment)
     }
 
-    private fun observeRestartAppFromLoginScreenEvent() {
-        viewModel.restartWithSignInEvent.observeEvent(viewLifecycleOwner) {
-            findTopNavController().navigate(R.id.signInFragment, null, navOptions {
-                popUpTo(R.id.tabsFragment) {
-                    inclusive = true
-                }
-            })
-        }
-    }
-
     private fun onLogoutButtonPressed() {
         viewModel.logout()
+        findTopNavController().navigate(R.id.action_tabsFragment_to_signInFragment)
     }
-
 
 }

@@ -10,4 +10,5 @@
         android:name="com.alexeyyuditsky.room.screens.tabs.profile.ProfileFragment"
         android:label="@string/screen_profile"
         tools:layout="@layout/fragment_profile" />
+
 </navigation>

@@ -17,9 +17,6 @@ class ProfileViewModel(
     private val _account = MutableLiveData<Account>()
     val account = _account.share()
 
-    private val _restartFromLoginEvent = MutableLiveEvent<Unit>()
-    val restartWithSignInEvent = _restartFromLoginEvent.share()
-
     init {
         viewModelScope.launch {
             accountsRepository.getAccount().collect {
@@ -31,12 +28,7 @@ class ProfileViewModel(
     fun logout() {
         viewModelScope.launch {
             accountsRepository.logout()
-            restartAppFromLoginScreen()
         }
-    }
-
-    private fun restartAppFromLoginScreen() {
-        _restartFromLoginEvent.publishEvent(Unit)
     }
 
 }

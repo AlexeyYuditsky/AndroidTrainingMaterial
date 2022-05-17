@@ -45,6 +45,11 @@
         <action
             android:id="@+id/action_tabsFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_tabsFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/tabsFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
