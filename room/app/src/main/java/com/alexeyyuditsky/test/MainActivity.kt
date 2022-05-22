@@ -8,9 +8,11 @@ import androidx.lifecycle.lifecycleScope
 import com.alexeyyuditsky.test.databinding.ActivityMainBinding
 import com.alexeyyuditsky.test.room.customers.CustomerDbEntity
 import com.alexeyyuditsky.test.room.orders.OrderDbEntity
+import com.alexeyyuditsky.test.room.orders.OrderUpdateDateTuple
 import com.alexeyyuditsky.test.room.orders.OrderWithIdTuple
 import com.alexeyyuditsky.test.room.products.ProductDbEntity
 import kotlinx.coroutines.*
+import java.lang.NumberFormatException
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,11 +76,55 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.deleteOrder.setOnClickListener {
+        binding.deleteOrderButton.setOnClickListener {
             val text = binding.editText.text.toString()
             val orderWithIdTuple = OrderWithIdTuple(productId = text.toLong())
+            binding.editText.text.clear()
             lifecycleScope.launch(Dispatchers.IO) {
                 Repositories.database.getOrdersDao().deleteOrder(orderWithIdTuple)
+            }
+        }
+
+        binding.changeOrderButton.setOnClickListener {
+            val text = binding.editText.text.toString().split(',')
+            val orderDbEntity = OrderDbEntity(
+                id = 3,
+                productId = text[0].toLong(),
+                customerId = text[1].toLong(),
+                createdAt = text[2],
+                itemsCount = text[3].toInt(),
+                price = text[4].toInt()
+            )
+            binding.editText.text.clear()
+            lifecycleScope.launch(Dispatchers.IO) {
+                Repositories.database.getOrdersDao().changeOrder(orderDbEntity)
+            }
+        }
+
+        binding.updateOrderButton.setOnClickListener {
+            val text = binding.editText.text.toString().split(',')
+            val orderUpdateDateTuple = OrderUpdateDateTuple(
+                id = 3,
+                createdAt = text[0]
+            )
+            binding.editText.text.clear()
+            lifecycleScope.launch(Dispatchers.IO) {
+                Repositories.database.getOrdersDao().updateOrderDate(orderUpdateDateTuple)
+            }
+        }
+
+        binding.getCustomersAndProductsButton.setOnClickListener {
+            val id = try {
+                binding.editText.text.toString().toLong()
+            } catch (e: NumberFormatException) {
+                1
+            }
+            binding.editText.text.clear()
+            lifecycleScope.launch(Dispatchers.IO) {
+                val res = Repositories.database.getOrdersDao().getCustomersAndProductsAndOrders(id)
+                lifecycleScope.launch {
+                    binding.customersAndProductsTextView.text = res.toString()
+                }
             }
         }
     }

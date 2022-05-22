@@ -15,4 +15,24 @@ interface OrdersDao {
     @Delete(entity = OrderDbEntity::class)
     fun deleteOrder(orderDbEntity: OrderWithIdTuple)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun changeOrder(orderDbEntity: OrderDbEntity)
+
+    @Update(entity = OrderDbEntity::class)
+    fun updateOrderDate(orderUpdateDateTuple: OrderUpdateDateTuple)
+
+    @Transaction
+    @Query(
+        "select " +
+                "customers.id as customer_id, " +
+                "products.id as product_id, " +
+                "products.name as name, " +
+                "products.price as price " +
+                "from customers, products " +
+                "join orders on orders.customer_id = customers.id and orders.product_id = products.id " +
+                "where customers.id = :customerId"
+    )
+    fun getCustomersAndProductsAndOrders(customerId: Long): CustomersAndProductsAndOrdersTuple
+
 }
+
