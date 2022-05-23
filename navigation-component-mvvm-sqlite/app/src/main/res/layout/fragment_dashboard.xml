@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/boxesContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.main.tabs.dashboard.DashboardFragment">
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flowView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="greenBox,yellowBox"
+        app:flow_horizontalGap="12dp"
+        app:flow_horizontalStyle="packed"
+        app:flow_verticalGap="12dp"
+        app:flow_wrapMode="chain"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.alexeyyuditsky.test.views.DashboardItemView
+        android:id="@+id/greenBox"
+        android:layout_width="140dp"
+        android:layout_height="90dp"
+        app:color="#008800"
+        app:title="Green Box" />
+
+    <com.alexeyyuditsky.test.views.DashboardItemView
+        android:id="@+id/yellowBox"
+        android:layout_width="140dp"
+        android:layout_height="90dp"
+        app:color="#888800"
+        app:title="Yellow Box" />
+
+    <TextView
+        android:id="@+id/noBoxesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_boxes"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
