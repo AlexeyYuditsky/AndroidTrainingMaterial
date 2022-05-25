@@ -17,10 +17,8 @@ import com.alexeyyuditsky.paging.simpleScan
 import com.alexeyyuditsky.paging.viewModelCreator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -60,7 +58,6 @@ class MainActivity : AppCompatActivity() {
         val adapterWithLoadState = adapter.withLoadStateFooter(footerAdapter)
 
         binding.usersRecyclerView.adapter = adapterWithLoadState
-        (binding.usersRecyclerView.itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
 
         mainLoadStateHolder = DefaultLoadStateAdapter.Holder(
             binding.loadStateView,

@@ -27,6 +27,7 @@ class MainViewModel(
             // if user types text too quickly -> filtering intermediate values to avoid excess loads
             .debounce(500)
             .flatMapLatest {
+                Log.d("MyLog", "flatMapLatest = $it")
                 usersRepository.getPagedUsers(it)
             }
             // always use cacheIn operator for flows returned by Pager. Otherwise exception may be thrown

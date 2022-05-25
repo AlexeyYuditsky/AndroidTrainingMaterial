@@ -29,6 +29,7 @@ class RoomUsersRepository(
 
     override fun getPagedUsers(searchBy: String): Flow<PagingData<User>> {
         val loader: UsersPageLoader = { pageIndex, pageSize ->
+            Log.d("MyLog", "pageIndex = $pageIndex, pageSize = $pageSize")
             getUsers(pageIndex, pageSize, searchBy)
         }
         return Pager(
