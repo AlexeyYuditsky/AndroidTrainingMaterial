@@ -1,6 +1,5 @@
 package com.alexeyyuditsky.paging.model.users
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -11,15 +10,19 @@ typealias UsersPageLoader = suspend (pageIndex: Int, pageSize: Int) -> List<User
  * Example implementation of [PagingSource].
  * It is used by [Pager] for fetching data.
  */
-@Suppress("UnnecessaryVariable")
+// Класс отвечает за загрузку данных
+// PagingSource<Int, User>, Int - какие аргументы пагинации мы используем (представляет индекс элемента с которого мы начинаем загрузку или индекс страницы с которой начинаем загрузку
+// User - с какими данными мы работаем
+// Источником данных для PagingSource может быть, что угодно(бд, сеть, файл и т.д.)
 class UsersPagingSource(
     private val loader: UsersPageLoader,
     private val pageSize: Int
 ) : PagingSource<Int, User>() {
 
+    // метод отвечает за загрузку данных
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
         // get the index of page to be loaded (it may be NULL, in this case let's load the first page with index = 0)
-        val pageIndex = params.key ?: 0
+        val pageIndex = params.key ?: 0 // params.key - null, 3, 4, 5 и т.д., params.loadSize - 60, 20, 20, 20 и т.д.
 
         return try {
             // loading the desired page of users
@@ -40,6 +43,7 @@ class UsersPagingSource(
         }
     }
 
+    // метод отвечает за вычисление аргументов пагинации в случае, если текущее состояние списка стало невалидыным, например: пользователь запросил обновление данных с нуля
     override fun getRefreshKey(state: PagingState<Int, User>): Int? {
         // get the most recently accessed index in the users list:
         val anchorPosition = state.anchorPosition ?: return null

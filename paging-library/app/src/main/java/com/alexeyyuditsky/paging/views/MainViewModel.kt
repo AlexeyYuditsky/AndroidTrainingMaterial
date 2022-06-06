@@ -8,6 +8,7 @@ import com.alexeyyuditsky.paging.model.users.User
 import com.alexeyyuditsky.paging.model.users.repositories.UsersRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 @ExperimentalCoroutinesApi
@@ -27,7 +28,7 @@ class MainViewModel(
             // if user types text too quickly -> filtering intermediate values to avoid excess loads
             .debounce(500)
             .flatMapLatest {
-                Log.d("MyLog", "flatMapLatest = $it")
+                // получаем Flow<PagingData<User>> и прослушиваем эти данные на стороне активити/фрагмента и внутри активити/фрагмента отправляем эти данные в адаптер списка UsersAdapter
                 usersRepository.getPagedUsers(it)
             }
             // always use cacheIn operator for flows returned by Pager. Otherwise exception may be thrown
