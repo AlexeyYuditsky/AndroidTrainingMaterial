@@ -8,6 +8,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         Repositories.init(applicationContext)
         super.onCreate(savedInstanceState)
+
+
     }
 
 }
