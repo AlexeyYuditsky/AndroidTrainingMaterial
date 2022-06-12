@@ -6,7 +6,7 @@
     android:background="@color/purple_700"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".screens.SplashFragment">
+    tools:context=".screens.splash.SplashFragment">
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -18,11 +18,5 @@
         android:text="@string/loading"
         android:textColor="@color/white"
         android:textSize="20sp" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@color/white" />
 
 </LinearLayout>

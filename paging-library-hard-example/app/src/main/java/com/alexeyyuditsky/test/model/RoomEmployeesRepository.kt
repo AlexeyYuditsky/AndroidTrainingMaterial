@@ -1,28 +1,16 @@
-package com.alexeyyuditsky.test.screens
+package com.alexeyyuditsky.test.model
 
-import android.os.Bundle
-import android.util.Log
-import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import com.alexeyyuditsky.test.R
-import com.alexeyyuditsky.test.Repository
-import com.alexeyyuditsky.test.databinding.FragmentSplashBinding
-import com.alexeyyuditsky.test.model.EmployeeDbEntity
-import com.bumptech.glide.Glide
 import com.github.javafaker.Faker
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.random.Random
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
-class SplashFragment : Fragment(R.layout.fragment_splash) {
+class RoomEmployeesRepository(
+    private val employeesDao: EmployeesDao,
+    private val ioDispatcher: CoroutineDispatcher
+) : EmployeesRepository {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentSplashBinding.bind(view)
-
-        lifecycleScope.launch(Dispatchers.IO) {
+    override suspend fun initDatabaseIfEmpty() = withContext(ioDispatcher) {
+        if (employeesDao.getEmployees().isEmpty()) {
             val faker = Faker()
             val employeesList = mutableListOf<EmployeeDbEntity>()
             repeat(1000) {
@@ -37,22 +25,8 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
                     )
                 )
             }
-            Repository.database.getEmployeesDao().insertEmployeesList(employeesList)
-
-            val list = Repository.database.getEmployeesDao().getEmployees()
-
-            lifecycleScope.launch {
-                list.forEach {
-                    Glide.with(requireContext())
-                        .load(it.image)
-                        .into(binding.imageView)
-                    delay(1000)
-                }
-            }
-
+            employeesDao.insertEmployeesList(employeesList)
         }
-
-
     }
 
     private companion object {

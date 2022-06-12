@@ -3,17 +3,23 @@ package com.alexeyyuditsky.test
 import android.content.Context
 import androidx.room.Room
 import com.alexeyyuditsky.test.model.AppDatabase
+import com.alexeyyuditsky.test.model.EmployeesRepository
+import com.alexeyyuditsky.test.model.RoomEmployeesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-object Repository {
+object Repositories {
 
     private lateinit var applicationContext: Context
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
-    val database: AppDatabase by lazy {
+    private val database: AppDatabase by lazy {
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, "database.db").build()
+    }
+
+    val employeesRepository: EmployeesRepository by lazy {
+        RoomEmployeesRepository(database.getEmployeesDao(), ioDispatcher)
     }
 
     fun init(context: Context) {
