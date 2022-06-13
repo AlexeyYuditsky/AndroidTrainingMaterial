@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">Test</string>
-    <string name="loading">loading...</string>
+    <string name="app_name">Paging library</string>
+    <string name="load_error">Oops, can\'t load data</string>
+    <string name="try_again">Try Again</string>
 </resources>

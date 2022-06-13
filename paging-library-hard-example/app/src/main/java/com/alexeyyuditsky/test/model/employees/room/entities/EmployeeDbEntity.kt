@@ -1,9 +1,10 @@
-package com.alexeyyuditsky.test.model
+package com.alexeyyuditsky.test.model.employees.room.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.alexeyyuditsky.test.model.employees.entities.Employee
 
 @Entity(
     tableName = "employees",

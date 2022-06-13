@@ -1,9 +1,9 @@
-package com.alexeyyuditsky.test.model
+package com.alexeyyuditsky.test.model.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.alexeyyuditsky.test.model.EmployeeDbEntity
-import com.alexeyyuditsky.test.model.EmployeesDao
+import com.alexeyyuditsky.test.model.employees.room.entities.EmployeeDbEntity
+import com.alexeyyuditsky.test.model.employees.room.EmployeesDao
 
 @Database(
     version = 1,
