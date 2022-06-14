@@ -14,6 +14,7 @@ import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.Repositories
 import com.alexeyyuditsky.test.adapters.DefaultLoadStateAdapter
 import com.alexeyyuditsky.test.adapters.EmployeesAdapter
+import com.alexeyyuditsky.test.adapters.TryAgainAction
 import com.alexeyyuditsky.test.databinding.FragmentListBinding
 import com.alexeyyuditsky.test.utils.viewModelCreator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,7 +35,8 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         binding = FragmentListBinding.bind(view)
 
         val adapter = EmployeesAdapter()
-        val footerAdapter = DefaultLoadStateAdapter()
+        val tryAgainAction: TryAgainAction = { adapter.retry() }
+        val footerAdapter = DefaultLoadStateAdapter(tryAgainAction)
         val adapterWithLoadState = adapter.withLoadStateFooter(footerAdapter)
 
         binding.recyclerView.adapter = adapterWithLoadState
@@ -45,11 +47,9 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         setupSwipeToRefresh()
     }
 
-    private fun observeEmployees(adapter: EmployeesAdapter) {
-        lifecycleScope.launch {
-            viewModel.employeesFlow.collectLatest { pagingData ->
-                adapter.submitData(pagingData)
-            }
+    private fun observeEmployees(adapter: EmployeesAdapter) = lifecycleScope.launch {
+        viewModel.employeesFlow.collectLatest { pagingData ->
+            adapter.submitData(pagingData)
         }
     }
 

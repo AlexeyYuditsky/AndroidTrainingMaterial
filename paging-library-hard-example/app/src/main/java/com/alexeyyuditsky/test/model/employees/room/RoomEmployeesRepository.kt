@@ -1,5 +1,6 @@
 package com.alexeyyuditsky.test.model.employees.room
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -12,12 +13,15 @@ import com.github.javafaker.Faker
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 
 class RoomEmployeesRepository(
     private val employeesDao: EmployeesDao,
     private val ioDispatcher: CoroutineDispatcher
 ) : EmployeesRepository {
+
+    override val enableErrorFlow = MutableStateFlow(false)
 
     override suspend fun initDatabaseIfEmpty() = withContext(ioDispatcher) {
         if (employeesDao.getEmployees().isEmpty()) {
@@ -39,6 +43,10 @@ class RoomEmployeesRepository(
         }
     }
 
+    override fun setErrorEnabled(value: Boolean) {
+        enableErrorFlow.value = value
+    }
+
     override fun getPagedEmployees(): Flow<PagingData<Employee>> {
         val loader: EmployeesPageLoader = { pageIndex, pageSize ->
             getEmployees(pageIndex, pageSize)
@@ -54,13 +62,14 @@ class RoomEmployeesRepository(
 
     private suspend fun getEmployees(pageIndex: Int, pageSize: Int): List<Employee> = withContext(ioDispatcher) {
         delay(2000)
+        if (enableErrorFlow.value) throw IllegalStateException("Error!")
         val offset = pageIndex * pageSize
         val list = employeesDao.getEmployees(pageSize, offset)
         return@withContext list.map(EmployeeDbEntity::toEmployee)
     }
 
     companion object {
-        const val DATABASE_SIZE = 100
+        const val DATABASE_SIZE = 1000
         private const val PAGE_SIZE = 15
         private val IMAGE_LIST = listOf(
             "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
