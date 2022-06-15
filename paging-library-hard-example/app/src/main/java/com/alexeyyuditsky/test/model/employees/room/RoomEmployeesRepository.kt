@@ -47,9 +47,9 @@ class RoomEmployeesRepository(
         enableErrorFlow.value = value
     }
 
-    override fun getPagedEmployees(): Flow<PagingData<Employee>> {
+    override fun getPagedEmployees(searchBy: String): Flow<PagingData<Employee>> {
         val loader: EmployeesPageLoader = { pageIndex, pageSize ->
-            getEmployees(pageIndex, pageSize)
+            getEmployees(pageIndex, pageSize, searchBy)
         }
         return Pager(
             config = PagingConfig(
@@ -60,13 +60,14 @@ class RoomEmployeesRepository(
         ).flow
     }
 
-    private suspend fun getEmployees(pageIndex: Int, pageSize: Int): List<Employee> = withContext(ioDispatcher) {
-        delay(2000)
-        if (enableErrorFlow.value) throw IllegalStateException("Error!")
-        val offset = pageIndex * pageSize
-        val list = employeesDao.getEmployees(pageSize, offset)
-        return@withContext list.map(EmployeeDbEntity::toEmployee)
-    }
+    private suspend fun getEmployees(pageIndex: Int, pageSize: Int, searchBy: String): List<Employee> =
+        withContext(ioDispatcher) {
+            delay(2000)
+            if (enableErrorFlow.value) throw IllegalStateException("Error!")
+            val offset = pageIndex * pageSize
+            val list = employeesDao.getEmployees(pageSize, offset, searchBy)
+            return@withContext list.map(EmployeeDbEntity::toEmployee)
+        }
 
     companion object {
         const val DATABASE_SIZE = 1000

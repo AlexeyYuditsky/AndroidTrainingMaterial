@@ -3,8 +3,11 @@ package com.alexeyyuditsky.test.screens.main
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.CheckBox
+import android.widget.EditText
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -19,7 +22,10 @@ import com.alexeyyuditsky.test.databinding.FragmentListBinding
 import com.alexeyyuditsky.test.utils.viewModelCreator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -41,10 +47,15 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
         binding.recyclerView.adapter = adapterWithLoadState
         binding.recyclerView.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        binding.loadStateView.tryAgainButton.setOnClickListener { adapter.retry() }
 
         observeEmployees(adapter)
         observeLoadState(adapter)
-        setupSwipeToRefresh()
+        observeEditText()
+        observeCheckBox()
+        observeSwipeToRefresh()
+        handleScrollingToTopWhenSearching(adapter)
+        handleListVisibility(adapter)
     }
 
     private fun observeEmployees(adapter: EmployeesAdapter) = lifecycleScope.launch {
@@ -53,7 +64,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
     }
 
-    private fun setupSwipeToRefresh() {
+    private fun observeSwipeToRefresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }
@@ -63,6 +74,52 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         adapter.addLoadStateListener {
             binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
         }
+    }
+
+    private fun observeCheckBox() {
+        val errorCheckBox = requireActivity().findViewById<CheckBox>(R.id.errorCheckBox)
+        lifecycleScope.launch {
+            viewModel.isErrorsEnabled.collectLatest {
+                errorCheckBox.isChecked = it
+            }
+        }
+        errorCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setEnableError(isChecked)
+        }
+    }
+
+    private fun observeEditText() {
+        val editText = requireActivity().findViewById<EditText>(R.id.searchEditText)
+        editText.addTextChangedListener { viewModel.searchByName(it.toString()) }
+    }
+
+    private fun getRefreshLoadStateFlow(adapter: EmployeesAdapter): Flow<LoadState> {
+        return adapter.loadStateFlow.map { it.refresh }
+    }
+
+    private fun handleScrollingToTopWhenSearching(adapter: EmployeesAdapter) = lifecycleScope.launch {
+        val state = getRefreshLoadStateFlow(adapter)
+        val items = List<LoadState?>(2) { null }
+        state.scan(items) { previous, value -> previous.drop(1) + value }
+            .collectLatest { (previousState, currentState) ->
+                if (previousState is LoadState.Loading && currentState is LoadState.NotLoading) {
+                    binding.recyclerView.scrollToPosition(0)
+                }
+            }
+    }
+
+    private fun handleListVisibility(adapter: EmployeesAdapter) = lifecycleScope.launch {
+        val state = getRefreshLoadStateFlow(adapter)
+        val items = List<LoadState?>(3) { null }
+        state.scan(items) { previous, value -> previous.drop(1) + value }
+            .collectLatest { (beforePrevious, previous, current) ->
+                binding.recyclerView.isInvisible = current is LoadState.Error
+                        || previous is LoadState.Error
+                        || (beforePrevious is LoadState.Error && previous is LoadState.NotLoading
+                        && current is LoadState.Loading)
+                binding.loadStateView.messageTextView.isVisible = current is LoadState.Error
+                binding.loadStateView.tryAgainButton.isVisible = current is LoadState.Error
+            }
     }
 
 }

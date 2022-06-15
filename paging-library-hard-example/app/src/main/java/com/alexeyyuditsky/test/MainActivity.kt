@@ -2,8 +2,11 @@ package com.alexeyyuditsky.test
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.alexeyyuditsky.test.databinding.ActivityMainBinding
 import com.alexeyyuditsky.test.screens.main.ListViewModel
@@ -14,8 +17,6 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel by viewModelCreator { MainViewModel(Repositories.employeesRepository) }
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
         setSupportActionBar(binding.toolbar)
-        setupEnableErrorCheckBox()
     }
 
     override fun onBackPressed() {
@@ -31,17 +31,6 @@ class MainActivity : AppCompatActivity() {
             binding.searchEditText.text.clear()
             binding.searchEditText.clearFocus()
         } else super.onBackPressed()
-    }
-
-    private fun setupEnableErrorCheckBox() {
-        lifecycleScope.launch {
-            viewModel.isErrorsEnabled.collectLatest {
-                binding.errorCheckBox.isChecked = it
-            }
-        }
-        binding.errorCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setEnableError(isChecked)
-        }
     }
 
 }

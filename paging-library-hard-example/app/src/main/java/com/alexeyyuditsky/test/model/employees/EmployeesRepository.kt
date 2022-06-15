@@ -13,6 +13,6 @@ interface EmployeesRepository {
 
     fun setErrorEnabled(value: Boolean)
 
-    fun getPagedEmployees(): Flow<PagingData<Employee>>
+    fun getPagedEmployees(searchBy: String = ""): Flow<PagingData<Employee>>
 
 }
