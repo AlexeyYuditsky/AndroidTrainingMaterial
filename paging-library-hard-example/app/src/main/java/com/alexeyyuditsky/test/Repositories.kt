@@ -2,9 +2,9 @@ package com.alexeyyuditsky.test
 
 import android.content.Context
 import androidx.room.Room
-import com.alexeyyuditsky.test.model.room.AppDatabase
-import com.alexeyyuditsky.test.model.employees.EmployeesRepository
-import com.alexeyyuditsky.test.model.employees.room.RoomEmployeesRepository
+import com.alexeyyuditsky.test.model.AppDatabase
+import com.alexeyyuditsky.test.model.employees.repositories.EmployeesRepository
+import com.alexeyyuditsky.test.model.employees.repositories.room.RoomEmployeesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 

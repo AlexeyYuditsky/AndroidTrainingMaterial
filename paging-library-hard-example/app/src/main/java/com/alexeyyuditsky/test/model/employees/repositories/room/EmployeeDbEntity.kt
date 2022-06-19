@@ -1,10 +1,10 @@
-package com.alexeyyuditsky.test.model.employees.room.entities
+package com.alexeyyuditsky.test.model.employees.repositories.room
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.alexeyyuditsky.test.model.employees.entities.Employee
+import com.alexeyyuditsky.test.model.employees.Employee
 
 @Entity(
     tableName = "employees",
@@ -18,7 +18,7 @@ data class EmployeeDbEntity(
     @ColumnInfo(collate = ColumnInfo.NOCASE) val name: String,
     val nation: String,
     val email: String,
-    val age: Int
+    @ColumnInfo(defaultValue = "0") val isFavorite: Boolean = false
 ) {
 
     fun toEmployee(): Employee = Employee(
@@ -27,7 +27,7 @@ data class EmployeeDbEntity(
         name = name,
         nation = nation,
         email = email,
-        age = age
+        isFavorite = isFavorite
     )
 
 }

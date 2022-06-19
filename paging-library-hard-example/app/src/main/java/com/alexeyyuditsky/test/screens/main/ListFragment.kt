@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 @FlowPreview
 class ListFragment : Fragment(R.layout.fragment_list) {
 
-    private val viewModel by viewModelCreator { ListViewModel(Repositories.employeesRepository) }
+    private val viewModel by viewModelCreator<ListViewModel> { ListViewModel(Repositories.employeesRepository) }
 
     private lateinit var binding: FragmentListBinding
 
@@ -40,7 +40,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentListBinding.bind(view)
 
-        val adapter = EmployeesAdapter()
+        val adapter = EmployeesAdapter(viewModel)
         val tryAgainAction: TryAgainAction = { adapter.retry() }
         val footerAdapter = DefaultLoadStateAdapter(tryAgainAction)
         val adapterWithLoadState = adapter.withLoadStateFooter(footerAdapter)
@@ -54,9 +54,17 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         observeEditText()
         observeCheckBox()
         observeSwipeToRefresh()
+        observeInvalidateList(adapter)
         handleScrollingToTopWhenSearching(adapter)
         handleListVisibility(adapter)
     }
+
+    private fun observeInvalidateList(adapter: EmployeesAdapter) =
+        viewModel.invalidateEvent.observe(viewLifecycleOwner) {
+            it.get()?.let {
+                adapter.refresh()
+            }
+        }
 
     private fun observeEmployees(adapter: EmployeesAdapter) = lifecycleScope.launch {
         viewModel.employeesFlow.collectLatest { pagingData ->

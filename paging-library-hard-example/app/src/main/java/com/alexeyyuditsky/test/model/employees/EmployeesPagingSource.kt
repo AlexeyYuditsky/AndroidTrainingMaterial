@@ -2,7 +2,6 @@ package com.alexeyyuditsky.test.model.employees
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.alexeyyuditsky.test.model.employees.entities.Employee
 
 typealias EmployeesPageLoader = suspend (pageIndex: Int, pageSize: Int) -> List<Employee>
 

@@ -1,9 +1,8 @@
-package com.alexeyyuditsky.test.model.employees
+package com.alexeyyuditsky.test.model.employees.repositories
 
 import androidx.paging.PagingData
-import com.alexeyyuditsky.test.model.employees.entities.Employee
+import com.alexeyyuditsky.test.model.employees.Employee
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 interface EmployeesRepository {
 
@@ -14,5 +13,7 @@ interface EmployeesRepository {
     fun setErrorEnabled(value: Boolean)
 
     fun getPagedEmployees(searchBy: String = ""): Flow<PagingData<Employee>>
+
+    suspend fun deleteEmployee(employee: Employee)
 
 }

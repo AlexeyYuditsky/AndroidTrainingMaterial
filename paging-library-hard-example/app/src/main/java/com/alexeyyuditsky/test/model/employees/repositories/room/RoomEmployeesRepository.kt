@@ -1,14 +1,12 @@
-package com.alexeyyuditsky.test.model.employees.room
+package com.alexeyyuditsky.test.model.employees.repositories.room
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.alexeyyuditsky.test.model.employees.EmployeesPageLoader
 import com.alexeyyuditsky.test.model.employees.EmployeesPagingSource
-import com.alexeyyuditsky.test.model.employees.EmployeesRepository
-import com.alexeyyuditsky.test.model.employees.entities.Employee
-import com.alexeyyuditsky.test.model.employees.room.entities.EmployeeDbEntity
+import com.alexeyyuditsky.test.model.employees.repositories.EmployeesRepository
+import com.alexeyyuditsky.test.model.employees.Employee
 import com.github.javafaker.Faker
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -34,8 +32,7 @@ class RoomEmployeesRepository(
                         image = IMAGE_LIST[it % IMAGE_LIST.size],
                         name = faker.name().fullName(),
                         nation = faker.nation().nationality(),
-                        email = faker.internet().emailAddress(),
-                        age = faker.random().nextInt(16, 65)
+                        email = faker.internet().emailAddress()
                     )
                 )
             }
@@ -60,9 +57,14 @@ class RoomEmployeesRepository(
         ).flow
     }
 
+    override suspend fun deleteEmployee(employee: Employee) = withContext(ioDispatcher) {
+        delay(1000)
+        employeesDao.deleteEmployee(IdTuple(employee.id))
+    }
+
     private suspend fun getEmployees(pageIndex: Int, pageSize: Int, searchBy: String): List<Employee> =
         withContext(ioDispatcher) {
-            delay(2000)
+            delay(1000)
             if (enableErrorFlow.value) throw IllegalStateException("Error!")
             val offset = pageIndex * pageSize
             val list = employeesDao.getEmployees(pageSize, offset, searchBy)
@@ -70,7 +72,7 @@ class RoomEmployeesRepository(
         }
 
     companion object {
-        const val DATABASE_SIZE = 1000
+        const val DATABASE_SIZE = 100
         private const val PAGE_SIZE = 15
         private val IMAGE_LIST = listOf(
             "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",

@@ -1,4 +1,4 @@
-package com.alexeyyuditsky.test.model.employees.entities
+package com.alexeyyuditsky.test.model.employees
 
 data class Employee(
     val id: Long,
@@ -6,5 +6,5 @@ data class Employee(
     val name: String,
     val nation: String,
     val email: String,
-    val age: Int
+    val isFavorite: Boolean
 )

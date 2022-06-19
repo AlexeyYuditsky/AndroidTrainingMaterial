@@ -1,10 +1,7 @@
-package com.alexeyyuditsky.test.model.employees.room
+package com.alexeyyuditsky.test.model.employees.repositories.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import com.alexeyyuditsky.test.model.employees.room.RoomEmployeesRepository.Companion.DATABASE_SIZE
-import com.alexeyyuditsky.test.model.employees.room.entities.EmployeeDbEntity
+import androidx.room.*
+import com.alexeyyuditsky.test.model.employees.repositories.room.RoomEmployeesRepository.Companion.DATABASE_SIZE
 
 @Dao
 interface EmployeesDao {
@@ -19,5 +16,8 @@ interface EmployeesDao {
 
     @Insert(entity = EmployeeDbEntity::class)
     fun insertEmployeesList(employeesList: List<EmployeeDbEntity>)
+
+    @Delete(entity = EmployeeDbEntity::class)
+    fun deleteEmployee(idTuple: IdTuple)
 
 }
