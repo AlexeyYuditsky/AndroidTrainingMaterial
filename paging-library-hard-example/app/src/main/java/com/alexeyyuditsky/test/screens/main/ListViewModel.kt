@@ -25,16 +25,19 @@ class ListViewModel(private val employeesRepository: EmployeesRepository) : View
 
     val employeesFlow: Flow<PagingData<EmployeeListItem>>
 
+    private var searchBy = MutableLiveData("")
+
     private val localChanges = LocalChanges()
     private val localChangesFlow = MutableStateFlow(OnChange(localChanges))
 
     private val _invalidateListEvent = MutableLiveData<Event<Unit>>()
     val invalidateListEvent: LiveData<Event<Unit>> = _invalidateListEvent
 
+    private val _scrollEvent = MutableLiveData<Event<Unit>>()
+    val scrollEvent: LiveData<Event<Unit>> = _scrollEvent
+
     private val _errorEvents = MutableLiveData<Event<Int>>()
     val errorEvents: LiveData<Event<Int>> = _errorEvents
-
-    private var searchBy = MutableLiveData("")
 
     init {
         viewModelScope.launch { employeesRepository.initDatabaseIfEmpty() }
@@ -55,7 +58,7 @@ class ListViewModel(private val employeesRepository: EmployeesRepository) : View
         viewModelScope.launch {
             try {
                 setProgress(employeeListItem, true)
-                delete(employeeListItem)
+                deleteEmployee(employeeListItem)
             } catch (e: Exception) {
                 showError(R.string.error_delete)
             } finally {
@@ -64,15 +67,23 @@ class ListViewModel(private val employeesRepository: EmployeesRepository) : View
         }
     }
 
-    override fun onEmployeeFavorite(employeeListItem: EmployeeListItem) {
+    override fun onEmployeeToggleFavoriteFlag(employeeListItem: EmployeeListItem) {
         viewModelScope.launch {
-            //   employeesRepository.updateEmployee(employee)
+            try {
+                setProgress(employeeListItem, true)
+                setFavoriteFlag(employeeListItem)
+            } catch (e: Exception) {
+                showError(R.string.error_change_favorite)
+            } finally {
+                setProgress(employeeListItem, false)
+            }
         }
     }
 
     fun searchByName(value: String) {
         if (this.searchBy.value == value) return
         this.searchBy.value = value
+        scrollListToTop()
     }
 
     fun refresh() {
@@ -81,6 +92,17 @@ class ListViewModel(private val employeesRepository: EmployeesRepository) : View
 
     fun setEnableError(value: Boolean) {
         employeesRepository.setErrorEnabled(value)
+    }
+
+    private fun scrollListToTop() {
+        _scrollEvent.value = Event(Unit)
+    }
+
+    private suspend fun setFavoriteFlag(employeeListItem: EmployeeListItem) {
+        val newFlagValue = !employeeListItem.isFavorite
+        employeesRepository.setIsFavorite(employeeListItem.employee, newFlagValue)
+        localChanges.favoriteFlags[employeeListItem.id] = newFlagValue
+        localChangesFlow.value = OnChange(localChanges)
     }
 
     private fun setProgress(userListItem: EmployeeListItem, inProgress: Boolean) {
@@ -96,7 +118,7 @@ class ListViewModel(private val employeesRepository: EmployeesRepository) : View
         _errorEvents.value = Event(errorMessage)
     }
 
-    private suspend fun delete(employeeListItem: EmployeeListItem) {
+    private suspend fun deleteEmployee(employeeListItem: EmployeeListItem) {
         employeesRepository.deleteEmployee(employeeListItem.employee)
         invalidateList()
     }
@@ -105,15 +127,19 @@ class ListViewModel(private val employeesRepository: EmployeesRepository) : View
         _invalidateListEvent.value = Event(Unit)
     }
 
-    private fun merge(users: PagingData<Employee>, localChanges: OnChange<LocalChanges>): PagingData<EmployeeListItem> {
-        return users.map { user ->
-            val isInProgress = localChanges.value.idsInProgress.contains(user.id)
-            val localFavoriteFlag = localChanges.value.favoriteFlags[user.id]
+    private fun merge(
+        employees: PagingData<Employee>,
+        localChanges: OnChange<LocalChanges>
+    ): PagingData<EmployeeListItem> {
+        return employees.map { employee ->
+            val isInProgress = localChanges.value.idsInProgress.contains(employee.id)
+            val localFavoriteFlag = localChanges.value.favoriteFlags[employee.id]
 
-            val userWithLocalChanges = if (localFavoriteFlag == null)
-                user
-            else
-                user.copy(isFavorite = localFavoriteFlag)
+            val userWithLocalChanges = if (localFavoriteFlag == null) {
+                employee
+            } else {
+                employee.copy(isFavorite = localFavoriteFlag)
+            }
 
             EmployeeListItem(userWithLocalChanges, isInProgress)
         }

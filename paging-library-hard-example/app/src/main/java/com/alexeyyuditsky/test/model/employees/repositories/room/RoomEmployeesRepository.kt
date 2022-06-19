@@ -62,9 +62,16 @@ class RoomEmployeesRepository(
         employeesDao.deleteEmployee(IdTuple(employee.id))
     }
 
-    override suspend fun updateEmployee(employee: Employee) = withContext(ioDispatcher) {
+    override suspend fun setIsFavorite(employee: Employee, isFavorite: Boolean) = withContext(ioDispatcher) {
         delay(1000)
-        employeesDao.updateEmployee(IsFavoriteTuple(employee.id, !employee.isFavorite))
+        throwErrorsIfEnabled()
+
+        val tuple = IsFavoriteTuple(employee.id, isFavorite)
+        employeesDao.setIsFavorite(tuple)
+    }
+
+    private fun throwErrorsIfEnabled() {
+        if (enableErrorFlow.value) throw IllegalStateException("Error!")
     }
 
     private suspend fun getEmployees(pageIndex: Int, pageSize: Int, searchBy: String): List<Employee> =

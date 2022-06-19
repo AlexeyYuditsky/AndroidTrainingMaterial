@@ -23,7 +23,7 @@ class EmployeesAdapter(private val listener: Listener) :
     override fun onClick(v: View) {
         val employee = v.tag as EmployeeListItem
         if (v.id == R.id.deleteImageView) listener.onEmployeeDelete(employee)
-        if (v.id == R.id.favoriteImageView) listener.onEmployeeFavorite(employee)
+        if (v.id == R.id.favoriteImageView) listener.onEmployeeToggleFavoriteFlag(employee)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -84,7 +84,7 @@ class EmployeesAdapter(private val listener: Listener) :
 
     interface Listener {
         fun onEmployeeDelete(employeeListItem: EmployeeListItem)
-        fun onEmployeeFavorite(employeeListItem: EmployeeListItem)
+        fun onEmployeeToggleFavoriteFlag(employeeListItem: EmployeeListItem)
     }
 
 }

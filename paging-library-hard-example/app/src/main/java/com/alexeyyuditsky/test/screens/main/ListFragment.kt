@@ -115,7 +115,9 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         val items = List<LoadState?>(2) { null }
         state.scan(items) { previous, value -> previous.drop(1) + value }
             .collectLatest { (previousState, currentState) ->
-                if (previousState is LoadState.Loading && currentState is LoadState.NotLoading) {
+                if (previousState is LoadState.Loading && currentState is LoadState.NotLoading &&
+                    viewModel.scrollEvent.value?.get() != null
+                ) {
                     binding.recyclerView.scrollToPosition(0)
                 }
             }

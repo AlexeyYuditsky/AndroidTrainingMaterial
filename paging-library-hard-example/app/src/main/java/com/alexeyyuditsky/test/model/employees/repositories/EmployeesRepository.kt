@@ -16,6 +16,6 @@ interface EmployeesRepository {
 
     suspend fun deleteEmployee(employee: Employee)
 
-    suspend fun updateEmployee(employee: Employee)
+    suspend fun setIsFavorite(employee: Employee, isFavorite: Boolean)
 
 }
