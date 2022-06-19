@@ -9,4 +9,5 @@ data class EmployeeListItem(
     val name: String get() = employee.name
     val nation: String get() = employee.nation
     val email: String get() = employee.email
+    val isFavorite: Boolean get() = employee.isFavorite
 }

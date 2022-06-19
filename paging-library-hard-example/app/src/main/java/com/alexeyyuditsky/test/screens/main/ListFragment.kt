@@ -5,12 +5,14 @@ import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.alexeyyuditsky.test.R
@@ -22,10 +24,7 @@ import com.alexeyyuditsky.test.databinding.FragmentListBinding
 import com.alexeyyuditsky.test.utils.viewModelCreator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.scan
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -47,6 +46,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
         binding.recyclerView.adapter = adapterWithLoadState
         binding.recyclerView.addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        (binding.recyclerView.itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
         binding.loadStateView.tryAgainButton.setOnClickListener { adapter.retry() }
 
         observeEmployees(adapter)
@@ -55,15 +55,20 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         observeCheckBox()
         observeSwipeToRefresh()
         observeInvalidateList(adapter)
+        observeErrorMessages()
         handleScrollingToTopWhenSearching(adapter)
         handleListVisibility(adapter)
     }
 
+    private fun observeErrorMessages() {
+        viewModel.errorEvents.observe(viewLifecycleOwner) {
+            it.get()?.let { messageRes -> Toast.makeText(context, messageRes, Toast.LENGTH_SHORT).show() }
+        }
+    }
+
     private fun observeInvalidateList(adapter: EmployeesAdapter) =
-        viewModel.invalidateEvent.observe(viewLifecycleOwner) {
-            it.get()?.let {
-                adapter.refresh()
-            }
+        viewModel.invalidateListEvent.observe(viewLifecycleOwner) {
+            it.get()?.let { adapter.refresh() }
         }
 
     private fun observeEmployees(adapter: EmployeesAdapter) = lifecycleScope.launch {
@@ -78,10 +83,8 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
     }
 
-    private fun observeLoadState(adapter: EmployeesAdapter) {
-        adapter.addLoadStateListener {
-            binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
-        }
+    private fun observeLoadState(adapter: EmployeesAdapter) = adapter.addLoadStateListener {
+        binding.swipeRefreshLayout.isRefreshing = it.refresh is LoadState.Loading
     }
 
     private fun observeCheckBox() {
@@ -98,7 +101,9 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
     private fun observeEditText() {
         val editText = requireActivity().findViewById<EditText>(R.id.searchEditText)
-        editText.addTextChangedListener { viewModel.searchByName(it.toString()) }
+        editText.addTextChangedListener {
+            viewModel.searchByName(it.toString())
+        }
     }
 
     private fun getRefreshLoadStateFlow(adapter: EmployeesAdapter): Flow<LoadState> {

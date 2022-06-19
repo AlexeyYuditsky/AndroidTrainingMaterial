@@ -62,6 +62,11 @@ class RoomEmployeesRepository(
         employeesDao.deleteEmployee(IdTuple(employee.id))
     }
 
+    override suspend fun updateEmployee(employee: Employee) = withContext(ioDispatcher) {
+        delay(1000)
+        employeesDao.updateEmployee(IsFavoriteTuple(employee.id, !employee.isFavorite))
+    }
+
     private suspend fun getEmployees(pageIndex: Int, pageSize: Int, searchBy: String): List<Employee> =
         withContext(ioDispatcher) {
             delay(1000)

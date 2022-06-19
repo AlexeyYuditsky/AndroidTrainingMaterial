@@ -20,4 +20,7 @@ interface EmployeesDao {
     @Delete(entity = EmployeeDbEntity::class)
     fun deleteEmployee(idTuple: IdTuple)
 
+    @Update(entity = EmployeeDbEntity::class)
+    fun updateEmployee(isFavoriteTuple: IsFavoriteTuple)
+
 }

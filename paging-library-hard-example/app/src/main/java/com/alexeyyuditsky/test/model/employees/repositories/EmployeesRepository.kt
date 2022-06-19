@@ -16,4 +16,6 @@ interface EmployeesRepository {
 
     suspend fun deleteEmployee(employee: Employee)
 
+    suspend fun updateEmployee(employee: Employee)
+
 }

@@ -1,18 +1,20 @@
 package com.alexeyyuditsky.test.screens.main
 
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
+import com.alexeyyuditsky.test.R
 import com.alexeyyuditsky.test.adapters.EmployeesAdapter
 import com.alexeyyuditsky.test.model.employees.Employee
+import com.alexeyyuditsky.test.model.employees.EmployeeListItem
 import com.alexeyyuditsky.test.model.employees.repositories.EmployeesRepository
 import com.alexeyyuditsky.test.utils.Event
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -21,49 +23,107 @@ class ListViewModel(private val employeesRepository: EmployeesRepository) : View
 
     val isErrorsEnabled: Flow<Boolean> = employeesRepository.enableErrorFlow
 
-    val employeesFlow: Flow<PagingData<Employee>>
+    val employeesFlow: Flow<PagingData<EmployeeListItem>>
 
-    private val _invalidateEvent = MutableLiveData<Event<Unit>>()
-    val invalidateEvent: LiveData<Event<Unit>> = _invalidateEvent
+    private val localChanges = LocalChanges()
+    private val localChangesFlow = MutableStateFlow(OnChange(localChanges))
+
+    private val _invalidateListEvent = MutableLiveData<Event<Unit>>()
+    val invalidateListEvent: LiveData<Event<Unit>> = _invalidateListEvent
+
+    private val _errorEvents = MutableLiveData<Event<Int>>()
+    val errorEvents: LiveData<Event<Int>> = _errorEvents
 
     private var searchBy = MutableLiveData("")
 
     init {
-        viewModelScope.launch {
-            employeesRepository.initDatabaseIfEmpty()
-        }
+        viewModelScope.launch { employeesRepository.initDatabaseIfEmpty() }
 
-        employeesFlow = searchBy.asFlow()
+        val originEmployeesFlow = searchBy.asFlow()
             .debounce(500)
             .flatMapLatest { employeesRepository.getPagedEmployees(it) }
             .cachedIn(viewModelScope)
+
+        employeesFlow = combine(
+            originEmployeesFlow,
+            localChangesFlow,
+            this::merge
+        )
     }
 
-    override fun onEmployeeDelete(employee: Employee) {
+    override fun onEmployeeDelete(employeeListItem: EmployeeListItem) {
         viewModelScope.launch {
-            employeesRepository.deleteEmployee(employee)
-            invalidateList()
+            try {
+                setProgress(employeeListItem, true)
+                delete(employeeListItem)
+            } catch (e: Exception) {
+                showError(R.string.error_delete)
+            } finally {
+                setProgress(employeeListItem, false)
+            }
         }
     }
 
-    override fun onEmployeeFavorite(employee: Employee) {
-
+    override fun onEmployeeFavorite(employeeListItem: EmployeeListItem) {
+        viewModelScope.launch {
+            //   employeesRepository.updateEmployee(employee)
+        }
     }
 
     fun searchByName(value: String) {
-        searchBy.value = value
+        if (this.searchBy.value == value) return
+        this.searchBy.value = value
     }
 
     fun refresh() {
-        searchBy.value = searchBy.value
+        this.searchBy.value = this.searchBy.value
     }
 
     fun setEnableError(value: Boolean) {
         employeesRepository.setErrorEnabled(value)
     }
 
+    private fun setProgress(userListItem: EmployeeListItem, inProgress: Boolean) {
+        if (inProgress) {
+            localChanges.idsInProgress.add(userListItem.id)
+        } else {
+            localChanges.idsInProgress.remove(userListItem.id)
+        }
+        localChangesFlow.value = OnChange(localChanges)
+    }
+
+    private fun showError(@StringRes errorMessage: Int) {
+        _errorEvents.value = Event(errorMessage)
+    }
+
+    private suspend fun delete(employeeListItem: EmployeeListItem) {
+        employeesRepository.deleteEmployee(employeeListItem.employee)
+        invalidateList()
+    }
+
     private fun invalidateList() {
-        _invalidateEvent.value = Event(Unit)
+        _invalidateListEvent.value = Event(Unit)
+    }
+
+    private fun merge(users: PagingData<Employee>, localChanges: OnChange<LocalChanges>): PagingData<EmployeeListItem> {
+        return users.map { user ->
+            val isInProgress = localChanges.value.idsInProgress.contains(user.id)
+            val localFavoriteFlag = localChanges.value.favoriteFlags[user.id]
+
+            val userWithLocalChanges = if (localFavoriteFlag == null)
+                user
+            else
+                user.copy(isFavorite = localFavoriteFlag)
+
+            EmployeeListItem(userWithLocalChanges, isInProgress)
+        }
+    }
+
+    class OnChange<T>(val value: T)
+
+    class LocalChanges {
+        val idsInProgress = mutableSetOf<Long>()
+        val favoriteFlags = mutableMapOf<Long, Boolean>()
     }
 
 }
