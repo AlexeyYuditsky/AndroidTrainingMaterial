@@ -59,6 +59,8 @@ class RoomEmployeesRepository(
 
     override suspend fun deleteEmployee(employee: Employee) = withContext(ioDispatcher) {
         delay(1000)
+        throwErrorsIfEnabled()
+
         employeesDao.deleteEmployee(IdTuple(employee.id))
     }
 
