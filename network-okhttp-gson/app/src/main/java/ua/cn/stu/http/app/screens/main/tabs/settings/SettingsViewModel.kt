@@ -37,12 +37,16 @@ class SettingsViewModel(
         boxesRepository.reload(BoxesFilter.ALL)
     }
 
-    override fun enableBox(box: Box) = viewModelScope.safeLaunch {
-        boxesRepository.activateBox(box)
+    override fun enableBox(box: Box) {
+        viewModelScope.safeLaunch {
+            boxesRepository.activateBox(box)
+        }
     }
 
-    override fun disableBox(box: Box) = viewModelScope.safeLaunch {
-        boxesRepository.deactivateBox(box)
+    override fun disableBox(box: Box) {
+        viewModelScope.safeLaunch {
+            boxesRepository.deactivateBox(box)
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package ua.cn.stu.http.sources.base
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CancellableContinuation
@@ -83,7 +84,7 @@ open class BaseOkHttpSource(
      */
     fun <T> Response.parseJsonResponse(typeToken: TypeToken<T>): T {
         try {
-            return gson.fromJson(this.body!!.string(), typeToken.type)
+            return gson.fromJson<T>(this.body!!.string(), typeToken.type).apply { Log.d("MyLog", this.toString()) }
         } catch (e: Exception) {
             throw ParseBackendResponseException(e)
         }

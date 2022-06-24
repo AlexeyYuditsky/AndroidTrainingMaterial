@@ -21,8 +21,7 @@ class SharedPreferencesAppSettings(
         editor.apply()
     }
 
-    override fun getCurrentToken(): String? =
-        sharedPreferences.getString(PREF_CURRENT_ACCOUNT_TOKEN, null)
+    override fun getCurrentToken(): String? = sharedPreferences.getString(PREF_CURRENT_ACCOUNT_TOKEN, null)
 
     companion object {
         private const val PREF_CURRENT_ACCOUNT_TOKEN = "currentToken"

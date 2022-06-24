@@ -29,27 +29,25 @@ open class BaseViewModel(
     private val _showAuthErrorAndRestartEvent = MutableUnitLiveEvent()
     val showAuthErrorAndRestartEvent = _showAuthErrorAndRestartEvent.share()
 
-    fun CoroutineScope.safeLaunch(block: suspend CoroutineScope.() -> Unit) {
-        viewModelScope.launch {
-            try {
-                block.invoke(this)
-            } catch (e: ConnectionException) {
-                logError(e)
-                _showErrorMessageResEvent.publishEvent(R.string.connection_error)
-            } catch (e: BackendException) {
-                logError(e)
-                _showErrorMessageEvent.publishEvent(e.message ?: "")
-            } catch (e: AuthException) {
-                logError(e)
-                _showAuthErrorAndRestartEvent.publishEvent()
-            } catch (e: Exception) {
-                logError(e)
-                _showErrorMessageResEvent.publishEvent(R.string.internal_error)
-            }
+    fun CoroutineScope.safeLaunch(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch {
+        try {
+            block.invoke(this)
+        } catch (e: ConnectionException) {
+            logError(e)
+            _showErrorMessageResEvent.publishEvent(R.string.connection_error)
+        } catch (e: BackendException) {
+            logError(e)
+            _showErrorMessageEvent.publishEvent(e.message ?: "")
+        } catch (e: AuthException) {
+            logError(e)
+            _showAuthErrorAndRestartEvent.publishEvent()
+        } catch (e: Exception) {
+            logError(e)
+            _showErrorMessageResEvent.publishEvent(R.string.internal_error)
         }
     }
 
-    fun logError(e: Throwable) {
+    private fun logError(e: Throwable) {
         logger.error(javaClass.simpleName, e)
     }
 
