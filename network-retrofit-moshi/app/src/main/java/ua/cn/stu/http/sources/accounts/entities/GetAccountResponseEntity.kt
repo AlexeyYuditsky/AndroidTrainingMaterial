@@ -31,4 +31,5 @@ data class GetAccountResponseEntity(
         username = username,
         createdAt = createdAt
     )
+
 }

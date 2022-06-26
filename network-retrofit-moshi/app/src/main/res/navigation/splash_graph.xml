@@ -10,6 +10,7 @@
         android:name="ua.cn.stu.http.app.screens.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
+
     <activity
         android:id="@+id/mainActivity"
         android:name="ua.cn.stu.http.app.screens.main.MainActivity"
@@ -19,4 +20,5 @@
             android:name="isSignedIn"
             app:argType="boolean" />
     </activity>
+
 </navigation>

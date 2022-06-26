@@ -29,7 +29,7 @@ open class BaseViewModel(
     private val _showAuthErrorAndRestartEvent = MutableUnitLiveEvent()
     val showAuthErrorAndRestartEvent = _showAuthErrorAndRestartEvent.share()
 
-    fun CoroutineScope.safeLaunch(block: suspend CoroutineScope.() -> Unit) {
+    fun safeLaunch(block: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch {
             try {
                 block.invoke(this)
@@ -49,7 +49,7 @@ open class BaseViewModel(
         }
     }
 
-    fun logError(e: Throwable) {
+    private fun logError(e: Throwable) {
         logger.error(javaClass.simpleName, e)
     }
 

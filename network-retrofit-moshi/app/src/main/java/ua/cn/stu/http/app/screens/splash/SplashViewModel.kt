@@ -24,4 +24,5 @@ class SplashViewModel(
             _launchMainScreenEvent.publishEvent(accountsRepository.isSignedIn())
         }
     }
+
 }

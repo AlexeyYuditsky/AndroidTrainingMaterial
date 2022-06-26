@@ -14,18 +14,18 @@ class SharedPreferencesAppSettings(
 
     override fun setCurrentToken(token: String?) {
         val editor = sharedPreferences.edit()
-        if (token == null)
+        if (token == null) {
             editor.remove(PREF_CURRENT_ACCOUNT_TOKEN)
-        else
+        } else {
             editor.putString(PREF_CURRENT_ACCOUNT_TOKEN, token)
+        }
         editor.apply()
     }
 
-    override fun getCurrentToken(): String? =
-        sharedPreferences.getString(PREF_CURRENT_ACCOUNT_TOKEN, null)
+    override fun getCurrentToken(): String? = sharedPreferences.getString(PREF_CURRENT_ACCOUNT_TOKEN, null)
 
-    companion object {
-        private const val PREF_CURRENT_ACCOUNT_TOKEN = "currentToken"
+    private companion object {
+        const val PREF_CURRENT_ACCOUNT_TOKEN = "currentToken"
     }
 
 }

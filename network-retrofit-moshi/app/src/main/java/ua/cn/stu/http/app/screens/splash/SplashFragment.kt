@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ua.cn.stu.http.app.R
 import ua.cn.stu.http.app.databinding.FragmentSplashBinding
 import ua.cn.stu.http.app.screens.main.MainActivity
@@ -21,15 +24,15 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSplashBinding.bind(view)
 
-        // just some animations example
         renderAnimations()
 
-        viewModel.launchMainScreenEvent.observeEvent(viewLifecycleOwner) { launchMainScreen(it) }
+        viewModel.launchMainScreenEvent.observeEvent(viewLifecycleOwner) {
+            launchMainScreen(it)
+        }
     }
 
     private fun launchMainScreen(isSignedIn: Boolean) {
         val intent = Intent(requireContext(), MainActivity::class.java)
-
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
         val args = MainActivityArgs(isSignedIn)
@@ -50,6 +53,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             .setStartDelay(500)
             .setDuration(1000)
             .start()
-
     }
+
 }

@@ -1,6 +1,5 @@
 package ua.cn.stu.http.app.model
 
-
 open class AppException : RuntimeException {
     constructor() : super()
     constructor(message: String) : super(message)

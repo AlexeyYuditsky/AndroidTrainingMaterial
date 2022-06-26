@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -58,7 +59,7 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
         fillError(binding.passwordTextInput, state.passwordErrorMessageRes)
         fillError(binding.repeatPasswordTextInput, state.repeatPasswordErrorMessageRes)
 
-        binding.progressBar.visibility = if (state.showProgress) View.VISIBLE else View.INVISIBLE
+        binding.progressBar.isVisible = state.showProgress
     }
 
     private fun observeShowSuccessSignUpMessageEvent() = viewModel.showToastEvent.observeEvent(viewLifecycleOwner) {
@@ -80,4 +81,5 @@ class SignUpFragment : BaseFragment(R.layout.fragment_sign_up) {
     }
 
     private fun getEmailArgument(): String? = args.email
+
 }

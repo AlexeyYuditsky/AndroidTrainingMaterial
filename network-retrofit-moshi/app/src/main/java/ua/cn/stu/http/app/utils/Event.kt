@@ -5,13 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class Event<T>(
-    value: T
+    private var value: T? = null
 ) {
-
-    private var _value: T? = value
-
-    fun get(): T? = _value.also { _value = null }
-
+    fun get(): T? = value.apply { value = null }
 }
 
 // --- helper methods / aliases

@@ -1,7 +1,6 @@
 package ua.cn.stu.http.app.screens.main.auth
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import ua.cn.stu.http.app.R
 import ua.cn.stu.http.app.screens.base.BaseViewModel
 import ua.cn.stu.http.app.utils.*
@@ -30,7 +29,7 @@ class SignInViewModel(
     private val _navigateToTabsEvent = MutableUnitLiveEvent()
     val navigateToTabsEvent = _navigateToTabsEvent.share()
 
-    fun signIn(email: String, password: String) = viewModelScope.safeLaunch {
+    fun signIn(email: String, password: String) = safeLaunch {
         showProgress()
         try {
             accountsRepository.signIn(email, password)

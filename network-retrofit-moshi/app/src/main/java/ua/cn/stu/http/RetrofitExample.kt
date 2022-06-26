@@ -17,7 +17,7 @@ data class SignInResponseBody(
     val token: String
 )
 
-interface Api {
+interface API {
     @POST("sign-in")
     suspend fun signIn(@Body signInRequestBody: SignInRequestBody): SignInResponseBody
 }
@@ -34,7 +34,7 @@ suspend fun main() {
         .addConverterFactory(moshiConverterFactory)
         .build()
 
-    val api = retrofit.create(Api::class.java)
+    val api = retrofit.create(API::class.java)
 
     val requestBody = SignInRequestBody(
         email = "admin@google.com",

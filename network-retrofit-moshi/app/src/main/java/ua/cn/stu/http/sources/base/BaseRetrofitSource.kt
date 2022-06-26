@@ -1,5 +1,6 @@
 package ua.cn.stu.http.sources.base
 
+import android.util.Log
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
 import com.squareup.moshi.Moshi
@@ -34,15 +35,15 @@ open class BaseRetrofitSource(
             block()
         } catch (e: AppException) {
             throw e
-        // moshi
+            // moshi
         } catch (e: JsonDataException) {
             throw ParseBackendResponseException(e)
         } catch (e: JsonEncodingException) {
             throw ParseBackendResponseException(e)
-        // retrofit
+            // retrofit
         } catch (e: HttpException) {
             throw createBackendException(e)
-        // mostly retrofit
+            // mostly retrofit
         } catch (e: IOException) {
             throw ConnectionException(e)
         }

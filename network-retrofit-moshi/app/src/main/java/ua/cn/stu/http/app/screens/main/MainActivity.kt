@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Singletons.init(applicationContext)
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
+        val binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
         setSupportActionBar(binding.toolbar)
 
         // preparing root nav controller

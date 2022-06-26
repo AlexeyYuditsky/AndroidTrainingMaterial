@@ -2,7 +2,6 @@ package ua.cn.stu.http.app.screens.main.tabs.settings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ua.cn.stu.http.app.screens.base.BaseViewModel
 import ua.cn.stu.http.app.utils.share
@@ -33,15 +32,15 @@ class SettingsViewModel(
         }
     }
 
-    fun tryAgain() = viewModelScope.safeLaunch {
+    fun tryAgain() = safeLaunch {
         boxesRepository.reload(BoxesFilter.ALL)
     }
 
-    override fun enableBox(box: Box) = viewModelScope.safeLaunch {
+    override fun enableBox(box: Box) = safeLaunch {
         boxesRepository.activateBox(box)
     }
 
-    override fun disableBox(box: Box) = viewModelScope.safeLaunch {
+    override fun disableBox(box: Box) = safeLaunch {
         boxesRepository.deactivateBox(box)
     }
 

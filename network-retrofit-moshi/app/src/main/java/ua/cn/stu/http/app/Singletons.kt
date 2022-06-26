@@ -53,7 +53,8 @@ object Singletons {
      * (e.g. in onCreate of activities and services)
      */
     fun init(appContext: Context) {
-        Singletons.appContext = appContext
+        this.appContext = appContext
     }
+
 }
 

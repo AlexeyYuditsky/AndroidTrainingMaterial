@@ -30,7 +30,7 @@ class SignUpViewModel(
     private val _state = MutableLiveData(State())
     val state = _state.share()
 
-    fun signUp(signUpData: SignUpData) = viewModelScope.safeLaunch {
+    fun signUp(signUpData: SignUpData) = safeLaunch {
         showProgress()
         try {
             accountsRepository.signUp(signUpData)

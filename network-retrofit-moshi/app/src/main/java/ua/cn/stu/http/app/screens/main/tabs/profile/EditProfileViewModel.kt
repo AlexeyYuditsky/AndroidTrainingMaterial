@@ -44,7 +44,7 @@ class EditProfileViewModel(
         }
     }
 
-    fun saveUsername(newUsername: String) = viewModelScope.safeLaunch {
+    fun saveUsername(newUsername: String) = safeLaunch {
         showProgress()
         try {
             accountsRepository.updateAccountUsername(newUsername)

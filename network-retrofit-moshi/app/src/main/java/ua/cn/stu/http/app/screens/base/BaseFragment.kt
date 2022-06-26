@@ -37,11 +37,7 @@ abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
     }
 
     private fun restartWithSignIn() {
-        findTopNavController().navigate(R.id.signInFragment, null, navOptions {
-            popUpTo(R.id.tabsFragment) {
-                inclusive = true
-            }
-        })
+        findTopNavController().navigate(R.id.action_tabsFragment_to_signInFragment)
     }
 
 }

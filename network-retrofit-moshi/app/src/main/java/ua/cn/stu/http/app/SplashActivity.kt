@@ -11,12 +11,11 @@ import ua.cn.stu.http.app.screens.splash.SplashViewModel
  * Splash activity contains only window background, all other initialization logic is placed to
  * [SplashFragment] and [SplashViewModel].
  */
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : AppCompatActivity(R.layout.activity_splash) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Singletons.init(applicationContext)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
     }
 
 }
