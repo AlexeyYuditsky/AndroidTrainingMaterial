@@ -13,6 +13,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -62,12 +63,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupYearsSpinner() {
         val items = (listOf(null) + (2006..2025))
             .map { Year(this, it) }
-            .toList()
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_list_item_1,
-            items
-        )
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, items)
         binding.yearSpinner.adapter = adapter
         binding.yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -84,17 +80,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupList() {
         binding.launchesRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.launchesRecyclerView.adapter = adapter
-        (binding.launchesRecyclerView.itemAnimator as? DefaultItemAnimator)
-            ?.supportsChangeAnimations = false
-        binding.launchesRecyclerView.addItemDecoration(
-            DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        (binding.launchesRecyclerView.itemAnimator as? DefaultItemAnimator)?.supportsChangeAnimations = false
+        binding.launchesRecyclerView.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
         lifecycleScope.launch {
             waitForLoad()
             val tryAgainAction: TryAgainAction = { adapter.retry() }
             val footerAdapter = DefaultLoadStateAdapter(tryAgainAction)
-            val adapterWithLoadState =
-                adapter.withLoadStateFooter(footerAdapter)
+            val adapterWithLoadState = adapter.withLoadStateFooter(footerAdapter)
             binding.launchesRecyclerView.adapter = adapterWithLoadState
         }
     }
@@ -105,11 +97,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeLaunches() {
-        lifecycleScope.launch {
-            viewModel.launchesListFlow.collectLatest {
-                adapter.submitData(it)
-            }
+    private fun observeLaunches() = lifecycleScope.launch {
+        viewModel.launchesListFlow.collectLatest {
+            adapter.submitData(it)
         }
     }
 
@@ -122,9 +112,7 @@ class MainActivity : AppCompatActivity() {
         }
         adapter.loadStateFlow
             .debounce(300)
-            .onEach {
-                loadStateHolder.bind(it.refresh)
-            }
+            .onEach { loadStateHolder.bind(it.refresh) }
             .launchIn(lifecycleScope)
     }
 
@@ -139,8 +127,8 @@ class MainActivity : AppCompatActivity() {
                 binding.launchesRecyclerView.isInvisible = current is LoadState.Error
                         || previous is LoadState.Error
                         || (beforePrevious is LoadState.Error
-                            && previous is LoadState.NotLoading
-                            && current is LoadState.Loading)
+                        && previous is LoadState.NotLoading
+                        && current is LoadState.Loading)
             }
     }
 
@@ -151,7 +139,8 @@ class MainActivity : AppCompatActivity() {
             .simpleScan(count = 2)
             .collect { (previousState, currentState) ->
                 if (previousState is LoadState.Loading
-                        && currentState is LoadState.NotLoading) {
+                    && currentState is LoadState.NotLoading
+                ) {
                     delay(200)
                     binding.launchesRecyclerView.scrollToPosition(0)
                 }
@@ -176,4 +165,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+}
+
+class God(
+    private val value: Int?,
+    private val message: String
+) {
+
+    constructor(context: String, year: Int?) : this(
+        value = year,
+        message = year?.toString() ?: "All"
+    )
+
+    override fun toString(): String = message
+
+}
+
+fun main() {
+    val list = (listOf(null) + (5..15)).apply { println(this) }
+        .map { God("context", it) }
+    println(list)
 }

@@ -7,6 +7,7 @@ import androidx.paging.RemoteMediator
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.delay
 import ua.cn.stu.remotemediator.data.retrofit.LaunchesApi
 import ua.cn.stu.remotemediator.data.retrofit.LaunchesQuery
 import ua.cn.stu.remotemediator.data.room.LaunchRoomEntity
@@ -60,6 +61,7 @@ class LaunchesRemoteMediator @AssistedInject constructor(
         limit: Int,
         offset: Int
     ): List<LaunchRoomEntity> {
+        delay(2000)
         val query = LaunchesQuery.create(
             year = year,
             limit = limit,

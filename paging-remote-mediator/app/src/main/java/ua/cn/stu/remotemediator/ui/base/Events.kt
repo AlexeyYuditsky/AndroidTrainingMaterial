@@ -32,9 +32,9 @@ fun <T> MutableLiveEvent<T>.publishEvent(value: T) {
 }
 
 fun <T> LiveEvent<T>.observeEvent(lifecycleOwner: LifecycleOwner, listener: EventListener<T>) {
-    this.observe(lifecycleOwner, {
+    this.observe(lifecycleOwner) {
         it.get()?.let { value ->
             listener(value)
         }
-    })
+    }
 }

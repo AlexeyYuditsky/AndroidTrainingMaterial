@@ -18,6 +18,7 @@ import ua.cn.stu.remotemediator.R
 import ua.cn.stu.remotemediator.domain.Launch
 import ua.cn.stu.remotemediator.domain.LaunchesRepository
 import ua.cn.stu.remotemediator.ui.base.MutableLiveEvent
+import ua.cn.stu.remotemediator.ui.base.log
 import ua.cn.stu.remotemediator.ui.base.publishEvent
 import ua.cn.stu.remotemediator.ui.base.share
 import javax.inject.Inject
@@ -34,8 +35,7 @@ class MainViewModel @Inject constructor(
 
     private val selections = Selections()
 
-    private val yearLiveData =
-        savedStateHandle.getLiveData(KEY_YEAR, 2020)
+    private val yearLiveData = savedStateHandle.getLiveData(KEY_YEAR, 2020)
     var year: Int?
         get() = yearLiveData.value
         set(value) {
@@ -44,16 +44,14 @@ class MainViewModel @Inject constructor(
 
     private val launchesFlow = yearLiveData.asFlow()
         .distinctUntilChanged()
-        .flatMapLatest {
-            launchesRepository.getLaunches(it)
-        }
+        .flatMapLatest { launchesRepository.getLaunches(it) }
         .cachedIn(viewModelScope)
 
     val launchesListFlow = combine(
-            launchesFlow,
-            selections.flow(),
-            ::merge
-        )
+        launchesFlow,
+        selections.flow(),
+        ::merge
+    )
 
     fun toggleCheckState(launch: LaunchUiEntity) {
         selections.toggle(launch.id)
