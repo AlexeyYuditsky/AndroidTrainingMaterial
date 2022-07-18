@@ -3,6 +3,7 @@ package ua.cn.stu.hilt.di
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.components.SingletonComponent
 import ua.cn.stu.hilt.app.model.settings.AppSettings
 import ua.cn.stu.hilt.app.model.settings.SharedPreferencesAppSettings

@@ -3,6 +3,7 @@ package ua.cn.stu.hilt.app.model.settings
 import android.content.Context
 import android.content.SharedPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,18 +19,15 @@ class SharedPreferencesAppSettings @Inject constructor(
 
     override fun setCurrentToken(token: String?) {
         val editor = sharedPreferences.edit()
-        if (token == null)
-            editor.remove(PREF_CURRENT_ACCOUNT_TOKEN)
-        else
-            editor.putString(PREF_CURRENT_ACCOUNT_TOKEN, token)
+        if (token == null) editor.remove(PREF_CURRENT_ACCOUNT_TOKEN)
+        else editor.putString(PREF_CURRENT_ACCOUNT_TOKEN, token)
         editor.apply()
     }
 
-    override fun getCurrentToken(): String? =
-        sharedPreferences.getString(PREF_CURRENT_ACCOUNT_TOKEN, null)
+    override fun getCurrentToken(): String? = sharedPreferences.getString(PREF_CURRENT_ACCOUNT_TOKEN, null)
 
-    companion object {
-        private const val PREF_CURRENT_ACCOUNT_TOKEN = "currentToken"
+    private companion object {
+        const val PREF_CURRENT_ACCOUNT_TOKEN = "currentToken"
     }
 
 }
