@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val accountsRepository: AccountsRepository
+    accountsRepository: AccountsRepository
 ) : ViewModel() {
 
     private val _username = MutableLiveData<String>()

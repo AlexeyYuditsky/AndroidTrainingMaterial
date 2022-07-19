@@ -15,7 +15,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val accountsRepository: AccountsRepository
+    accountsRepository: AccountsRepository
 ) : ViewModel() {
 
     private val _launchMainScreenEvent = MutableLiveEvent<Boolean>()

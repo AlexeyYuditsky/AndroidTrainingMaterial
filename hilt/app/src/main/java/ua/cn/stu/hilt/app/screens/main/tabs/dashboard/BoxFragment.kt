@@ -17,10 +17,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class BoxFragment : BaseFragment(R.layout.fragment_box) {
 
-    @Inject lateinit var factory: BoxViewModel.Factory
-    override val viewModel by viewModelCreator {
-        factory.create(args.boxId)
-    }
+    override val viewModel by viewModels<BoxViewModel>()
 
     private lateinit var binding: FragmentBoxBinding
 
