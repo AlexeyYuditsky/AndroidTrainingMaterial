@@ -12,6 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ua.cn.stu.remotemediator.data.retrofit.LaunchesApi
+import ua.cn.stu.remotemediator.ui.base.log
 import javax.inject.Singleton
 
 @Module

@@ -12,6 +12,7 @@ import ua.cn.stu.remotemediator.data.retrofit.LaunchesApi
 import ua.cn.stu.remotemediator.data.retrofit.LaunchesQuery
 import ua.cn.stu.remotemediator.data.room.LaunchRoomEntity
 import ua.cn.stu.remotemediator.data.room.LaunchesDao
+import ua.cn.stu.remotemediator.ui.base.log
 
 @ExperimentalPagingApi
 class LaunchesRemoteMediator @AssistedInject constructor(

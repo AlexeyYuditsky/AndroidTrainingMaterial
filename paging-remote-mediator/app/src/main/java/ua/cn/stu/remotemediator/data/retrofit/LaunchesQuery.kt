@@ -1,6 +1,7 @@
 package ua.cn.stu.remotemediator.data.retrofit
 
 import com.google.gson.annotations.SerializedName
+import ua.cn.stu.remotemediator.ui.base.log
 import java.util.*
 import java.util.concurrent.TimeUnit
 

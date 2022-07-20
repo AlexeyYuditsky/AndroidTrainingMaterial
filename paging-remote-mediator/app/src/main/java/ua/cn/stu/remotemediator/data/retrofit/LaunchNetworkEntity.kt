@@ -26,9 +26,10 @@ data class LaunchNetworkEntity(
     override val imageUrl: String get() = links?.patch?.small ?: ""
     override val launchTimestamp: Long get() = dateUnix
 
-    override val year: Int get() = Calendar.getInstance().apply {
-        timeInMillis = TimeUnit.SECONDS.toMillis(launchTimestamp)
-    }.get(Calendar.YEAR)
+    override val year: Int
+        get() = Calendar.getInstance().apply {
+            timeInMillis = TimeUnit.SECONDS.toMillis(launchTimestamp)
+        }.get(Calendar.YEAR)
 
 }
 
