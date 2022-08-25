@@ -26,9 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createAdapter() {
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(binding.recyclerView.context, RecyclerView.VERTICAL)
-        )
+        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
     }
 
     private fun createUsersList() {
@@ -50,7 +48,6 @@ class MainActivity : AppCompatActivity() {
 
             adapter.usersList = usersList
             stopShimmer()
-            binding.recyclerView.isVisible = true
         }
     }
 
