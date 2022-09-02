@@ -6,8 +6,6 @@ import android.widget.Toast
 import com.alexeyyuditsky.test.databinding.ActivityMainBinding
 import com.alexeyyuditsky.test.presenter.LoginPresenterImpl
 import com.alexeyyuditsky.test.presenter.LoginView
-import com.alexeyyuditsky.test.repository.AuthRepositoryImpl
-import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity(), LoginView {
 
@@ -26,17 +24,23 @@ class MainActivity : AppCompatActivity(), LoginView {
         Toast.makeText(this, getString(message), Toast.LENGTH_SHORT).show()
     }
 
+    override fun viewsState(state: Boolean) {
+        binding.login.isEnabled = state
+        binding.password.isEnabled = state
+        binding.click.isEnabled = state
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loginPresenter.attachView(this@MainActivity)
         setContentView(binding.root)
-        binding.click.setOnClickListener { performLogin() }
+        binding.click.setOnClickListener { onButtonClick() }
     }
 
-    private fun performLogin() {
+    private fun onButtonClick() {
         loginPresenter.login(
-            binding.login.text.toString(),
-            binding.password.text.toString()
+            email = binding.login.text.toString(),
+            password = binding.password.text.toString()
         )
     }
 

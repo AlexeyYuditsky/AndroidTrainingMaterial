@@ -15,22 +15,28 @@ class LoginPresenterImpl : LoginPresenter {
     }
 
     override fun login(email: String, password: String) {
+        viewState?.get()?.viewsState(false)
+
         if (!validateEmail(email)) {
             viewState?.get()?.showError(R.string.error_email_invalid)
+            viewState?.get()?.viewsState(true)
             return
         }
         if (!validatePassword(password)) {
             viewState?.get()?.showError(R.string.error_password_invalid)
+            viewState?.get()?.viewsState(true)
             return
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            val errorMessage = authRepository.login(email, password).await()
+            val errorMessage = authRepository.login(email, password)
 
-            if (errorMessage.isEmpty())
-                withContext(Dispatchers.Main) { viewState?.get()?.showSuccess() }
-            else
-                withContext(Dispatchers.Main) { viewState?.get()?.showError(errorMessage) }
+            withContext(Dispatchers.Main) {
+                if (errorMessage.isEmpty()) viewState?.get()?.showSuccess()
+                else viewState?.get()?.showError(errorMessage)
+
+                viewState?.get()?.viewsState(true)
+            }
         }
     }
 

@@ -10,4 +10,6 @@ interface LoginView {
 
     fun showError(@StringRes message: Int)
 
+    fun viewsState(state: Boolean)
+
 }
