@@ -1,2 +1,0 @@
-rootProject.name = "Simple MVVM (Coroutines)"
-include ':app'
