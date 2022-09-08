@@ -1,10 +1,10 @@
-package com.alexeyyuditsky.test.data.repository
+package com.alexeyyuditsky.data.repository
 
-import com.alexeyyuditsky.test.data.storage.model.User
-import com.alexeyyuditsky.test.data.storage.UserStorage
-import com.alexeyyuditsky.test.domain.repository.UserRepository
-import com.alexeyyuditsky.test.domain.model.UserName
-import com.alexeyyuditsky.test.domain.model.UserNameParam
+import com.alexeyyuditsky.data.storage.model.User
+import com.alexeyyuditsky.data.storage.UserStorage
+import com.alexeyyuditsky.domain.model.UserName
+import com.alexeyyuditsky.domain.model.UserNameParam
+import com.alexeyyuditsky.domain.repository.UserRepository
 
 class UserRepositoryImpl(private val userStorage: UserStorage) : UserRepository {
 

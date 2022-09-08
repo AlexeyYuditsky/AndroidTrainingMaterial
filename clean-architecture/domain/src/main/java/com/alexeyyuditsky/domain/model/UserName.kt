@@ -1,4 +1,4 @@
-package com.alexeyyuditsky.test.domain.model
+package com.alexeyyuditsky.domain.model
 
 class UserName(
     val firstName:String,

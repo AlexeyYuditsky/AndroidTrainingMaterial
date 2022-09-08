@@ -1,8 +1,8 @@
-package com.alexeyyuditsky.test.data.storage.sharedpref
+package com.alexeyyuditsky.data.storage.sharedpref
 
 import android.content.Context
-import com.alexeyyuditsky.test.data.storage.model.User
-import com.alexeyyuditsky.test.data.storage.UserStorage
+import com.alexeyyuditsky.data.storage.model.User
+import com.alexeyyuditsky.data.storage.UserStorage
 
 class SharedPrefUserStorage(context: Context) : UserStorage {
 

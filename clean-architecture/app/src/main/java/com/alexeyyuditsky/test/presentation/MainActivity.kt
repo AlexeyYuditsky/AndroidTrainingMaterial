@@ -2,12 +2,12 @@ package com.alexeyyuditsky.test.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.alexeyyuditsky.test.data.repository.UserRepositoryImpl
-import com.alexeyyuditsky.test.data.storage.sharedpref.SharedPrefUserStorage
+import com.alexeyyuditsky.data.repository.UserRepositoryImpl
+import com.alexeyyuditsky.data.storage.sharedpref.SharedPrefUserStorage
 import com.alexeyyuditsky.test.databinding.ActivityMainBinding
-import com.alexeyyuditsky.test.domain.model.UserNameParam
-import com.alexeyyuditsky.test.domain.usecase.GetUserNameUseCase
-import com.alexeyyuditsky.test.domain.usecase.SaveUserNameUseCase
+import com.alexeyyuditsky.domain.model.UserNameParam
+import com.alexeyyuditsky.domain.usecase.GetUserNameUseCase
+import com.alexeyyuditsky.domain.usecase.SaveUserNameUseCase
 
 class MainActivity : AppCompatActivity() {
 

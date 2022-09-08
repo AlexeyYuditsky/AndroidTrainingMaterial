@@ -1,7 +1,7 @@
-package com.alexeyyuditsky.test.domain.usecase
+package com.alexeyyuditsky.domain.usecase
 
-import com.alexeyyuditsky.test.domain.repository.UserRepository
-import com.alexeyyuditsky.test.domain.model.UserNameParam
+import com.alexeyyuditsky.domain.repository.UserRepository
+import com.alexeyyuditsky.domain.model.UserNameParam
 
 class SaveUserNameUseCase(private val userRepository: UserRepository) {
 
