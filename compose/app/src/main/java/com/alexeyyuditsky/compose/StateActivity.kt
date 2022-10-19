@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import kotlin.random.Random
 
+// part 6
 class StateActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +36,7 @@ class StateActivity : ComponentActivity() {
                         .background(color.value)
                         .fillMaxSize()
                         .weight(1f)
-                ).apply { Log.d("MyLog", "Box") }
+                )
             }
         }
     }
@@ -48,7 +49,6 @@ fun ColorBox(
     updateColor: (color: Color) -> Unit
 ) {
     Box(modifier = modifier
-        .apply { Log.d("MyLog", "ColorBox") }
         .background(Color.Red)
         .clickable {
             updateColor(

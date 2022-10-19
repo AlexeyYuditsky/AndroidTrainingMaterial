@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 
+// part 5
 class TextStyleActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
