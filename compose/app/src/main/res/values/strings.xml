@@ -4,4 +4,5 @@
     <string name="title_activity_state">StateActivity</string>
     <string name="title_activity_test_activty">TestActivty</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_constraint">ConstraintActivity</string>
 </resources>
