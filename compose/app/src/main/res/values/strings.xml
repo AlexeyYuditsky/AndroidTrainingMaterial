@@ -6,4 +6,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_constraint">ConstraintActivity</string>
     <string name="title_activity_animation">AnimationActivity</string>
+    <string name="title_activity_circular_progress">CircularProgressActivity</string>
+    <string name="title_activity_music_knob">MusicKnobActivity</string>
+    <string name="title_activity_mediation_uiactivity">MediationUIActivity</string>
 </resources>
