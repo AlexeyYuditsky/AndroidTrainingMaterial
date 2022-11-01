@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Compose"
         tools:targetApi="33">
         <activity
-            android:name=".MediationUIActivity"
+            android:name=".meditation.MediationActivity"
             android:exported="true"
             android:label="@string/title_activity_mediation_uiactivity"
             android:theme="@style/Theme.Compose">
