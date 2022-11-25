@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -31,9 +30,6 @@ class SearchRepositoriesActivity : AppCompatActivity() {
         val binding = ActivitySearchRepositoriesBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        binding.list.addItemDecoration(decoration)
 
         binding.bindState(
             uiState = viewModel.state,
@@ -110,6 +106,8 @@ class SearchRepositoriesActivity : AppCompatActivity() {
         pagingData: Flow<PagingData<Repo>>,
         onScrollChanged: (UiAction.Scroll) -> Unit
     ) {
+        list.addItemDecoration(DividerItemDecoration(list.context, DividerItemDecoration.VERTICAL))
+
         retryButton.setOnClickListener { repoAdapter.retry() }
 
         list.addOnScrollListener(object : OnScrollListener() {
