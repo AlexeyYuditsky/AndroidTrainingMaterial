@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.example.android.codelabs.paging.api.GithubService
 import com.example.android.codelabs.paging.api.IN_QUALIFIER
 import com.example.android.codelabs.paging.data.GithubRepository.Companion.NETWORK_PAGE_SIZE
+import com.example.android.codelabs.paging.log
 import com.example.android.codelabs.paging.model.Repo
 import retrofit2.HttpException
 
@@ -18,6 +19,10 @@ class GithubPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {
         val position = params.key ?: GITHUB_STARTING_PAGE_INDEX
         val apiQuery = query + IN_QUALIFIER
+
+        log("position: $position")
+        log("apiQuery: $apiQuery")
+        log("params.loadSize: ${params.loadSize}")
 
         return try {
             val response = service.searchRepos(apiQuery, position, params.loadSize)

@@ -1,11 +1,8 @@
 package com.example.android.codelabs.paging.ui
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.codelabs.paging.R
 import com.example.android.codelabs.paging.databinding.ReposLoadStateFooterViewItemBinding
 
 class ReposLoadStateViewHolder(
@@ -18,20 +15,13 @@ class ReposLoadStateViewHolder(
     }
 
     fun bind(loadState: LoadState) {
-        if (loadState is LoadState.Error) {
-            binding.errorMsg.text = loadState.error.localizedMessage
-        }
-        binding.progressBar.isVisible = loadState is LoadState.Loading
-        binding.retryButton.isVisible = loadState is LoadState.Error
-        binding.errorMsg.isVisible = loadState is LoadState.Error
-    }
-
-    companion object {
-        fun create(parent: ViewGroup, retry: () -> Unit): ReposLoadStateViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.repos_load_state_footer_view_item, parent, false)
-            val binding = ReposLoadStateFooterViewItemBinding.bind(view)
-            return ReposLoadStateViewHolder(binding, retry)
+        with(binding) {
+            if (loadState is LoadState.Error) {
+                errorTextView.text = loadState.error.localizedMessage
+            }
+            retryButton.isVisible = loadState is LoadState.Error
+            errorTextView.isVisible = loadState is LoadState.Error
+            progressBar.isVisible = loadState is LoadState.Loading
         }
     }
 

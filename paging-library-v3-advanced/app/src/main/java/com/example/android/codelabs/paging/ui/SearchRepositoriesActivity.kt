@@ -7,19 +7,26 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.flatMap
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.example.android.codelabs.paging.Injection
+import com.example.android.codelabs.paging.R
 import com.example.android.codelabs.paging.databinding.ActivitySearchRepositoriesBinding
+import com.example.android.codelabs.paging.log
 import com.example.android.codelabs.paging.model.Repo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class SearchRepositoriesActivity : AppCompatActivity() {
 
@@ -28,8 +35,7 @@ class SearchRepositoriesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivitySearchRepositoriesBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         binding.bindState(
             uiState = viewModel.state,
@@ -39,15 +45,11 @@ class SearchRepositoriesActivity : AppCompatActivity() {
     }
 
     private fun ActivitySearchRepositoriesBinding.bindState(
-        uiState: StateFlow<UiState>,
-        pagingData: Flow<PagingData<Repo>>,
-        uiActions: (UiAction) -> Unit
+        uiState: StateFlow<UiState>, // UiState(query = Android(default value))
+        pagingData: Flow<PagingData<Repo>>, // List<Repo>
+        uiActions: (UiState) -> Unit
     ) {
         val repoAdapter = ReposAdapter()
-        list.adapter = repoAdapter.withLoadStateHeaderAndFooter(
-            header = ReposLoadStateAdapter { repoAdapter.retry() },
-            footer = ReposLoadStateAdapter { repoAdapter.retry() }
-        )
 
         bindSearch(
             uiState = uiState,
@@ -55,26 +57,15 @@ class SearchRepositoriesActivity : AppCompatActivity() {
         )
         bindList(
             repoAdapter = repoAdapter,
-            uiState = uiState,
-            pagingData = pagingData,
-            onScrollChanged = uiActions
+            pagingData = pagingData
         )
     }
 
     private fun ActivitySearchRepositoriesBinding.bindSearch(
         uiState: StateFlow<UiState>,
-        onQueryChanged: (UiAction.Search) -> Unit
+        onQueryChanged: (UiState) -> Unit
     ) {
-        searchRepo.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_GO) {
-                updateRepoListFromInput(onQueryChanged)
-                true
-            } else {
-                false
-            }
-        }
-
-        searchRepo.setOnKeyListener { _, keyCode, event ->
+        searchEditText.setOnKeyListener { _, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 updateRepoListFromInput(onQueryChanged)
                 true
@@ -84,68 +75,42 @@ class SearchRepositoriesActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            uiState
-                .map { it.query }
-                .distinctUntilChanged()
-                .collect(searchRepo::setText)
+            uiState.collect {
+                searchEditText.setText(it.query)
+            }
         }
     }
 
-    private fun ActivitySearchRepositoriesBinding.updateRepoListFromInput(onQueryChanged: (UiAction.Search) -> Unit) {
-        searchRepo.text!!.trim().let {
-            if (it.isNotEmpty()) {
-                list.scrollToPosition(0)
-                onQueryChanged(UiAction.Search(query = it.toString()))
+    private fun ActivitySearchRepositoriesBinding.updateRepoListFromInput(onQueryChanged: (UiState) -> Unit) {
+        searchEditText.text!!.trim().let {
+            if (it.isNotBlank()) {
+                onQueryChanged(UiState(query = it.toString()))
             }
         }
     }
 
     private fun ActivitySearchRepositoriesBinding.bindList(
         repoAdapter: ReposAdapter,
-        uiState: StateFlow<UiState>,
-        pagingData: Flow<PagingData<Repo>>,
-        onScrollChanged: (UiAction.Scroll) -> Unit
+        pagingData: Flow<PagingData<Repo>>
     ) {
-        list.addItemDecoration(DividerItemDecoration(list.context, DividerItemDecoration.VERTICAL))
-
-        retryButton.setOnClickListener { repoAdapter.retry() }
-
-        list.addOnScrollListener(object : OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy != 0) onScrollChanged(UiAction.Scroll(currentQuery = uiState.value.query))
-            }
-        })
-
-        val notLoading = repoAdapter.loadStateFlow
-            .distinctUntilChangedBy { it.source.refresh }
-            .map { it.source.refresh is LoadState.NotLoading }
-
-        val hasNotScrolledForCurrentSearch = uiState
-            .map { it.hasNotScrolledForCurrentSearch }
-            .distinctUntilChanged()
-
-        val shouldScrollToTop = combine(
-            notLoading,
-            hasNotScrolledForCurrentSearch,
-            Boolean::and
+        recyclerView.adapter = repoAdapter.withLoadStateHeaderAndFooter(
+            header = ReposLoadStateAdapter { repoAdapter.retry() },
+            footer = ReposLoadStateAdapter { repoAdapter.retry() }
         )
-            .distinctUntilChanged()
+
+        recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL))
 
         lifecycleScope.launch {
-            pagingData.collectLatest(repoAdapter::submitData)
-        }
-
-        lifecycleScope.launch {
-            shouldScrollToTop.collect { shouldScroll ->
-                if (shouldScroll) list.scrollToPosition(0)
+            pagingData.collectLatest {
+                repoAdapter.submitData(it)
             }
         }
 
         lifecycleScope.launch {
             repoAdapter.loadStateFlow.collect { loadState ->
                 val isListEmpty = loadState.refresh is LoadState.NotLoading && repoAdapter.itemCount == 0
-                emptyList.isVisible = isListEmpty
-                list.isVisible = !isListEmpty
+                noResultTextView.isVisible = isListEmpty
+                recyclerView.isVisible = !isListEmpty
                 progressBar.isVisible = loadState.source.refresh is LoadState.Loading
                 retryButton.isVisible = loadState.source.refresh is LoadState.Error
 
@@ -154,11 +119,7 @@ class SearchRepositoriesActivity : AppCompatActivity() {
                     ?: loadState.append as? LoadState.Error
                     ?: loadState.prepend as? LoadState.Error
                 errorState?.let {
-                    Toast.makeText(
-                        this@SearchRepositoriesActivity,
-                        "\uD83D\uDE28 Wooops ${it.error}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(recyclerView.context, getString(R.string.whoops, it.error), Toast.LENGTH_LONG).show()
                 }
             }
         }
