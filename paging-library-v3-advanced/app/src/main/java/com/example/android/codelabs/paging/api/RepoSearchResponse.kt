@@ -4,6 +4,6 @@ import com.example.android.codelabs.paging.model.Repo
 import com.squareup.moshi.Json
 
 data class RepoSearchResponse(
+    val items: List<Repo> = emptyList(),
     @field:Json(name = "total_count") val total: Int = 0,
-    @field:Json(name = "items") val items: List<Repo> = emptyList()
 )

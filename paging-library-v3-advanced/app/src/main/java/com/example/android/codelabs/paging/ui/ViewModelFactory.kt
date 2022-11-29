@@ -1,28 +1,20 @@
 package com.example.android.codelabs.paging.ui
 
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.savedstate.SavedStateRegistryOwner
+import androidx.lifecycle.ViewModelProvider
 import com.example.android.codelabs.paging.data.GithubRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 @ExperimentalCoroutinesApi
+@FlowPreview
 class ViewModelFactory(
-    owner: SavedStateRegistryOwner,
     private val repository: GithubRepository
-) : AbstractSavedStateViewModelFactory(owner, null) {
+) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel> create(
-        key: String,
-        modelClass: Class<T>,
-        handle: SavedStateHandle
-    ): T {
-        if (modelClass.isAssignableFrom(SearchRepositoriesViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return SearchRepositoriesViewModel(repository, handle) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
+        return SearchRepositoriesViewModel(repository) as T
     }
 
 }

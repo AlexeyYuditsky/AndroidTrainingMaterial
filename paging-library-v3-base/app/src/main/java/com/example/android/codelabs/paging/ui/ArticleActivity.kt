@@ -37,15 +37,13 @@ import kotlinx.coroutines.launch
 
 class ArticleActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<ArticleViewModel>()
+    val viewModel by viewModels<ArticleViewModel>(factoryProducer = { Injection.provideViewModelFactory(owner = this) })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityArticlesBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        val viewModel by viewModels<ArticleViewModel>(factoryProducer = { Injection.provideViewModelFactory(owner = this) })
 
         val articleAdapter = ArticleAdapter()
 

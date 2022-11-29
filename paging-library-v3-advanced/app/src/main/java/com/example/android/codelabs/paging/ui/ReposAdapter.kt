@@ -9,8 +9,9 @@ import com.example.android.codelabs.paging.model.Repo
 
 class ReposAdapter : PagingDataAdapter<Repo, RepoViewHolder>(REPO_COMPARATOR) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder =
-        RepoViewHolder(RepoViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoViewHolder {
+        return RepoViewHolder(RepoViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    }
 
     override fun onBindViewHolder(holder: RepoViewHolder, position: Int) {
         val repoItem = getItem(position) ?: return

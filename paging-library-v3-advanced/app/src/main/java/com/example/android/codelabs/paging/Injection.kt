@@ -1,12 +1,13 @@
 package com.example.android.codelabs.paging
 
 import androidx.lifecycle.ViewModelProvider
-import androidx.savedstate.SavedStateRegistryOwner
 import com.example.android.codelabs.paging.api.GithubService
 import com.example.android.codelabs.paging.data.GithubRepository
 import com.example.android.codelabs.paging.ui.ViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 object Injection {
 
@@ -14,8 +15,8 @@ object Injection {
         return GithubRepository(GithubService.create())
     }
 
-    fun provideViewModelFactory(owner: SavedStateRegistryOwner): ViewModelProvider.Factory {
-        return ViewModelFactory(owner, provideGithubRepository())
+    fun provideViewModelFactory(): ViewModelProvider.Factory {
+        return ViewModelFactory(provideGithubRepository())
     }
 
 }

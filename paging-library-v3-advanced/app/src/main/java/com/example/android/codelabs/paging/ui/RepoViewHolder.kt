@@ -13,32 +13,30 @@ class RepoViewHolder(
     private val binding: RepoViewItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(repo: Repo) {
-        with(binding) {
-            nameTextView.text = repo.fullName
-            starsTextView.text = repo.stars.toString()
-            forksTextView.text = repo.forks.toString()
+    fun bind(repo: Repo) = with(binding) {
+        nameTextView.text = repo.fullName
+        starsTextView.text = repo.stars.toString()
+        forksTextView.text = repo.forks.toString()
 
-            if (!repo.description.isNullOrBlank()) {
-                descriptionTextView.text = repo.description
-                descriptionTextView.isVisible = true
-            } else {
-                descriptionTextView.isGone = true
-            }
+        if (!repo.description.isNullOrBlank()) {
+            descriptionTextView.text = repo.description
+            descriptionTextView.isVisible = true
+        } else {
+            descriptionTextView.isGone = true
+        }
 
-            if (!repo.language.isNullOrBlank()) {
-                languageTextView.text =
-                    binding.root.context.resources.getString(R.string.language, repo.language)
-                languageTextView.isVisible = true
-            } else {
-                languageTextView.isGone = true
-            }
+        if (!repo.language.isNullOrBlank()) {
+            languageTextView.text =
+                binding.root.context.resources.getString(R.string.language, repo.language)
+            languageTextView.isVisible = true
+        } else {
+            languageTextView.isGone = true
+        }
 
-            if (!repo.url.isNullOrBlank()) {
-                root.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(repo.url))
-                    root.context.startActivity(intent)
-                }
+        if (!repo.url.isNullOrBlank()) {
+            root.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(repo.url))
+                root.context.startActivity(intent)
             }
         }
     }
