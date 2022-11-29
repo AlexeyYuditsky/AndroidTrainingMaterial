@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.android.codelabs.paging.Injection
 import com.example.android.codelabs.paging.R
 import com.example.android.codelabs.paging.databinding.ActivitySearchRepositoriesBinding
-import com.example.android.codelabs.paging.model.Repo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -38,7 +37,7 @@ class SearchRepositoriesActivity : AppCompatActivity() {
     }
 
     private fun ActivitySearchRepositoriesBinding.bindState(
-        pagingData: Flow<PagingData<Repo>>,
+        pagingData: Flow<PagingData<UiModel>>,
         uiActions: (String) -> Unit
     ) {
         val repoAdapter = ReposAdapter()
@@ -69,7 +68,7 @@ class SearchRepositoriesActivity : AppCompatActivity() {
 
     private fun ActivitySearchRepositoriesBinding.bindList(
         repoAdapter: ReposAdapter,
-        pagingData: Flow<PagingData<Repo>>
+        pagingData: Flow<PagingData<UiModel>>
     ) {
         recyclerView.adapter = repoAdapter.withLoadStateHeaderAndFooter(
             header = ReposLoadStateAdapter { repoAdapter.retry() },
