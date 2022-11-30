@@ -9,10 +9,12 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.android.codelabs.paging.Injection
 import com.example.android.codelabs.paging.R
 import com.example.android.codelabs.paging.databinding.ActivitySearchRepositoriesBinding
+import com.example.android.codelabs.paging.log
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -21,9 +23,9 @@ import kotlinx.coroutines.launch
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SearchRepositoriesActivity : AppCompatActivity() {
+class RepositoriesActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<SearchRepositoriesViewModel>() { Injection.provideViewModelFactory() }
+    private val viewModel by viewModels<RepositoriesViewModel> { Injection.provideViewModelFactory(application) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +81,11 @@ class SearchRepositoriesActivity : AppCompatActivity() {
 
         retryButton.setOnClickListener { repoAdapter.retry() }
 
-        lifecycleScope.launch { pagingData.collectLatest(repoAdapter::submitData) }
+        lifecycleScope.launch {
+            pagingData.collectLatest {
+                repoAdapter.submitData(it)
+            }
+        }
 
         lifecycleScope.launch {
             repoAdapter.loadStateFlow.collect { loadState ->

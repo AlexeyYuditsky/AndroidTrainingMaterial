@@ -8,7 +8,7 @@ class SeparatorViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(separatorText: String) = with(binding) {
-        separatorDescription.text = separatorText
+        separatorTextView.text = separatorText
     }
 
 }

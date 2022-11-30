@@ -15,7 +15,10 @@ class GithubRepository(
 
     fun getSearchResultStream(query: String): Flow<PagingData<Repo>> {
         return Pager(
-            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
+            config = PagingConfig(
+                pageSize = NETWORK_PAGE_SIZE,
+                enablePlaceholders = false
+            ),
             pagingSourceFactory = { GithubPagingSource(service, query) }
         ).flow
     }
