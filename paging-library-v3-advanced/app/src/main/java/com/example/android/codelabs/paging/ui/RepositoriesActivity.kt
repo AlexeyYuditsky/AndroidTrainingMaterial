@@ -63,7 +63,6 @@ class RepositoriesActivity : AppCompatActivity() {
 
     private fun ActivitySearchRepositoriesBinding.updateRepoListFromInput(onQueryChanged: (String) -> Unit) {
         searchEditText.text!!.trim().let {
-            recyclerView.scrollToPosition(0)
             onQueryChanged(it.toString())
         }
     }
@@ -72,13 +71,14 @@ class RepositoriesActivity : AppCompatActivity() {
         repoAdapter: ReposAdapter,
         pagingData: Flow<PagingData<UiModel>>
     ) {
+        repoAdapter.addOnPagesUpdatedListener { recyclerView.scrollToPosition(0) }
+
         recyclerView.adapter = repoAdapter.withLoadStateHeaderAndFooter(
             header = ReposLoadStateAdapter { repoAdapter.retry() },
             footer = ReposLoadStateAdapter { repoAdapter.retry() }
         )
 
         recyclerView.addItemDecoration(DividerItemDecoration(root.context, DividerItemDecoration.VERTICAL))
-
         retryButton.setOnClickListener { repoAdapter.retry() }
 
         lifecycleScope.launch {
