@@ -26,8 +26,7 @@ class RepoViewHolder(
         }
 
         if (!repo.language.isNullOrBlank()) {
-            languageTextView.text =
-                binding.root.context.resources.getString(R.string.language, repo.language)
+            languageTextView.text = root.context.resources.getString(R.string.language, repo.language)
             languageTextView.isVisible = true
         } else {
             languageTextView.isGone = true

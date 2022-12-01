@@ -62,9 +62,7 @@ class RepositoriesActivity : AppCompatActivity() {
     }
 
     private fun ActivitySearchRepositoriesBinding.updateRepoListFromInput(onQueryChanged: (String) -> Unit) {
-        searchEditText.text!!.trim().let {
-            onQueryChanged(it.toString())
-        }
+        onQueryChanged(searchEditText.text!!.trim().toString())
     }
 
     private fun ActivitySearchRepositoriesBinding.bindList(
