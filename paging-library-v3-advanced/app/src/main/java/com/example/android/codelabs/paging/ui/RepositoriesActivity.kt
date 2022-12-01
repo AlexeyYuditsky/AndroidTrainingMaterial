@@ -9,12 +9,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.paging.map
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.android.codelabs.paging.Injection
 import com.example.android.codelabs.paging.R
 import com.example.android.codelabs.paging.databinding.ActivitySearchRepositoriesBinding
-import com.example.android.codelabs.paging.log
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -58,6 +56,7 @@ class RepositoriesActivity : AppCompatActivity() {
     ) {
         searchEditText.addTextChangedListener {
             updateRepoListFromInput(onQueryChanged)
+            recyclerView.scrollToPosition(0)
         }
     }
 
@@ -69,8 +68,6 @@ class RepositoriesActivity : AppCompatActivity() {
         repoAdapter: ReposAdapter,
         pagingData: Flow<PagingData<UiModel>>
     ) {
-        repoAdapter.addOnPagesUpdatedListener { recyclerView.scrollToPosition(0) }
-
         recyclerView.adapter = repoAdapter.withLoadStateHeaderAndFooter(
             header = ReposLoadStateAdapter { repoAdapter.retry() },
             footer = ReposLoadStateAdapter { repoAdapter.retry() }
