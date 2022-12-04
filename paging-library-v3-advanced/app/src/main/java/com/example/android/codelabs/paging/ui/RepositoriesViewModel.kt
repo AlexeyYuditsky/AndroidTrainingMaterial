@@ -2,8 +2,12 @@ package com.example.android.codelabs.paging.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
+import androidx.paging.map
 import com.example.android.codelabs.paging.R
 import com.example.android.codelabs.paging.data.GithubRepository
 import com.example.android.codelabs.paging.model.Repo
@@ -17,6 +21,7 @@ const val DEFAULT_QUERY = "Android"
 @ExperimentalCoroutinesApi
 class RepositoriesViewModel(
     private val repository: GithubRepository,
+    savedStateHandle: SavedStateHandle,
     application: Application,
 ) : AndroidViewModel(application) {
 

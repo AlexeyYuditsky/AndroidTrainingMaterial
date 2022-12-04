@@ -1,8 +1,8 @@
 package com.example.android.codelabs.paging.ui
 
 import android.app.Application
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import androidx.savedstate.SavedStateRegistryOwner
 import com.example.android.codelabs.paging.data.GithubRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -10,13 +10,18 @@ import kotlinx.coroutines.FlowPreview
 @ExperimentalCoroutinesApi
 @FlowPreview
 class ViewModelFactory(
+    owner: SavedStateRegistryOwner,
     private val repository: GithubRepository,
     private val application: Application
-) : ViewModelProvider.Factory {
+) : AbstractSavedStateViewModelFactory(owner, null) {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(
+        key: String,
+        modelClass: Class<T>,
+        handle: SavedStateHandle
+    ): T {
         @Suppress("UNCHECKED_CAST")
-        return RepositoriesViewModel(repository, application) as T
+        return RepositoriesViewModel(repository, handle, application) as T
     }
 
 }
