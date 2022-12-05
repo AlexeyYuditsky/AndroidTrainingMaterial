@@ -2,11 +2,13 @@ package com.example.android.codelabs.paging.ui
 
 import android.app.Application
 import androidx.lifecycle.*
+import androidx.paging.ExperimentalPagingApi
 import androidx.savedstate.SavedStateRegistryOwner
 import com.example.android.codelabs.paging.data.GithubRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
+@ExperimentalPagingApi
 @ExperimentalCoroutinesApi
 @FlowPreview
 class ViewModelFactory(

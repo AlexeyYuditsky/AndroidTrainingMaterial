@@ -41,7 +41,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs')
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
-    implementation "androidx.appcompat:appcompat:$supportLibVersion"
     implementation "com.google.android.material:material:$materialVersion"
 
     implementation "androidx.activity:activity-ktx:$activityKtx"
@@ -54,6 +53,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion"
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-paging:$roomVersion"
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
 

@@ -4,19 +4,19 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.insertSeparators
-import androidx.paging.map
+import androidx.paging.*
 import com.example.android.codelabs.paging.R
 import com.example.android.codelabs.paging.data.GithubRepository
+import com.example.android.codelabs.paging.log
 import com.example.android.codelabs.paging.model.Repo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 const val DEFAULT_QUERY = "Android"
 
+@ExperimentalPagingApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 class RepositoriesViewModel(
@@ -37,14 +37,14 @@ class RepositoriesViewModel(
             .filter { it.isNotBlank() }
 
         pagingDataFlow = searches
-            .flatMapLatest { query: String -> searchRepo(queryString = query) }
+            .flatMapLatest { query: String -> searchRepo(query = query) }
             .cachedIn(viewModelScope)
 
         accept = { query: String -> actionStateFlow.tryEmit(query) }
     }
 
-    private fun searchRepo(queryString: String): Flow<PagingData<UiModel>> {
-        val repoPagingFlow: Flow<PagingData<Repo>> = repository.getSearchResultStream(queryString)
+    private fun searchRepo(query: String): Flow<PagingData<UiModel>> {
+        val repoPagingFlow: Flow<PagingData<Repo>> = repository.getSearchResultStream(query)
 
         val repoItemPagingFlow: Flow<PagingData<UiModel.RepoItem>> = repoPagingFlow
             .map { pagingData: PagingData<Repo> -> pagingData.map { repo: Repo -> UiModel.RepoItem(repo) } }

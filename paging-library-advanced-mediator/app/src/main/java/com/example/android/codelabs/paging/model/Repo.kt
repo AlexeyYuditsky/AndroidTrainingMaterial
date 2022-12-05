@@ -1,9 +1,12 @@
 package com.example.android.codelabs.paging.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
+@Entity(tableName = "repos")
 data class Repo(
-    val id: Long,
+    @PrimaryKey val id: Long,
     val name: String,
     val description: String?,
     val language: String?,
