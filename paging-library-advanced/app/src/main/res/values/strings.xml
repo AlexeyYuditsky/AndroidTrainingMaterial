@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Paging</string>
+    <string name="loading">Loading</string>
+    <string name="language">Language: %s</string>
+    <string name="search_hint">GitHub Repository</string>
+    <string name="no_results">No results 😓</string>
+    <string name="unknown">\?</string>
+    <string name="retry">Retry</string>
+    <string name="whoops">\uD83D\uDE28 Whoops %s</string>
+    <string name="desc_stars">%d0.000+ stars</string>
+    <string name="desc_stars_other">\u003c 10.000 stars</string>
+    <string name="desc_stars_plus">\u003c %d stars</string>
+</resources>
