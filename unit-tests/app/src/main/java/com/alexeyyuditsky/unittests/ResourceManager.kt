@@ -43,7 +43,7 @@ class ResourceManager<R>(
      * If the manager has been already destroyed, this method does nothing.
      */
     fun setResource(resource: R) = synchronized(this) {
-        if (destroyed) return
+        if (destroyed) return@synchronized
         var localConsumers: List<Consumer<R>>
         do {
             localConsumers = ArrayList(consumers)
@@ -60,7 +60,7 @@ class ResourceManager<R>(
      * If the manager has been already destroyed, this method does nothing.
      */
     fun clearResource() = synchronized(this) {
-        if (destroyed) return
+        if (destroyed) return@synchronized
         this.resource = null
     }
 
@@ -114,11 +114,7 @@ class ResourceManager<R>(
     fun consumeResource(consumer: Consumer<R>) = synchronized(this) {
         if (destroyed) return@synchronized
         val resource = this.resource
-        if (resource != null) {
-            processResource(consumer, resource)
-        } else {
-            consumers.add(consumer)
-        }
+        resource?.let { processResource(consumer, it) } ?: consumers.add(consumer)
     }
 
     /**
