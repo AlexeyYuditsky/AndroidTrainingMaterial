@@ -1,14 +1,53 @@
 package com.alexeyyuditsky.unittests
 
+import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.junit4.MockKRule
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
+import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.Executor
 
 class ResourceManagerTest {
 
+    @get: Rule
+    val rule = MockKRule(this)
+
+    @MockK
+    lateinit var executor: Executor
+
+    @MockK
+    lateinit var errorHandler: ErrorHandler<String>
+
+    @RelaxedMockK
+    lateinit var bar: Bar
+
+    @InjectMockKs
+    lateinit var resourceManager: ResourceManager<String>
+
+    interface Bar {
+        fun foo()
+        fun getInt(): Int
+        fun getBoolean(): Boolean
+    }
+
     @Test
     fun test() {
+        val testExecutor = mockk<Executor>()
+        val testErrorHandler = mockk<ErrorHandler<String>>()
+        val resourceManager = ResourceManager(testExecutor, testErrorHandler)
 
+        val bar = mockk<Bar>(relaxed = true)
+        every { bar.foo() } answers { println("foo lalala") }
+        every { bar.getInt() } returns 5
+        every { bar.getBoolean() } returns false
+
+        bar.foo()
+        println(bar.getInt())
+        println(bar.getBoolean())
     }
 
     @Test
