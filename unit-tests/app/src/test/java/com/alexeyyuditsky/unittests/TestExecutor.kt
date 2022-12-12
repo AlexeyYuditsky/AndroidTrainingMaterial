@@ -2,10 +2,19 @@ package com.alexeyyuditsky.unittests
 
 import java.util.concurrent.Executor
 
-class TestExecutor : Executor {
+class TestExecutor(
+    private val autoExec: Boolean = true
+) : Executor {
+
+    private val _commands = mutableListOf<Runnable>()
+    val commands: List<Runnable> = _commands
+    val invokeCount: Int get() = commands.size
 
     override fun execute(command: Runnable) {
-        command.run()
+        _commands.add(command)
+        if (autoExec) {
+            command.run()
+        }
     }
 
 }

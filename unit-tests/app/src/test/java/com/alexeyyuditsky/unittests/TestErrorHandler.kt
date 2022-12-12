@@ -2,8 +2,17 @@ package com.alexeyyuditsky.unittests
 
 class TestErrorHandler : ErrorHandler<String> {
 
-    override fun onError(exception: Exception, resource: String) {
+    private val _records = mutableListOf<Record>()
+    val records: List<Record> = _records
+    val invokeCount: Int get() = records.size
 
+    override fun onError(exception: Exception, resource: String) {
+        _records.add(Record(exception, resource))
     }
+
+    data class Record(
+        val exception: Exception,
+        val resource: String
+    )
 
 }
