@@ -29,9 +29,7 @@ class BaseRetrofitSourceTest {
     @Test
     fun getRetrofitReturnsInstanceFromConfig() {
         val expectedRetrofit = mockk<Retrofit>()
-        val source = createBaseRetrofitSource(
-            retrofit = expectedRetrofit
-        )
+        val source = createBaseRetrofitSource(expectedRetrofit)
 
         val retrofit = source.retrofit
 
@@ -106,9 +104,9 @@ class BaseRetrofitSourceTest {
     fun wrapRetrofitExceptionsWithHttpExceptionThrowsBackendException() = runTest {
         val source = createBaseRetrofitSource()
         val block = createMockedBlock()
-        val httpException = mockk<HttpException>()
-        val response = mockk<Response<*>>()
-        val errorBody = mockk<ResponseBody>()
+        val httpException: HttpException = mockk()
+        val response: Response<*> = mockk()
+        val errorBody: ResponseBody = mockk()
         val errorJson = "{\"error\": \"Oops\"}"
         coEvery { block.invoke() } throws httpException
         every { httpException.response() } returns response
@@ -128,6 +126,7 @@ class BaseRetrofitSourceTest {
         return mockk()
     }
 
+
     private fun createBaseRetrofitSource(
         retrofit: Retrofit = mockk()
     ) = BaseRetrofitSource(
@@ -136,4 +135,5 @@ class BaseRetrofitSourceTest {
             moshi = Moshi.Builder().build()
         )
     )
+
 }
