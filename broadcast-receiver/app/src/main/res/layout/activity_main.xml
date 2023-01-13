@@ -5,23 +5,14 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/sendStaticallyButton"
+        android:id="@+id/sendBroadcast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send message (Statically)"
+        android:text="@string/send_custom_broadcast"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/sendDynamicallyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send message (Dynamically)"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendStaticallyButton" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>
