@@ -11,10 +11,9 @@ import java.util.*
 class DynamicallyReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        val msgStr = StringBuilder("Текущее время: ")
-        val formatter: Format = SimpleDateFormat("hh:mm:ss a")
-        msgStr.append(formatter.format(Date()))
-        Toast.makeText(context, msgStr, Toast.LENGTH_SHORT).show()
+        val formatter: Format = SimpleDateFormat("hh:mm:ss a", Locale.ROOT)
+        val msgStr = "Текущее время: ${formatter.format(Date())}"
+        Toast.makeText(context, msgStr, Toast.LENGTH_LONG).show()
     }
 
 }

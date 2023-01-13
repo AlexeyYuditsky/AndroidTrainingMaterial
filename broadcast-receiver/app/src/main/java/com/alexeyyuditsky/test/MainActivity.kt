@@ -6,19 +6,17 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.alexeyyuditsky.test.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     private val dynamicallyReceiver = DynamicallyReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
+        setContentView(binding.root)
 
         binding.sendStaticallyButton.setOnClickListener { sendMessageStatically() }
-
         binding.sendDynamicallyButton.setOnClickListener { sendMessageDynamically() }
     }
 
