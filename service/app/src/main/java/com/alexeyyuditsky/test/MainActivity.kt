@@ -9,11 +9,11 @@ import com.alexeyyuditsky.test.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater).apply { setContentView(root) }
+        setContentView(binding.root)
 
         binding.startBackgroundButton.setOnClickListener {
             startService(Intent(this, BackgroundService::class.java))
