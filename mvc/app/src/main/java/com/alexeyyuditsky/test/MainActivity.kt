@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.alexeyyuditsky.test.databinding.ActivityMainBinding
-import com.alexeyyuditsky.test.repository.AuthRepositoryImpl
+import com.alexeyyuditsky.test.repository.AuthRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val authRepository = AuthRepositoryImpl()
+    private val authRepository = AuthRepository.Base()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +41,10 @@ class MainActivity : AppCompatActivity() {
                 password = binding.password.text.toString()
             )
 
-            if (result.isEmpty()) {
-                withContext(Dispatchers.Main) {
+            withContext(Dispatchers.Main) {
+                if (result.isEmpty()) {
                     Toast.makeText(this@MainActivity, "Success login", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                withContext(Dispatchers.Main) {
+                } else {
                     Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
                 }
             }
