@@ -4,13 +4,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.alexeyyuditsky.test.databinding.ActivityMainBinding
-import com.alexeyyuditsky.test.presenter.LoginPresenterImpl
+import com.alexeyyuditsky.test.presenter.LoginPresenter
 import com.alexeyyuditsky.test.presenter.LoginView
+import com.alexeyyuditsky.test.model.AuthRepository
 
 class MainActivity : AppCompatActivity(), LoginView {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val loginPresenter = LoginPresenterImpl()
+    private val loginPresenter = LoginPresenter.Base(AuthRepository.Base())
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loginPresenter.attachView(this@MainActivity)
+        setContentView(binding.root)
+        binding.click.setOnClickListener { onButtonClick() }
+    }
 
     override fun showSuccess() {
         Toast.makeText(this, "Success login", Toast.LENGTH_SHORT).show()
@@ -28,13 +36,6 @@ class MainActivity : AppCompatActivity(), LoginView {
         binding.login.isEnabled = state
         binding.password.isEnabled = state
         binding.click.isEnabled = state
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        loginPresenter.attachView(this@MainActivity)
-        setContentView(binding.root)
-        binding.click.setOnClickListener { onButtonClick() }
     }
 
     private fun onButtonClick() {
