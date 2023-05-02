@@ -1,4 +1,4 @@
-package ua.cn.stu.hilt.app.model.settings
+package ua.cn.stu.hilt.data.settings
 
 interface AppSettings {
 

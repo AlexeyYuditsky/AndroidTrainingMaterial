@@ -5,7 +5,7 @@ import ua.cn.stu.hilt.app.model.*
 import ua.cn.stu.hilt.app.utils.async.LazyFlowSubject
 import ua.cn.stu.hilt.app.model.accounts.entities.Account
 import ua.cn.stu.hilt.app.model.accounts.entities.SignUpData
-import ua.cn.stu.hilt.app.model.settings.AppSettings
+import ua.cn.stu.hilt.data.settings.AppSettings
 import javax.inject.Inject
 import javax.inject.Singleton
 

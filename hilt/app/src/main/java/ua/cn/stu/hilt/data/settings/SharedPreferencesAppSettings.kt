@@ -1,16 +1,13 @@
-package ua.cn.stu.hilt.app.model.settings
+package ua.cn.stu.hilt.data.settings
 
 import android.content.Context
 import android.content.SharedPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Implementation of [AppSettings] based on [SharedPreferences].
  */
-@Singleton
 class SharedPreferencesAppSettings @Inject constructor(
     @ApplicationContext appContext: Context
 ) : AppSettings {

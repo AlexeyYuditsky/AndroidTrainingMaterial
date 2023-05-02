@@ -1,7 +1,6 @@
 package ua.cn.stu.hilt.app.screens.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,14 +10,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import com.squareup.moshi.Moshi
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Retrofit
 import ua.cn.stu.hilt.app.R
 import ua.cn.stu.hilt.app.databinding.ActivityMainBinding
 import ua.cn.stu.hilt.app.screens.main.tabs.TabsFragment
 import java.util.regex.Pattern
-import javax.inject.Inject
 
 /**
  * Container for all screens in the app.
@@ -46,7 +42,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
         // preparing root nav controller

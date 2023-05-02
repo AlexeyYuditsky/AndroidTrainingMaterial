@@ -11,7 +11,6 @@ import ua.cn.stu.hilt.app.model.accounts.entities.Account
 import ua.cn.stu.hilt.app.model.boxes.entities.Box
 import ua.cn.stu.hilt.app.model.boxes.entities.BoxAndSettings
 import ua.cn.stu.hilt.app.model.boxes.entities.BoxesFilter
-import ua.cn.stu.hilt.app.model.settings.AppSettings
 import javax.inject.Inject
 import javax.inject.Singleton
 

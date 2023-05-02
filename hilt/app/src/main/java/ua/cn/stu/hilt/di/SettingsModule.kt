@@ -3,10 +3,10 @@ package ua.cn.stu.hilt.di
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.components.SingletonComponent
-import ua.cn.stu.hilt.app.model.settings.AppSettings
-import ua.cn.stu.hilt.app.model.settings.SharedPreferencesAppSettings
+import ua.cn.stu.hilt.data.settings.AppSettings
+import ua.cn.stu.hilt.data.settings.SharedPreferencesAppSettings
+import javax.inject.Singleton
 
 /**
  * This module is responsible for binding the concrete implementation
@@ -19,6 +19,7 @@ import ua.cn.stu.hilt.app.model.settings.SharedPreferencesAppSettings
 abstract class SettingsModule {
 
     @Binds
+    @Singleton
     abstract fun bindAppSettings(
         appSettings: SharedPreferencesAppSettings
     ): AppSettings

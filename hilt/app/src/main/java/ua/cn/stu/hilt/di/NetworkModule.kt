@@ -11,7 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import ua.cn.stu.hilt.app.Const
-import ua.cn.stu.hilt.app.model.settings.AppSettings
+import ua.cn.stu.hilt.data.settings.AppSettings
 import javax.inject.Singleton
 
 /**
