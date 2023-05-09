@@ -1,9 +1,12 @@
 package ua.cn.stu.hilt.app.screens.main
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
@@ -14,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ua.cn.stu.hilt.app.R
 import ua.cn.stu.hilt.app.databinding.ActivityMainBinding
 import ua.cn.stu.hilt.app.screens.main.tabs.TabsFragment
+import ua.cn.stu.hilt.app.utils.log
 import java.util.regex.Pattern
 
 /**
@@ -42,13 +46,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        showSplashScreen()
+
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
         // preparing root nav controller
         val navController = getRootNavController()
-        prepareRootNavController(isSignedIn(), navController)
+        prepareRootNavController(navController)
         onNavControllerActivated(navController)
 
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
@@ -65,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (isStartDestination(navController?.currentDestination)) {
             super.onBackPressed()
@@ -75,16 +82,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean = (navController?.navigateUp() ?: false) || super.onSupportNavigateUp()
 
-    private fun prepareRootNavController(isSignedIn: Boolean, navController: NavController) {
+    private fun prepareRootNavController(navController: NavController) {
         val graph = navController.navInflater.inflate(getMainNavigationGraphId())
-        graph.setStartDestination(
-            if (isSignedIn) {
-                getTabsDestination()
-            } else {
-                getSignInDestination()
-            }
-        )
-        navController.graph = graph
+
+        viewModel.isSignIn.observe(this) { isSignedIn ->
+            graph.setStartDestination(
+                if (isSignedIn) {
+                    getTabsDestination()
+                } else {
+                    getSignInDestination()
+                }
+            )
+            navController.graph = graph
+        }
     }
 
     private fun onNavControllerActivated(navController: NavController) {
@@ -112,9 +122,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun prepareTitle(label: CharSequence?, arguments: Bundle?): String {
-
         // code for this method has been copied from Google sources :)
-
         if (label == null) return ""
         val title = StringBuffer()
         val fillInPattern = Pattern.compile("\\{(.+?)\\}")
@@ -134,10 +142,10 @@ class MainActivity : AppCompatActivity() {
         return title.toString()
     }
 
-    private fun isSignedIn(): Boolean {
-        val bundle = intent.extras ?: throw IllegalStateException("No required arguments")
-        val args = MainActivityArgs.fromBundle(bundle)
-        return args.isSignedIn
+    private fun showSplashScreen() {
+        var keepSplashOnScreen = true
+        installSplashScreen().setKeepOnScreenCondition { keepSplashOnScreen }
+        viewModel.isSignIn.observe(this) { keepSplashOnScreen = false }
     }
 
     private fun getMainNavigationGraphId(): Int = R.navigation.main_graph

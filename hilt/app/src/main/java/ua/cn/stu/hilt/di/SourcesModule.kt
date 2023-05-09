@@ -6,8 +6,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ua.cn.stu.hilt.app.model.accounts.AccountsSource
 import ua.cn.stu.hilt.app.model.boxes.BoxesSource
-import ua.cn.stu.hilt.sources.accounts.RetrofitAccountsSource
-import ua.cn.stu.hilt.sources.boxes.RetrofitBoxesSource
+import ua.cn.stu.hilt.data.accounts.RetrofitAccountsSource
+import ua.cn.stu.hilt.data.boxes.RetrofitBoxesSource
+import javax.inject.Singleton
 
 /**
  * This module binds concrete sources implementations to their

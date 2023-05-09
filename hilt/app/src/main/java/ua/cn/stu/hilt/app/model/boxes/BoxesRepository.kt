@@ -1,5 +1,6 @@
 package ua.cn.stu.hilt.app.model.boxes
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -14,10 +15,11 @@ import ua.cn.stu.hilt.app.model.boxes.entities.BoxesFilter
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@ExperimentalCoroutinesApi
 @Singleton
 class BoxesRepository @Inject constructor(
     private val accountsRepository: AccountsRepository,
-    private val boxesSource: BoxesSource
+    private val boxesSource: BoxesSource,
 ) {
 
     private var accountResult: Result<Account> = Empty()

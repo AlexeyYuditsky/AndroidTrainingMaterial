@@ -1,24 +1,25 @@
-package ua.cn.stu.hilt.sources.boxes
+package ua.cn.stu.hilt.data.boxes
 
 import kotlinx.coroutines.delay
 import ua.cn.stu.hilt.app.model.boxes.BoxesSource
 import ua.cn.stu.hilt.app.model.boxes.entities.BoxAndSettings
 import ua.cn.stu.hilt.app.model.boxes.entities.BoxesFilter
-import ua.cn.stu.hilt.sources.base.BaseRetrofitSource
-import ua.cn.stu.hilt.sources.base.RetrofitConfig
+import ua.cn.stu.hilt.data.base.BaseRetrofitSource
+import ua.cn.stu.hilt.data.base.RetrofitConfig
+import ua.cn.stu.hilt.sources.boxes.BoxesApi
 import ua.cn.stu.hilt.sources.boxes.entities.UpdateBoxRequestEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class RetrofitBoxesSource @Inject constructor(
-    config: RetrofitConfig
+    config: RetrofitConfig,
 ) : BaseRetrofitSource(config), BoxesSource {
 
     private val boxesApi = retrofit.create(BoxesApi::class.java)
 
     override suspend fun getBoxes(
-        boxesFilter: BoxesFilter
+        boxesFilter: BoxesFilter,
     ): List<BoxAndSettings> = wrapRetrofitExceptions {
         delay(500)
         val isActive: Boolean? = if (boxesFilter == BoxesFilter.ONLY_ACTIVE)
@@ -31,7 +32,7 @@ class RetrofitBoxesSource @Inject constructor(
 
     override suspend fun setIsActive(
         boxId: Long,
-        isActive: Boolean
+        isActive: Boolean,
     ) = wrapRetrofitExceptions {
         val updateBoxRequestEntity = UpdateBoxRequestEntity(isActive)
         boxesApi.setIsActive(boxId, updateBoxRequestEntity)

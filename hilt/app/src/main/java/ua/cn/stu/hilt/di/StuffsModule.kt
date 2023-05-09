@@ -14,7 +14,7 @@ import ua.cn.stu.hilt.app.utils.logger.Logger
  */
 @Module
 @InstallIn(SingletonComponent::class)
-class StuffsModule {
+object StuffsModule {
 
     /**
      * We don't need scope annotation here because LogCatHolder is

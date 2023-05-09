@@ -1,4 +1,4 @@
-package ua.cn.stu.hilt.sources.base
+package ua.cn.stu.hilt.data.base
 
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
@@ -10,11 +10,13 @@ import ua.cn.stu.hilt.app.model.BackendException
 import ua.cn.stu.hilt.app.model.ConnectionException
 import ua.cn.stu.hilt.app.model.ParseBackendResponseException
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Base class for all OkHttp sources.
  */
-open class BaseRetrofitSource(
+abstract class BaseRetrofitSource(
     retrofitConfig: RetrofitConfig
 ) {
 
@@ -34,15 +36,15 @@ open class BaseRetrofitSource(
             block()
         } catch (e: AppException) {
             throw e
-        // moshi
+            // moshi
         } catch (e: JsonDataException) {
             throw ParseBackendResponseException(e)
         } catch (e: JsonEncodingException) {
             throw ParseBackendResponseException(e)
-        // retrofit
+            // retrofit
         } catch (e: HttpException) {
             throw createBackendException(e)
-        // mostly retrofit
+            // mostly retrofit
         } catch (e: IOException) {
             throw ConnectionException(e)
         }
@@ -60,7 +62,7 @@ open class BaseRetrofitSource(
     }
 
     class ErrorResponseBody(
-        val error: String
+        val error: String,
     )
 
 }

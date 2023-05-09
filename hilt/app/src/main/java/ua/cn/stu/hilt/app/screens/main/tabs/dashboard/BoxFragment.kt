@@ -6,14 +6,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ua.cn.stu.hilt.app.R
 import ua.cn.stu.hilt.app.databinding.FragmentBoxBinding
 import ua.cn.stu.hilt.app.screens.base.BaseFragment
 import ua.cn.stu.hilt.app.utils.observeEvent
-import ua.cn.stu.hilt.app.utils.viewModelCreator
 import ua.cn.stu.hilt.app.views.DashboardItemView
-import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class BoxFragment : BaseFragment(R.layout.fragment_box) {
 

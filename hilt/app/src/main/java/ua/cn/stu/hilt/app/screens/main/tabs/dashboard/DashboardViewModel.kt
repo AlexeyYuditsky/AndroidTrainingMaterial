@@ -3,6 +3,7 @@ package ua.cn.stu.hilt.app.screens.main.tabs.dashboard
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import ua.cn.stu.hilt.app.model.Result
 import ua.cn.stu.hilt.app.model.accounts.AccountsRepository
@@ -14,6 +15,7 @@ import ua.cn.stu.hilt.app.utils.logger.Logger
 import ua.cn.stu.hilt.app.utils.share
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val boxesRepository: BoxesRepository,

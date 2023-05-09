@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ua.cn.stu.hilt.app.model.boxes.entities.Box
 import ua.cn.stu.hilt.app.R
 import ua.cn.stu.hilt.app.databinding.FragmentDashboardBinding
@@ -13,6 +14,7 @@ import ua.cn.stu.hilt.app.screens.base.BaseFragment
 import ua.cn.stu.hilt.app.utils.observeResults
 import ua.cn.stu.hilt.app.views.DashboardItemView
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class DashboardFragment : BaseFragment(R.layout.fragment_dashboard) {
 

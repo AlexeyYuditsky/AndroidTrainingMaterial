@@ -9,4 +9,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="defaultDashboardColor">#008800</color>
+
+    <color name="layout_background">#FFF</color>
+
+
 </resources>

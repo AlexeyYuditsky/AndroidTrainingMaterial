@@ -19,9 +19,8 @@ import javax.inject.Singleton
 abstract class SettingsModule {
 
     @Binds
-    @Singleton
     abstract fun bindAppSettings(
-        appSettings: SharedPreferencesAppSettings
+        appSettings: SharedPreferencesAppSettings,
     ): AppSettings
 
 }

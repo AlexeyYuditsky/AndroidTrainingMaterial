@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="bottom|center_horizontal"
-    tools:background="@drawable/splash"
+    tools:background="@drawable/ic_splash"
     tools:context="ua.cn.stu.hilt.app.screens.splash.SplashFragment">
 
     <ProgressBar
