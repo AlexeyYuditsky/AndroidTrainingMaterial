@@ -2,7 +2,9 @@ package com.alexeyyuditsky.test
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
+import androidx.annotation.UiThread
 import com.alexeyyuditsky.test.databinding.ActivityMainBinding
 import com.alexeyyuditsky.test.presenter.LoginPresenter
 import com.alexeyyuditsky.test.presenter.LoginView

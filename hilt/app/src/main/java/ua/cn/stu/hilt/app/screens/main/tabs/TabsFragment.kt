@@ -10,11 +10,9 @@ import ua.cn.stu.hilt.app.databinding.FragmentTabsBinding
 
 class TabsFragment : Fragment(R.layout.fragment_tabs) {
 
-    private lateinit var binding: FragmentTabsBinding
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentTabsBinding.bind(view)
+        val binding = FragmentTabsBinding.bind(view)
 
         val navHost = childFragmentManager.findFragmentById(R.id.tabsContainer) as NavHostFragment
         val navController = navHost.navController

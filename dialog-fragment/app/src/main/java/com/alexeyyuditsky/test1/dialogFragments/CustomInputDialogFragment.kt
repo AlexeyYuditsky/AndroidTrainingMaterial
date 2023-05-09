@@ -78,11 +78,11 @@ class CustomInputDialogFragment : DialogFragment() {
             manager: FragmentManager,
             lifecycleOwner: LifecycleOwner,
             requestKey: String,
-            listener: CustomInputDialogListener
+            listener: CustomInputDialogListener,
         ) {
-            manager.setFragmentResultListener(requestKey, lifecycleOwner, { key, result ->
+            manager.setFragmentResultListener(requestKey, lifecycleOwner) { key, result ->
                 listener(key, result.getInt(KEY_VOLUME_RESPONSE))
-            })
+            }
         }
     }
 

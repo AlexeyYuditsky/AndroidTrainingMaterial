@@ -1,8 +1,6 @@
 package ua.cn.stu.hilt.app.screens.main
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import ua.cn.stu.hilt.app.R
 import ua.cn.stu.hilt.app.databinding.ActivityMainBinding
 import ua.cn.stu.hilt.app.screens.main.tabs.TabsFragment
-import ua.cn.stu.hilt.app.utils.log
 import java.util.regex.Pattern
 
 /**
@@ -26,7 +23,6 @@ import java.util.regex.Pattern
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    // view-model is used for observing username to be displayed in the toolbar
     private val viewModel by viewModels<MainActivityViewModel>()
 
     // nav controller of the current screen
@@ -45,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         showSplashScreen()
 
         val binding = ActivityMainBinding.inflate(layoutInflater)

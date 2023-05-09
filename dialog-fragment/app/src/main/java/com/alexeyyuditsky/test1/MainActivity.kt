@@ -182,15 +182,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSimpleDialogFragmentListener() {
-        supportFragmentManager.setFragmentResultListener(SimpleDialogFragment.REQUEST_KEY, this,
-            { _, result ->
-                val which = result.getInt(SimpleDialogFragment.KEY_RESPONSE)
-                when (which) {
-                    DialogInterface.BUTTON_POSITIVE -> showToast(R.string.uninstall_confirmed)
-                    DialogInterface.BUTTON_NEGATIVE -> showToast(R.string.uninstall_rejected)
-                    DialogInterface.BUTTON_NEUTRAL -> showToast(R.string.uninstall_ignored)
-                }
-            })
+        supportFragmentManager.setFragmentResultListener(
+            SimpleDialogFragment.REQUEST_KEY, this
+        ) { _, result ->
+            when (result.getInt(SimpleDialogFragment.KEY_RESPONSE)) {
+                DialogInterface.BUTTON_POSITIVE -> showToast(R.string.uninstall_confirmed)
+                DialogInterface.BUTTON_NEGATIVE -> showToast(R.string.uninstall_rejected)
+                DialogInterface.BUTTON_NEUTRAL -> showToast(R.string.uninstall_ignored)
+            }
+        }
     }
 
     //-----

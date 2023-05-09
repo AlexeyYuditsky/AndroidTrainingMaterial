@@ -19,6 +19,7 @@
             app:popUpTo="@id/signInFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/tabsFragment"
         android:name="ua.cn.stu.hilt.app.screens.main.tabs.TabsFragment"
@@ -28,6 +29,7 @@
             android:id="@+id/action_tabsFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="ua.cn.stu.hilt.app.screens.main.tabs.profile.EditProfileFragment"
@@ -43,4 +45,5 @@
             app:argType="string"
             app:nullable="true" />
     </fragment>
+
 </navigation>
