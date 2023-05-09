@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">News</string>
+    <string name="action">Action</string>
+    <string name="breaking_news">Breaking News</string>
+    <string name="saved_news">Saved News</string>
+    <string name="search_news">Search News</string>
+    <string name="search">Search...</string>
+    <string name="article_saved">Article saved successfully</string>
+    <string name="successfully_deleted">Successfully deleted article</string>
+    <string name="undo">Undo</string>
+
+    <string name="no_results">No results 😓</string>
+    <string name="retry">Retry</string>
+    <string name="search_hint">News</string>
+    <string name="whoops">\uD83D\uDE28 Whoops %s</string>
+
+</resources>

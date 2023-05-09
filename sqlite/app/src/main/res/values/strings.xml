@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SQLite test</string>
+    <string name="insert_data">Insert data</string>
+    <string name="get_data">Get data</string>
+    <string name="empty">Empty</string>
+    <string name="empty_error">Empty_error</string>
+    <string name="delete_data">Delete data</string>
+</resources>

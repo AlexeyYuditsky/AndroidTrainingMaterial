@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">pixabay-app</string>
+    <string name="user">user:</string>
+    <string name="likes">likes:</string>
+    <string name="comments">comments:</string>
+    <string name="photos">Photos</string>
+</resources>

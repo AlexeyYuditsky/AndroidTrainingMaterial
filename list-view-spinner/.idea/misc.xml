@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/1/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_2.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/1/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_checked.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/1/Desktop/Android/Test/app/src/main/res/drawable/background_shape.xml" value="0.3828125" />
+        <entry key="..\:/Users/1/Desktop/Android/Test/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/1/Desktop/AndroidTrainingMaterial/Brief overview of basic UI components/app/src/main/res/layout/activity_main.xml" value="0.35260416666666666" />
+        <entry key="..\:/Users/1/Desktop/AndroidTrainingMaterial/ListViewAndSpinner/app/src/main/res/layout/activity_main.xml" value="0.25462962962962965" />
+        <entry key="..\:/Users/1/Desktop/AndroidTrainingMaterial/ListViewAndSpinner/app/src/main/res/layout/activity_main_with_array_adapter.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/1/Desktop/AndroidTrainingMaterial/ListViewAndSpinner/app/src/main/res/layout/activity_main_with_simple_adapter1.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/1/Desktop/AndroidTrainingMaterial/ListViewAndSpinner/app/src/main/res/layout/activity_main_with_simple_adapter2.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/1/Desktop/AndroidTrainingMaterial/ListViewAndSpinner/app/src/main/res/layout/activity_main_with_spinner.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/1/Desktop/AndroidTrainingMaterial/ListViewAndSpinner/app/src/main/res/layout/dialog_add_character.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/1/Desktop/AndroidTrainingMaterial/ListViewAndSpinner/app/src/main/res/layout/item_character.xml" value="0.35833333333333334" />
+        <entry key="..\:/Users/1/Desktop/AndroidTrainingMaterial/ListViewAndSpinner/app/src/main/res/layout/item_custom.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/1/Desktop/RomanAndrushchenko/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
+        <entry key="..\:/Users/1/Desktop/RomanAndrushchenko/app/src/main/res/drawable/ic_baseline_library_add_24.xml" value="0.3828125" />
+        <entry key="..\:/Users/1/Desktop/RomanAndrushchenko/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
+        <entry key="..\:/Users/1/Desktop/RomanAndrushchenko/app/src/main/res/drawable/shape.xml" value="0.3828125" />
+        <entry key="..\:/Users/1/Desktop/RomanAndrushchenko/app/src/main/res/layout/activity_main.xml" value="0.35833333333333334" />
+        <entry key="..\:/Users/1/Desktop/RomanAndrushchenko/app/src/main/res/layout/activity_main2.xml" value="0.36018518518518516" />
+        <entry key="..\:/Users/1/Desktop/Test/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/1/Desktop/Test/app/src/main/res/layout/test_layout.xml" value="0.36666666666666664" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.35833333333333334" />
+      </ProjectState>
+    </option>
+  </component>
+</project>
