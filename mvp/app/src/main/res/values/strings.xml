@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">Test</string>
-    <string name="error_email_invalid">Email has wrong format</string>
-    <string name="error_password_invalid">Password has wrong format</string>
-</resources>

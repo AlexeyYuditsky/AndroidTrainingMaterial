@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">Test</string>
-    <string name="request_camera_permission">Request <b>CAMERA</b> permission</string>
-    <string name="feature_1">Feature #1</string>
-    <string name="feature_2">Feature #2</string>
-    <string name="request_record_audio_and_access_fine_location_and_access_coarse_location_permission">Request <b>RECORD_AUDIO</b> and <b>ACCESS_FINE_LOCATION</b> and <b>ACCESS_COARSE_LOCATION</b> permission</string>
-    <string name="cancel_permession">Если отмените разрешения, функционал не будет работать</string>
-</resources>
