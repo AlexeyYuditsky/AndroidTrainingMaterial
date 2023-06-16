@@ -18,7 +18,7 @@ object Repositories {
 
     // -- stuffs
 
-    private val database: SQLiteDatabase by lazy<SQLiteDatabase> {
+    private val database: SQLiteDatabase by lazy {
         AppSQLiteHelper(applicationContext).writableDatabase
     }
 
