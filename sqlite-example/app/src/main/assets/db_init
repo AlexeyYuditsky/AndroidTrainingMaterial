@@ -1,0 +1,12 @@
+CREATE TABLE "users"(
+	"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+	"name" TEXT NOT NULL COLLATE NOCASE,
+	"age" INTEGER NOT NULL,
+	"created_at" TEXT NOT NULL
+);
+
+INSERT INTO "users"
+("name", "age", "created_at")
+VALUES
+("alex", "26", "16.06.2023"),
+("ivan", "26", "15.06.2023")
