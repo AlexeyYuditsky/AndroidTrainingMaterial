@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sqlite_example.databinding.ActivityMainBinding
 import java.sql.SQLException
+import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,26 +24,27 @@ class MainActivity : AppCompatActivity() {
             CREATE TABLE IF NOT EXISTS "users"(
             	"id" INTEGER PRIMARY KEY AUTOINCREMENT,
             	"name" TEXT NOT NULL COLLATE NOCASE,
-            	"age" INTEGER NOT NULL,
+            	"age" INTEGER NOT NULL DEFAULT 1,
             	"created_at" TEXT NOT NULL,
-            UNIQUE("name","age"))
+            UNIQUE("name","age"), 
+            CHECK ((name != '' AND name != 'alex') AND (age > 0 AND age < 100)))
             """.trimIndent()
         )
+
+
 
         try {
             db.execSQL(
                 """
-                INSERT INTO "users"
-                    ("name", "age", "created_at")
+                INSERT INTO users
+                (name, age, created_at)
                 VALUES
-                    ("alex22", "4443", "15.06.2023")
+                ('222', 33, '15.06.2023')
                 """.trimIndent()
             )
         } catch (e: SQLiteConstraintException) {
-            Toast.makeText(this, "Дубликатная запись", Toast.LENGTH_SHORT).show()
+            binding.message.text = e.message
         }
-
-
 
 
 
@@ -54,15 +56,13 @@ class MainActivity : AppCompatActivity() {
                         .append("name: ${it.getString(it.getColumnIndexOrThrow("name"))}, ")
                         .append("age: ${it.getString(it.getColumnIndexOrThrow("age"))} ")
                         .append("\n")
+
                     binding.textView.text = result
                 }
             }
         } catch (e: SQLiteException) {
-            Toast.makeText(this, "Таблицы не существует", Toast.LENGTH_SHORT).show()
+            binding.message.text = e.message
         }
-
-
-
     }
 
 }
