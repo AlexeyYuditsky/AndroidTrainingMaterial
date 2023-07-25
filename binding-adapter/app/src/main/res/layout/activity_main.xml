@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.text.TextUtils" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="list"
+            type="java.util.List" />
+
+        <variable
+            name="handler"
+            type="com.alexeyyuditsky.bindingadapter.MyHandler" />
+
+        <variable
+            name="department"
+            type="com.alexeyyuditsky.bindingadapter.Department" />
+
+        <variable
+            name="employee"
+            type="com.alexeyyuditsky.bindingadapter.Employee" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{(view) -> handler.onDelete(view, employee)}"
+            android:text='@{employee.name + "(" + department.name + ")"}' />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{TextUtils.isEmpty(employee.address) ? @string/app_name : employee.address}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{employee.name + (department == null ? "" : "(" + department.name + ")") }' />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{employee.hobbies[0]}" />
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:background="#C3C3C3"
+            app:url="@{employee.avatarUrl}" />
+
+    </LinearLayout>
+
+</layout>
