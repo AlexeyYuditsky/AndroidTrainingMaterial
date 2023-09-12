@@ -24,12 +24,79 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MultiplicationTable()
+            Instagram()
         }
     }
 }
 
 @Preview
+@Composable
+fun Instagram() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier
+                    .background(Color.Yellow)
+                    .weight(1f),
+            ) {
+                Text(text = "Картинка")
+            }
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color.DarkGray)
+                ) {
+                    Text(text = "6950")
+                }
+                Box(
+                    modifier = Modifier
+                        .background(Color.Blue)
+                ) {
+                    Text(text = "Posts")
+                }
+            }
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color.Cyan)
+                ) {
+                    Text(text = "436М")
+                }
+                Box(
+                    modifier = Modifier
+                        .background(Color.Red)
+                ) {
+                    Text(text = "Followers")
+                }
+            }
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color.Magenta)
+                ) {
+                    Text(text = "76")
+                }
+                Box(
+                    modifier = Modifier
+                        .background(Color.LightGray)
+                ) {
+                    Text(text = "Following")
+                }
+            }
+        }
+    }
+}
+
+//@Preview
 @Composable
 fun MultiplicationTable() {
     Column(
