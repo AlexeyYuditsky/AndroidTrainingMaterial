@@ -18,22 +18,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TimesTable()
+            MultiplicationTable()
         }
     }
 }
 
 @Preview
 @Composable
-fun TimesTable() {
+fun MultiplicationTable() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         for (i in 1 until 10) {
             Row(
@@ -45,15 +45,18 @@ fun TimesTable() {
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
+                            .border(1.dp, Color.DarkGray)
                             .weight(1f)
-                            .border(width = 1.dp, color = Color.DarkGray)
                             .background(if ((i + j) % 2 == 0) Color.Yellow else Color.White),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = "${i * j}")
+                        Text(
+                            text = "${i * j}",
+                            fontSize = 20.sp
+                        )
                     }
                 }
             }
         }
     }
-} 
+}
