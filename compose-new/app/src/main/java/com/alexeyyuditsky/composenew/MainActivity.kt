@@ -3,127 +3,13 @@ package com.alexeyyuditsky.composenew
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.alexeyyuditsky.composenew.ui.theme.InstagramProfileCard
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Instagram()
-        }
-    }
-}
-
-@Preview
-@Composable
-fun Instagram() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Box(
-                modifier = Modifier
-                    .background(Color.Yellow)
-                    .weight(1f),
-            ) {
-                Text(text = "Картинка")
-            }
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.DarkGray)
-                ) {
-                    Text(text = "6950")
-                }
-                Box(
-                    modifier = Modifier
-                        .background(Color.Blue)
-                ) {
-                    Text(text = "Posts")
-                }
-            }
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.Cyan)
-                ) {
-                    Text(text = "436М")
-                }
-                Box(
-                    modifier = Modifier
-                        .background(Color.Red)
-                ) {
-                    Text(text = "Followers")
-                }
-            }
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.Magenta)
-                ) {
-                    Text(text = "76")
-                }
-                Box(
-                    modifier = Modifier
-                        .background(Color.LightGray)
-                ) {
-                    Text(text = "Following")
-                }
-            }
-        }
-    }
-}
-
-//@Preview
-@Composable
-fun MultiplicationTable() {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        for (i in 1 until 10) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                for (j in 1 until 10) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .border(1.dp, Color.DarkGray)
-                            .weight(1f)
-                            .background(if ((i + j) % 2 == 0) Color.Yellow else Color.White),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "${i * j}",
-                            fontSize = 20.sp
-                        )
-                    }
-                }
-            }
+            InstagramProfileCard()
         }
     }
 }
