@@ -1,4 +1,4 @@
-package com.alexeyyuditsky.composenew
+package com.alexeyyuditsky.vkclient
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,20 +8,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
-import com.alexeyyuditsky.composenew.ui.theme.ComposeNewTheme
-import com.alexeyyuditsky.composenew.ui.theme.InstagramProfileCard
+import com.alexeyyuditsky.vkclient.ui.theme.PostCard
+import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ComposeNewTheme {
+            VkClientTheme {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(color = MaterialTheme.colorScheme.background)
-                )
-                InstagramProfileCard()
+                        .background(MaterialTheme.colorScheme.background),
+                ) {
+                    PostCard()
+                }
             }
         }
     }

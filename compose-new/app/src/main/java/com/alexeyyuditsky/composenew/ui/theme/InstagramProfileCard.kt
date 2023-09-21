@@ -1,8 +1,8 @@
 package com.alexeyyuditsky.composenew.ui.theme
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,15 +35,12 @@ import com.alexeyyuditsky.composenew.R
 fun InstagramProfileCard() {
     Card(
         modifier = Modifier
-            .padding(8.dp),
-        shape = RoundedCornerShape(
-            topStart = 8.dp,
-            topEnd = 8.dp
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.onBackground
-        ),
+            .padding(8.dp)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+            ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
         )
@@ -52,9 +49,10 @@ fun InstagramProfileCard() {
             modifier = Modifier.padding(16.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Image(
                     modifier = Modifier
@@ -65,25 +63,14 @@ fun InstagramProfileCard() {
                     painter = painterResource(id = R.drawable.ic_instagram),
                     contentDescription = null
                 )
-
-                UserStatistics("Posts", "6,950")
-                UserStatistics("Followers", "436M")
-                UserStatistics("Following", "76")
+                UserState("6,950", "Posts")
+                UserState("436M", "Followers")
+                UserState("76", "Following")
             }
 
-            Text(
-                text = "Instagram",
-                fontSize = 32.sp,
-                fontFamily = FontFamily.Cursive
-            )
-            Text(
-                text = "#YoursToMake",
-                fontSize = 14.sp,
-            )
-            Text(
-                text = "www.facebook.com/emotional_health",
-                fontSize = 14.sp
-            )
+            SimpleBigCursiveText("Instagram")
+            SimpleSmallText("#YoursToMake")
+            SimpleSmallText("www.facebook.com/emotional_health")
             Button(
                 onClick = {},
                 shape = RoundedCornerShape(4.dp)
@@ -95,45 +82,54 @@ fun InstagramProfileCard() {
 }
 
 @Composable
-private fun UserStatistics(
-    tittle: String,
-    value: String
-) {
+fun UserState(title: String, value: String) {
     Column(
-        modifier = Modifier.height(70.dp),
+        modifier = Modifier.height(60.dp),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = value,
+            text = title,
             fontSize = 24.sp,
+            fontWeight = FontWeight.SemiBold,
             fontFamily = FontFamily.Cursive,
-            fontWeight = FontWeight.SemiBold
         )
         Text(
-            text = tittle,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            text = value,
+            fontWeight = FontWeight.SemiBold
         )
     }
 }
 
+@Composable
+fun SimpleSmallText(title: String) {
+    Text(
+        text = title,
+        fontSize = 14.sp
+    )
+}
+
+@Composable
+fun SimpleBigCursiveText(title: String) {
+    Text(
+        text = title,
+        fontSize = 32.sp,
+        fontFamily = FontFamily.Cursive
+    )
+}
+
 @Preview
 @Composable
-fun PreviewCardLight() {
-    ComposeNewTheme(
-        darkTheme = false
-    ) {
+fun PreviewLight() {
+    ComposeNewTheme(darkTheme = false) {
         InstagramProfileCard()
     }
 }
 
 @Preview
 @Composable
-fun PreviewCardDark() {
-    ComposeNewTheme(
-        darkTheme = true
-    ) {
+fun PreviewDark() {
+    ComposeNewTheme(darkTheme = true) {
         InstagramProfileCard()
     }
 }
