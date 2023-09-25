@@ -17,26 +17,27 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Black900,
+    primary = Color(red = 208, green = 188, blue = 255),
     secondary = Black900,
     tertiary = Black900,
     onPrimary = Color.White,
-    onSecondary = Black500
+    onSecondary = Black500,
+    onBackground = Black900
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color.White,
+    primary = Color(red = 103, green = 80, blue = 164),
     secondary = Color.White,
     tertiary = Color.White,
     onPrimary = Black900,
-    onSecondary = Black500
+    onSecondary = Black500,
+    onBackground = Color.White
 )
 
 @Composable
 fun VkClientTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

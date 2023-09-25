@@ -1,5 +1,6 @@
 package com.alexeyyuditsky.vkclient.ui.theme
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,12 +15,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,13 +34,15 @@ import com.alexeyyuditsky.vkclient.R
 fun PostCard() {
     Card(
         modifier = Modifier.padding(8.dp),
-        shape = RoundedCornerShape(4.dp)
+        shape = RoundedCornerShape(4.dp),
+        CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
+        border = BorderStroke(1.dp, Color.Gray)
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(8.dp)
+        ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -45,9 +52,7 @@ fun PostCard() {
                     painter = painterResource(id = R.drawable.post_comunity_thumbnail),
                     contentDescription = null
                 )
-
                 Spacer(modifier = Modifier.width(8.dp))
-
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
@@ -61,60 +66,88 @@ fun PostCard() {
                         color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
-
-                Image(
+                Icon(
                     imageVector = Icons.Rounded.MoreVert,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
 
-            /*Text(
-                text = "asdasdsadsadsadsd a sd sa dsad sdsadasdas da sadsadasdasdas"
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Lorem ipsum dolor sit amet, consectetur adipsini asdsadsa sdas elit.",
+                color = MaterialTheme.colorScheme.onPrimary
             )
-
+            Spacer(modifier = Modifier.height(8.dp))
             Image(
-                modifier = Modifier.size(500.dp),
-                contentScale = ContentScale.FillWidth,
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = null
+                painter = painterResource(id = R.drawable.post_content_image),
+                contentDescription = null,
+                contentScale = ContentScale.Inside
             )
-
-            Row {
-                Text(text = "206")
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_views_count),
-
-                    contentDescription = null
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.weight(2f)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_views_count),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "916",
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                }
+                Row(
+                    modifier = Modifier.weight(0.8f)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "7",
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                }
+                Row(
+                    modifier = Modifier.weight(0.8f)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_comment),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSecondary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "8",
+                        color = MaterialTheme.colorScheme.onSecondary
+                    )
+                }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_like),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
-                Text(text = "206")
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_share),
-
-                    contentDescription = null
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = "23",
+                    color = MaterialTheme.colorScheme.onSecondary
                 )
-                Text(text = "11")
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_comment),
-
-                    contentDescription = null
-                )
-                Text(text = "491")
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_like),
-                    contentDescription = null
-                )
-            }*/
+            }
         }
     }
 }
 
 @Preview
 @Composable
-fun PostCardLight() {
+private fun PostCardLight() {
     VkClientTheme(darkTheme = false) {
         PostCard()
     }
@@ -122,7 +155,7 @@ fun PostCardLight() {
 
 @Preview
 @Composable
-fun PostCardDark() {
+private fun PostCardDark() {
     VkClientTheme(darkTheme = true) {
         PostCard()
     }
