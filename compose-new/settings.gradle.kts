@@ -16,5 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "compose-new"
 include(":app")
 include(":vkclient")
-include(":app:test")
 include(":testcompose")
