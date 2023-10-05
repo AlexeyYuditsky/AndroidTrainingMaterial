@@ -9,21 +9,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.alexeyyuditsky.vkclient.R
 
 sealed class NavigationItem(
-    @StringRes val titleResId: Int,
+    @StringRes val id: Int,
     val icon: ImageVector
 ) {
     object Home : NavigationItem(
-        titleResId = R.string.navigation_item_main,
+        id = R.string.navigation_item_main,
         icon = Icons.Outlined.Home
     )
 
     object Favorite : NavigationItem(
-        titleResId = R.string.navigation_item_favorite,
+        id = R.string.navigation_item_favorite,
         icon = Icons.Outlined.Favorite
     )
 
     object Profile : NavigationItem(
-        titleResId = R.string.navigation_item_profile,
+        id = R.string.navigation_item_profile,
         icon = Icons.Outlined.Person
     )
 }
