@@ -13,11 +13,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +36,7 @@ import com.alexeyyuditsky.composenew.R
 @Preview
 @Composable
 fun InstagramProfileCard() {
+    val isFollowed = rememberSaveable { mutableStateOf(false) }
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -71,13 +75,29 @@ fun InstagramProfileCard() {
             SimpleBigCursiveText("Instagram")
             SimpleSmallText("#YoursToMake")
             SimpleSmallText("www.facebook.com/emotional_health")
-            Button(
-                onClick = {},
-                shape = RoundedCornerShape(4.dp)
-            ) {
-                Text(text = "Follow")
-            }
+            Button(isFollowed.value) { isFollowed.value = !isFollowed.value }
         }
+    }
+}
+
+@Composable
+private fun Button(
+    isFollowed: Boolean,
+    clickListener: () -> Unit
+) {
+    Button(
+        onClick = { clickListener.invoke() },
+        shape = RoundedCornerShape(4.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isFollowed) {
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+            } else {
+                MaterialTheme.colorScheme.primary
+            }
+        )
+    ) {
+        val text = if (isFollowed) "Unfollow" else "Follow"
+        Text(text = text)
     }
 }
 
@@ -116,20 +136,4 @@ fun SimpleBigCursiveText(title: String) {
         fontSize = 32.sp,
         fontFamily = FontFamily.Cursive
     )
-}
-
-@Preview
-@Composable
-fun PreviewLight() {
-    ComposeNewTheme(darkTheme = false) {
-        InstagramProfileCard()
-    }
-}
-
-@Preview
-@Composable
-fun PreviewDark() {
-    ComposeNewTheme(darkTheme = true) {
-        InstagramProfileCard()
-    }
 }

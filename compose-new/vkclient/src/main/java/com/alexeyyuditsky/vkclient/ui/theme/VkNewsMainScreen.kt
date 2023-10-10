@@ -26,16 +26,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
-    log("ss")
     val scope = rememberCoroutineScope()
     val snackbarState = remember { mutableStateOf(true) }
     Scaffold(
         snackbarHost = {
-            log("snackbarHost")
             SnackbarHost(hostState = snackbarHostState)
         },
         floatingActionButton = {
-            log("floatingActionButton")
             if (snackbarState.value) {
                 FloatingActionButton(
                     onClick = {
@@ -56,7 +53,6 @@ fun MainScreen() {
             }
         },
         bottomBar = {
-            log("bottomBar")
             NavigationBar {
                 val selectedItemPosition = remember { mutableStateOf(0) }
                 val items = arrayOf(
