@@ -19,8 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,15 +27,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alexeyyuditsky.composenew.MainViewModel
 import com.alexeyyuditsky.composenew.R
 
-@Preview
 @Composable
-fun InstagramProfileCard() {
-    val isFollowed = rememberSaveable { mutableStateOf(false) }
+fun InstagramProfileCard(viewModel: MainViewModel) {
+    val isFollowed = viewModel.isFollowing.observeAsState(false)
+
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -71,11 +70,10 @@ fun InstagramProfileCard() {
                 UserState("436M", "Followers")
                 UserState("76", "Following")
             }
-
             SimpleBigCursiveText("Instagram")
             SimpleSmallText("#YoursToMake")
             SimpleSmallText("www.facebook.com/emotional_health")
-            Button(isFollowed.value) { isFollowed.value = !isFollowed.value }
+            Button(isFollowed.value) { viewModel.changeFollowingStatus() }
         }
     }
 }
