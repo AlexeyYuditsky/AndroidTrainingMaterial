@@ -13,5 +13,4 @@ class MainViewModel : ViewModel() {
         val wasFollowing = _isFollowing.value ?: false
         _isFollowing.value = !wasFollowing
     }
-
 }

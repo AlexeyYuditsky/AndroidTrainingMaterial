@@ -19,12 +19,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,7 +36,7 @@ import com.alexeyyuditsky.composenew.R
 
 @Composable
 fun InstagramProfileCard(viewModel: MainViewModel) {
-    val isFollowed = viewModel.isFollowing.observeAsState(false)
+    val isFollowed: State<Boolean> = viewModel.isFollowing.observeAsState(false)
 
     Card(
         modifier = Modifier
@@ -94,7 +96,11 @@ private fun Button(
             }
         )
     ) {
-        val text = if (isFollowed) "Unfollow" else "Follow"
+        val text = if (isFollowed) {
+            stringResource(R.string.unfollow)
+        } else {
+            stringResource(R.string.follow)
+        }
         Text(text = text)
     }
 }
