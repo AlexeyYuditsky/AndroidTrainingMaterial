@@ -1,31 +1,57 @@
 package com.alexeyyuditsky.camerax
 
+import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
-import androidx.camera.video.Recorder
-import androidx.camera.video.Recording
-import androidx.camera.video.VideoCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.alexeyyuditsky.camerax.databinding.ActivityMainBinding
-import java.util.concurrent.ExecutorService
+import java.nio.ByteBuffer
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private class LuminosityAnalyzer(
+        private val listener: (luma: Double) -> Unit
+    ) : ImageAnalysis.Analyzer {
 
+        private fun ByteBuffer.toByteArray(): ByteArray {
+            rewind()    // Rewind the buffer to zero
+            val data = ByteArray(remaining())
+            get(data)   // Copy the buffer into a byte array
+            return data // Return the byte array
+        }
+
+        override fun analyze(image: ImageProxy) {
+            val buffer = image.planes.first().buffer
+            val data = buffer.toByteArray()
+            val pixels = data.map { it.toInt() and 0xFF }
+            val luma = pixels.average()
+            listener(luma)
+            image.close()
+        }
+    }
+
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private var imageCapture: ImageCapture? = null
-    private var videoCapture: VideoCapture<Recorder>? = null
-    private var recording: Recording? = null
-    private lateinit var cameraExecutor: ExecutorService
+    private val cameraExecutor = Executors.newSingleThreadExecutor()
 
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            // Handle Permission granted/rejected
             var permissionGranted = true
             permissions.entries.forEach {
                 if (it.key in REQUIRED_PERMISSIONS && !it.value)
@@ -48,27 +74,95 @@ class MainActivity : AppCompatActivity() {
             requestPermissions()
         }
 
-        binding.imageCaptureButton.setOnClickListener { onTakePhotoPressed() }
-        binding.videoCaptureButton.setOnClickListener { onStartCapturePressed() }
+        binding.imageCaptureButton.setOnClickListener {
+            Log.d("MyLog", "click")
+            takePhoto()
+        }
+        binding.videoCaptureButton.setOnClickListener { captureVideo() }
     }
 
-    private fun onTakePhotoPressed() {
+    private fun takePhoto() {
+        // Get a stable reference of the modifiable image capture use case
+        imageCapture = imageCapture ?: throw IllegalStateException()
 
+        // Create time stamped name and MediaStore entry.
+        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+            }
+        }
+
+        // Create output options object which contains file + metadata
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(
+            contentResolver,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        ).build()
+
+        // Set up image capture listener, which is triggered after photo has
+        // been taken
+        imageCapture!!.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onError(exc: ImageCaptureException) {
+                    Log.e("MyLog", "Photo capture failed: ${exc.message}", exc)
+                }
+
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    val msg = "Photo capture succeeded: ${output.savedUri}"
+                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                    Log.d("MyLog", msg)
+                }
+            }
+        )
     }
-
-    private fun onStartCapturePressed() {
-
-    }
-
-    private fun takePhoto() {}
 
     private fun captureVideo() {}
 
-    private fun startCamera() {}
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
-    private fun requestPermissions() {
-        activityResultLauncher.launch(REQUIRED_PERMISSIONS)
+        cameraProviderFuture.addListener({
+            // Used to bind the lifecycle of cameras to the lifecycle owner
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            // Preview
+            val preview = Preview.Builder()
+                .build()
+                .also { it.setSurfaceProvider(binding.viewFinder.surfaceProvider) }
+
+            imageCapture = ImageCapture.Builder().build()
+
+            val imageAnalyzer = ImageAnalysis.Builder()
+                .build()
+                .also {
+                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
+                        Log.d("MyLog", "Average luminosity: $luma")
+                    })
+                }
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    this,
+                    CameraSelector.DEFAULT_BACK_CAMERA,
+                    preview,
+                    imageCapture,
+                    imageAnalyzer
+                )
+
+            } catch (exc: Exception) {
+                Log.e("MyLog", "Use case binding failed", exc)
+            }
+
+        }, ContextCompat.getMainExecutor(this))
     }
+
+    private fun requestPermissions() = activityResultLauncher.launch(REQUIRED_PERMISSIONS)
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all { permission ->
         ContextCompat
@@ -76,8 +170,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        cameraExecutor.shutdown()
         super.onDestroy()
+        cameraExecutor.shutdown()
     }
 
     companion object {
