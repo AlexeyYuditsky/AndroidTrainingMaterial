@@ -1,8 +1,8 @@
 package com.alexeyyuditsky.composenew.ui.theme
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,31 +33,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alexeyyuditsky.composenew.MainViewModel
 import com.alexeyyuditsky.composenew.R
+import com.alexeyyuditsky.composenew.log
 
 @Composable
 fun InstagramProfileCard(viewModel: MainViewModel) {
+    log("InstagramProfileCard")
     val isFollowed: State<Boolean> = viewModel.isFollowing.observeAsState(false)
 
     Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.onBackground,
-                shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
-            ),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
-        )
+        modifier = Modifier.padding(8.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+        shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.onBackground)
     ) {
+        log("Card")
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     modifier = Modifier
@@ -68,35 +64,36 @@ fun InstagramProfileCard(viewModel: MainViewModel) {
                     painter = painterResource(id = R.drawable.ic_instagram),
                     contentDescription = null
                 )
-                UserState("6,950", "Posts")
-                UserState("436M", "Followers")
-                UserState("76", "Following")
+                UserStatistics(title = "6,950", value = "Posts")
+                UserStatistics(title = "436M", value = "Followers")
+                UserStatistics(title = "76", value = "Following")
             }
             SimpleBigCursiveText("Instagram")
             SimpleSmallText("#YoursToMake")
             SimpleSmallText("www.facebook.com/emotional_health")
-            Button(isFollowed.value) { viewModel.changeFollowingStatus() }
+            Button(isFollowed) { viewModel.changeFollowingStatus() }
         }
     }
 }
 
 @Composable
 private fun Button(
-    isFollowed: Boolean,
+    isFollowed: State<Boolean>,
     clickListener: () -> Unit
 ) {
+    log("Button")
     Button(
         onClick = { clickListener.invoke() },
         shape = RoundedCornerShape(4.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isFollowed) {
+            containerColor = if (isFollowed.value) {
                 MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
             } else {
                 MaterialTheme.colorScheme.primary
             }
         )
     ) {
-        val text = if (isFollowed) {
+        val text = if (isFollowed.value) {
             stringResource(R.string.unfollow)
         } else {
             stringResource(R.string.follow)
@@ -106,7 +103,8 @@ private fun Button(
 }
 
 @Composable
-fun UserState(title: String, value: String) {
+fun UserStatistics(title: String, value: String) {
+    log("UserStatistics")
     Column(
         modifier = Modifier.height(60.dp),
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -135,6 +133,7 @@ fun SimpleSmallText(title: String) {
 
 @Composable
 fun SimpleBigCursiveText(title: String) {
+    log("SimpleBigCursiveText")
     Text(
         text = title,
         fontSize = 32.sp,

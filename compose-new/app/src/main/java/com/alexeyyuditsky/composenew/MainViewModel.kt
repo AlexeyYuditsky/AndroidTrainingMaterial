@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
 
-    private val _isFollowing = MutableLiveData<Boolean>()
+    private val _isFollowing = MutableLiveData(false)
     val isFollowing: LiveData<Boolean> = _isFollowing
 
     fun changeFollowingStatus() {
