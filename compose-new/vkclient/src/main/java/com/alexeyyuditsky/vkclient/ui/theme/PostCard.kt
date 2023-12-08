@@ -30,11 +30,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alexeyyuditsky.vkclient.R
+import com.alexeyyuditsky.vkclient.domain.StatisticItem
+import com.alexeyyuditsky.vkclient.domain.StatisticType
 
 @Composable
-fun PostCard() {
+@Preview
+fun PostCard(modifier: Modifier = Modifier) {
     Card(
-        modifier = Modifier.padding(8.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.scrim)
@@ -48,7 +51,9 @@ fun PostCard() {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Image(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
                 painter = painterResource(id = R.drawable.post_content_image),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
@@ -79,21 +84,42 @@ private fun IconWithText(
 }
 
 @Composable
-private fun Statistics() {
+private fun Statistics(
+    statistics: List<StatisticItem>
+) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.weight(1f)) {
-            IconWithText(R.drawable.ic_views_count, "916")
+            val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
+            IconWithText(
+                iconResId = R.drawable.ic_views_count,
+                text = viewsItem.count.toString()
+            )
         }
         Row(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            IconWithText(iconResId = R.drawable.ic_share, text = "7")
-            IconWithText(iconResId = R.drawable.ic_comment, text = "8")
-            IconWithText(iconResId = R.drawable.ic_like, text = "23")
+            val sharesItem = statistics.getItemByType(StatisticType.SHARES)
+            IconWithText(
+                iconResId = R.drawable.ic_share,
+                text = sharesItem.count.toString()
+            )
+            val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
+            IconWithText(
+                iconResId = R.drawable.ic_comment,
+                text = commentsItem.count.toString()
+            )
+            val likesItem = statistics.getItemByType(StatisticType.LIKES)
+            IconWithText(
+                iconResId = R.drawable.ic_like,
+                text = likesItem.count.toString()
+            )
         }
     }
 }
+
+private fun List<StatisticItem>.getItemByType(type: StatisticType): StatisticItem =
+    this.find { statisticItem -> statisticItem.type == type } ?: throw IllegalArgumentException()
 
 @Composable
 private fun PostHeader() {
@@ -132,16 +158,14 @@ private fun PostHeader() {
 
 @Preview
 @Composable
-private fun PostCardLight() {
-    VkClientTheme(darkTheme = false) {
-        PostCard()
-    }
+private fun PostCardLight() = VkClientTheme(darkTheme = false) {
+    PostCard()
 }
+
 
 @Preview
 @Composable
-private fun PostCardDark() {
-    VkClientTheme(darkTheme = true) {
-        PostCard()
-    }
+private fun PostCardDark() = VkClientTheme(darkTheme = true) {
+    PostCard()
 }
+

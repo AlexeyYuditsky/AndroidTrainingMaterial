@@ -1,5 +1,7 @@
 package com.alexeyyuditsky.vkclient.ui.theme
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,39 +21,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Preview
 fun MainScreen() {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-    val snackbarState = remember { mutableStateOf(true) }
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
-        floatingActionButton = {
-            if (snackbarState.value) {
-                FloatingActionButton(
-                    onClick = {
-                        scope.launch {
-                            val snackbarResult = snackbarHostState.showSnackbar(
-                                message = "This is snackbar",
-                                actionLabel = "Hide FAB",
-                                duration = SnackbarDuration.Long
-                            )
-                            if (snackbarResult == SnackbarResult.ActionPerformed) {
-                                snackbarState.value = false
-                            }
-                        }
-                    },
-                ) {
-                    Icon(imageVector = Icons.Filled.Favorite, contentDescription = null)
-                }
-            }
-        },
         bottomBar = {
             NavigationBar {
                 val selectedItemPosition = remember { mutableStateOf(0) }
@@ -75,6 +56,6 @@ fun MainScreen() {
             }
         }
     ) {
-        it
+        PostCard(modifier = Modifier.padding(8.dp))
     }
 }

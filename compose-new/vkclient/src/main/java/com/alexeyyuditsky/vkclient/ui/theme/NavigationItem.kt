@@ -27,3 +27,7 @@ sealed class NavigationItem(
         icon = Icons.Outlined.Person
     )
 }
+
+fun main() {
+    val a = NavigationItem.Favorite as NavigationItem
+}

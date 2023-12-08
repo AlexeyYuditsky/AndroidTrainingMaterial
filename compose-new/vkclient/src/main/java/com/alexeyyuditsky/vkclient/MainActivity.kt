@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.alexeyyuditsky.vkclient.ui.theme.MainScreen
+import com.alexeyyuditsky.vkclient.ui.theme.PostCard
 import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 class MainActivity : ComponentActivity() {
