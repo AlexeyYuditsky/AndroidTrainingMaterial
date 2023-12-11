@@ -2,6 +2,7 @@ package com.alexeyyuditsky.vkclient.ui.theme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,16 +27,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alexeyyuditsky.vkclient.R
+import com.alexeyyuditsky.vkclient.domain.FeedPost
 import com.alexeyyuditsky.vkclient.domain.StatisticItem
 import com.alexeyyuditsky.vkclient.domain.StatisticType
 
 @Composable
-@Preview
-fun PostCard(modifier: Modifier = Modifier) {
+fun PostCard(
+    modifier: Modifier = Modifier,
+    feedPost: FeedPost,
+    statisticItemClickListener: (StatisticItem) -> Unit
+) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(4.dp),
@@ -43,10 +46,14 @@ fun PostCard(modifier: Modifier = Modifier) {
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.scrim)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            PostHeader()
+            PostHeader(
+                communityName = feedPost.communityName,
+                publicationDate = feedPost.publicationDate,
+                avatarResId = feedPost.avatarResId
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = stringResource(R.string.template_text),
+                text = feedPost.contentText,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -54,12 +61,15 @@ fun PostCard(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp),
-                painter = painterResource(id = R.drawable.post_content_image),
+                painter = painterResource(id = feedPost.contentImageResId),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Statistics()
+            Statistics(
+                statistics = feedPost.statistics,
+                onClickListener = { statisticItem -> statisticItemClickListener(statisticItem) }
+            )
         }
     }
 }
@@ -67,9 +77,13 @@ fun PostCard(modifier: Modifier = Modifier) {
 @Composable
 private fun IconWithText(
     iconResId: Int,
-    text: String
+    text: String,
+    onClickListener: () -> Unit
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier.clickable { onClickListener() },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Icon(
             painter = painterResource(id = iconResId),
             contentDescription = null,
@@ -85,14 +99,16 @@ private fun IconWithText(
 
 @Composable
 private fun Statistics(
-    statistics: List<StatisticItem>
+    statistics: List<StatisticItem>,
+    onClickListener: (StatisticItem) -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.weight(1f)) {
             val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
             IconWithText(
                 iconResId = R.drawable.ic_views_count,
-                text = viewsItem.count.toString()
+                text = viewsItem.count.toString(),
+                onClickListener = { onClickListener(viewsItem) }
             )
         }
         Row(
@@ -102,17 +118,20 @@ private fun Statistics(
             val sharesItem = statistics.getItemByType(StatisticType.SHARES)
             IconWithText(
                 iconResId = R.drawable.ic_share,
-                text = sharesItem.count.toString()
+                text = sharesItem.count.toString(),
+                onClickListener = { onClickListener(sharesItem) }
             )
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
                 iconResId = R.drawable.ic_comment,
-                text = commentsItem.count.toString()
+                text = commentsItem.count.toString(),
+                onClickListener = { onClickListener(commentsItem) }
             )
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
             IconWithText(
                 iconResId = R.drawable.ic_like,
-                text = likesItem.count.toString()
+                text = likesItem.count.toString(),
+                onClickListener = { onClickListener(likesItem) }
             )
         }
     }
@@ -122,7 +141,11 @@ private fun List<StatisticItem>.getItemByType(type: StatisticType): StatisticIte
     this.find { statisticItem -> statisticItem.type == type } ?: throw IllegalArgumentException()
 
 @Composable
-private fun PostHeader() {
+private fun PostHeader(
+    communityName: String,
+    publicationDate: String,
+    avatarResId: Int,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -131,7 +154,7 @@ private fun PostHeader() {
             modifier = Modifier
                 .size(50.dp)
                 .clip(CircleShape),
-            painter = painterResource(id = R.drawable.post_comunity_thumbnail),
+            painter = painterResource(id = avatarResId),
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -139,12 +162,12 @@ private fun PostHeader() {
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "/dev/null",
+                text = communityName,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "14:00",
+                text = publicationDate,
                 color = MaterialTheme.colorScheme.onSecondary
             )
         }
@@ -155,17 +178,3 @@ private fun PostHeader() {
         )
     }
 }
-
-@Preview
-@Composable
-private fun PostCardLight() = VkClientTheme(darkTheme = false) {
-    PostCard()
-}
-
-
-@Preview
-@Composable
-private fun PostCardDark() = VkClientTheme(darkTheme = true) {
-    PostCard()
-}
-
