@@ -11,6 +11,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -50,12 +51,15 @@ fun MainScreen(
             }
         }
     ) {
-        val feedPost = viewModel.feedPost.observeAsState(FeedPost())
+        val feedPost: State<FeedPost> = viewModel.feedPost.observeAsState(FeedPost())
 
         PostCard(
             modifier = Modifier.padding(8.dp),
-            feedPost = feedPost.value,
-            statisticItemClickListener = { statisticItem -> viewModel.update(statisticItem) }
+            feedPost = feedPost,
+            onViewsClickListener = viewModel::update,
+            onShareClickListener = viewModel::update,
+            onCommentClickListener = viewModel::update,
+            onLikeClickListener = viewModel::update
         )
     }
 }

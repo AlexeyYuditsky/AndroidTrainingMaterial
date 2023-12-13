@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,24 +37,27 @@ import com.alexeyyuditsky.vkclient.domain.StatisticType
 @Composable
 fun PostCard(
     modifier: Modifier = Modifier,
-    feedPost: FeedPost,
-    statisticItemClickListener: (StatisticItem) -> Unit
+    feedPost: State<FeedPost>,
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit
 ) {
+    log("PostCard")
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.scrim)
     ) {
+        log("PostCard inside start")
         Column(modifier = Modifier.padding(8.dp)) {
             PostHeader(
-                communityName = feedPost.communityName,
-                publicationDate = feedPost.publicationDate,
-                avatarResId = feedPost.avatarResId
+                feedPost = feedPost
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = feedPost.contentText,
+                text = feedPost.value.contentText,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -61,16 +65,20 @@ fun PostCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp),
-                painter = painterResource(id = feedPost.contentImageResId),
+                painter = painterResource(id = feedPost.value.contentImageResId),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
             Spacer(modifier = Modifier.height(8.dp))
             Statistics(
-                statistics = feedPost.statistics,
-                onClickListener = { statisticItem -> statisticItemClickListener(statisticItem) }
+                statistics = feedPost.value.statistics,
+                onViewsClickListener = onViewsClickListener,
+                onShareClickListener = onShareClickListener,
+                onCommentClickListener = onCommentClickListener,
+                onLikeClickListener = onLikeClickListener
             )
         }
+        log("PostCard inside finish")
     }
 }
 
@@ -100,38 +108,45 @@ private fun IconWithText(
 @Composable
 private fun Statistics(
     statistics: List<StatisticItem>,
-    onClickListener: (StatisticItem) -> Unit
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit
 ) {
+    log("Statistics")
     Row(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.weight(1f)) {
             val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
             IconWithText(
                 iconResId = R.drawable.ic_views_count,
                 text = viewsItem.count.toString(),
-                onClickListener = { onClickListener(viewsItem) }
+                onClickListener = { onViewsClickListener(viewsItem) }
             )
         }
         Row(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            log("Statistics shares")
             val sharesItem = statistics.getItemByType(StatisticType.SHARES)
             IconWithText(
                 iconResId = R.drawable.ic_share,
                 text = sharesItem.count.toString(),
-                onClickListener = { onClickListener(sharesItem) }
+                onClickListener = { onShareClickListener(sharesItem) }
             )
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
+            log("Statistics comment")
             IconWithText(
                 iconResId = R.drawable.ic_comment,
                 text = commentsItem.count.toString(),
-                onClickListener = { onClickListener(commentsItem) }
+                onClickListener = { onCommentClickListener(commentsItem) }
             )
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
+            log("Statistics likes")
             IconWithText(
                 iconResId = R.drawable.ic_like,
                 text = likesItem.count.toString(),
-                onClickListener = { onClickListener(likesItem) }
+                onClickListener = { onLikeClickListener(likesItem) }
             )
         }
     }
@@ -142,35 +157,38 @@ private fun List<StatisticItem>.getItemByType(type: StatisticType): StatisticIte
 
 @Composable
 private fun PostHeader(
-    communityName: String,
-    publicationDate: String,
-    avatarResId: Int,
+    feedPost: State<FeedPost>
 ) {
+    val feedPost2 = feedPost.value
+    log("PostHeader")
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        log("PostHeader avatarResId")
         Image(
             modifier = Modifier
                 .size(50.dp)
                 .clip(CircleShape),
-            painter = painterResource(id = avatarResId),
+            painter = painterResource(id = feedPost2.avatarResId),
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column(
             modifier = Modifier.weight(1f)
         ) {
+            log("PostHeader communityName")
             Text(
-                text = communityName,
+                text = feedPost2.communityName,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = publicationDate,
+                text = feedPost2.publicationDate,
                 color = MaterialTheme.colorScheme.onSecondary
             )
         }
+        log("PostHeader icon")
         Icon(
             imageVector = Icons.Rounded.MoreVert,
             contentDescription = null,
