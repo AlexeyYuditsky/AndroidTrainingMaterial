@@ -43,14 +43,12 @@ fun PostCard(
     onCommentClickListener: (StatisticItem) -> Unit,
     onLikeClickListener: (StatisticItem) -> Unit
 ) {
-    log("PostCard")
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.scrim)
     ) {
-        log("PostCard inside start")
         Column(modifier = Modifier.padding(8.dp)) {
             PostHeader(
                 feedPost = feedPost
@@ -78,7 +76,6 @@ fun PostCard(
                 onLikeClickListener = onLikeClickListener
             )
         }
-        log("PostCard inside finish")
     }
 }
 
@@ -113,7 +110,6 @@ private fun Statistics(
     onCommentClickListener: (StatisticItem) -> Unit,
     onLikeClickListener: (StatisticItem) -> Unit
 ) {
-    log("Statistics")
     Row(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.weight(1f)) {
             val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
@@ -127,7 +123,6 @@ private fun Statistics(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            log("Statistics shares")
             val sharesItem = statistics.getItemByType(StatisticType.SHARES)
             IconWithText(
                 iconResId = R.drawable.ic_share,
@@ -135,14 +130,12 @@ private fun Statistics(
                 onClickListener = { onShareClickListener(sharesItem) }
             )
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
-            log("Statistics comment")
             IconWithText(
                 iconResId = R.drawable.ic_comment,
                 text = commentsItem.count.toString(),
                 onClickListener = { onCommentClickListener(commentsItem) }
             )
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
-            log("Statistics likes")
             IconWithText(
                 iconResId = R.drawable.ic_like,
                 text = likesItem.count.toString(),
@@ -160,12 +153,10 @@ private fun PostHeader(
     feedPost: State<FeedPost>
 ) {
     val feedPost2 = feedPost.value
-    log("PostHeader")
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        log("PostHeader avatarResId")
         Image(
             modifier = Modifier
                 .size(50.dp)
@@ -177,7 +168,6 @@ private fun PostHeader(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            log("PostHeader communityName")
             Text(
                 text = feedPost2.communityName,
                 color = MaterialTheme.colorScheme.onPrimary
@@ -188,7 +178,6 @@ private fun PostHeader(
                 color = MaterialTheme.colorScheme.onSecondary
             )
         }
-        log("PostHeader icon")
         Icon(
             imageVector = Icons.Rounded.MoreVert,
             contentDescription = null,

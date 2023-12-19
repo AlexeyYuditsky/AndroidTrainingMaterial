@@ -19,8 +19,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,22 +29,20 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alexeyyuditsky.composenew.MainViewModel
+import com.alexeyyuditsky.composenew.InstagramModel
 import com.alexeyyuditsky.composenew.R
-import com.alexeyyuditsky.composenew.log
 
 @Composable
-fun InstagramProfileCard(viewModel: MainViewModel) {
-    log("InstagramProfileCard")
-    val isFollowed: State<Boolean> = viewModel.isFollowing.observeAsState(false)
-
+fun InstagramProfileCard(
+    model: InstagramModel,
+    onFollowedButtonClickListener: (InstagramModel) -> Unit
+) {
     Card(
         modifier = Modifier.padding(8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.onBackground)
     ) {
-        log("Card")
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
@@ -68,32 +64,31 @@ fun InstagramProfileCard(viewModel: MainViewModel) {
                 UserStatistics(title = "436M", value = "Followers")
                 UserStatistics(title = "76", value = "Following")
             }
-            SimpleBigCursiveText("Instagram")
-            SimpleSmallText("#YoursToMake")
+            SimpleBigCursiveText("Following${model.id}")
+            SimpleSmallText("#${model.title}")
             SimpleSmallText("www.facebook.com/emotional_health")
-            Button(isFollowed) { viewModel.changeFollowingStatus() }
+            FollowButton(isFollowed = model.isFollowed) { onFollowedButtonClickListener(model) }
         }
     }
 }
 
 @Composable
-private fun Button(
-    isFollowed: State<Boolean>,
+private fun FollowButton(
+    isFollowed: Boolean,
     clickListener: () -> Unit
 ) {
-    log("Button")
     Button(
         onClick = { clickListener.invoke() },
         shape = RoundedCornerShape(4.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isFollowed.value) {
+            containerColor = if (isFollowed) {
                 MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
             } else {
                 MaterialTheme.colorScheme.primary
             }
         )
     ) {
-        val text = if (isFollowed.value) {
+        val text = if (isFollowed) {
             stringResource(R.string.unfollow)
         } else {
             stringResource(R.string.follow)
@@ -104,7 +99,6 @@ private fun Button(
 
 @Composable
 fun UserStatistics(title: String, value: String) {
-    log("UserStatistics")
     Column(
         modifier = Modifier.height(60.dp),
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -133,7 +127,6 @@ fun SimpleSmallText(title: String) {
 
 @Composable
 fun SimpleBigCursiveText(title: String) {
-    log("SimpleBigCursiveText")
     Text(
         text = title,
         fontSize = 32.sp,
