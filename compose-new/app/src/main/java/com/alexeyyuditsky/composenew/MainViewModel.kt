@@ -27,4 +27,10 @@ class MainViewModel : ViewModel() {
             }
         } ?: mutableListOf()
     }
+
+    fun deleteItem(model: InstagramModel) {
+        _models.value = models.value?.toMutableList()?.apply {
+            remove(model)
+        }
+    }
 }
