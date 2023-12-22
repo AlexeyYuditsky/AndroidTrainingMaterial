@@ -53,7 +53,7 @@ fun MainScreen(
         val feedPostList: State<List<FeedPost>> = viewModel.feedPostList.observeAsState(listOf())
 
         LazyColumn {
-            items(feedPostList.value, key = { it.id }) { feedPost ->
+            items(feedPostList.value) { feedPost ->
                 PostCard(
                     feedPost = feedPost,
                     onViewsClickListener = { statisticItem ->

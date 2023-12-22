@@ -14,6 +14,28 @@ class MainViewModel : ViewModel() {
     val feedPostList: LiveData<List<FeedPost>> get() = _feedPostList
 
     fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
+        val oldFeedPostList = _feedPostList.value ?: return
 
+        val oldFeedPost = oldFeedPostList.find { it.id == feedPost.id } ?: return
+
+        val newStatistics = oldFeedPost.statistics.map {
+            if (statisticItem.type == it.type) {
+                it.copy(count = it.count + 1)
+            } else {
+                it
+            }
+        }
+
+        val newFeedPost = oldFeedPost.copy(statistics = newStatistics)
+
+        val newFeedPostList = oldFeedPostList.map {
+            if (feedPost.id == it.id) {
+                newFeedPost
+            } else {
+                it
+            }
+        }
+
+        _feedPostList.value = newFeedPostList
     }
 }
