@@ -8,19 +8,12 @@ import com.alexeyyuditsky.vkclient.domain.StatisticItem
 
 class MainViewModel : ViewModel() {
 
-    private val _feedPost = MutableLiveData(FeedPost())
-    val feedPost: LiveData<FeedPost> get() = _feedPost
+    private val feedPosts = List(10) { FeedPost(id = it) }
 
-    fun update(newStatisticItem: StatisticItem) {
-        val oldStatistic = _feedPost.value?.statistics ?: throw IllegalStateException()
-        val newStatistic = oldStatistic.map { oldStatisticItem ->
-            if (oldStatisticItem.type == newStatisticItem.type) {
-                oldStatisticItem.copy(count = oldStatisticItem.count + 1)
-            } else {
-                oldStatisticItem
-            }
-        }
+    private val _feedPostList = MutableLiveData(feedPosts)
+    val feedPostList: LiveData<List<FeedPost>> get() = _feedPostList
 
-        _feedPost.value = feedPost.value?.copy(statistics = newStatistic)
+    fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
+
     }
 }

@@ -37,7 +37,7 @@ import com.alexeyyuditsky.vkclient.domain.StatisticType
 @Composable
 fun PostCard(
     modifier: Modifier = Modifier,
-    feedPost: State<FeedPost>,
+    feedPost: FeedPost,
     onViewsClickListener: (StatisticItem) -> Unit,
     onShareClickListener: (StatisticItem) -> Unit,
     onCommentClickListener: (StatisticItem) -> Unit,
@@ -55,7 +55,7 @@ fun PostCard(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = feedPost.value.contentText,
+                text = feedPost.contentText,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -63,13 +63,13 @@ fun PostCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp),
-                painter = painterResource(id = feedPost.value.contentImageResId),
+                painter = painterResource(id = feedPost.contentImageResId),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
             Spacer(modifier = Modifier.height(8.dp))
             Statistics(
-                statistics = feedPost.value.statistics,
+                statistics = feedPost.statistics,
                 onViewsClickListener = onViewsClickListener,
                 onShareClickListener = onShareClickListener,
                 onCommentClickListener = onCommentClickListener,
@@ -150,9 +150,8 @@ private fun List<StatisticItem>.getItemByType(type: StatisticType): StatisticIte
 
 @Composable
 private fun PostHeader(
-    feedPost: State<FeedPost>
+    feedPost: FeedPost
 ) {
-    val feedPost2 = feedPost.value
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -161,7 +160,7 @@ private fun PostHeader(
             modifier = Modifier
                 .size(50.dp)
                 .clip(CircleShape),
-            painter = painterResource(id = feedPost2.avatarResId),
+            painter = painterResource(id = feedPost.avatarResId),
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -169,12 +168,12 @@ private fun PostHeader(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = feedPost2.communityName,
+                text = feedPost.communityName,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = feedPost2.publicationDate,
+                text = feedPost.publicationDate,
                 color = MaterialTheme.colorScheme.onSecondary
             )
         }

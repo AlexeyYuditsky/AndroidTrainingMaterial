@@ -1,7 +1,8 @@
 package com.alexeyyuditsky.vkclient.ui.theme
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -15,9 +16,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.alexeyyuditsky.vkclient.MainViewModel
 import com.alexeyyuditsky.vkclient.domain.FeedPost
 
@@ -51,15 +50,26 @@ fun MainScreen(
             }
         }
     ) {
-        val feedPost: State<FeedPost> = viewModel.feedPost.observeAsState(FeedPost())
+        val feedPostList: State<List<FeedPost>> = viewModel.feedPostList.observeAsState(listOf())
 
-        PostCard(
-            modifier = Modifier.padding(8.dp),
-            feedPost = feedPost,
-            onViewsClickListener = viewModel::update,
-            onShareClickListener = viewModel::update,
-            onCommentClickListener = viewModel::update,
-            onLikeClickListener = viewModel::update
-        )
+        LazyColumn {
+            items(feedPostList.value, key = { it.id }) { feedPost ->
+                PostCard(
+                    feedPost = feedPost,
+                    onViewsClickListener = { statisticItem ->
+                        viewModel.updateCount(feedPost, statisticItem)
+                    },
+                    onShareClickListener = { statisticItem ->
+                        viewModel.updateCount(feedPost, statisticItem)
+                    },
+                    onCommentClickListener = { statisticItem ->
+                        viewModel.updateCount(feedPost, statisticItem)
+                    },
+                    onLikeClickListener = { statisticItem ->
+                        viewModel.updateCount(feedPost, statisticItem)
+                    }
+                )
+            }
+        }
     }
 }
