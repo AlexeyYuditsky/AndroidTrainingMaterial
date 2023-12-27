@@ -27,6 +27,7 @@ fun HomeScreen(
     val feedPostList: State<List<FeedPost>> = viewModel.feedPostList.observeAsState(listOf())
 
     LazyColumn(
+        modifier = Modifier.padding(paddingValues),
         contentPadding = PaddingValues(
             top = 16.dp,
             start = 8.dp,
@@ -46,8 +47,7 @@ fun HomeScreen(
             }
 
             SwipeToDismiss(
-                modifier = Modifier
-                    .animateItemPlacement(),
+                modifier = Modifier.animateItemPlacement(),
                 state = dismissState,
                 directions = setOf(DismissDirection.EndToStart),
                 background = {},

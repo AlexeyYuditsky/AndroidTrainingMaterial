@@ -1,5 +1,6 @@
 package com.alexeyyuditsky.vkclient
 
+import android.os.Build
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,9 +10,9 @@ import com.alexeyyuditsky.vkclient.ui.theme.NavigationItem
 
 class MainViewModel : ViewModel() {
 
-    private val feedPosts = List(10) { FeedPost(id = it) }
+    private val sourceList = List(10) { FeedPost(id = it) }
 
-    private val _feedPostList = MutableLiveData(feedPosts)
+    private val _feedPostList = MutableLiveData(sourceList)
     val feedPostList: LiveData<List<FeedPost>> get() = _feedPostList
 
     private val _selectedNavItem = MutableLiveData<NavigationItem>(NavigationItem.Home)
@@ -22,11 +23,9 @@ class MainViewModel : ViewModel() {
     }
 
     fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
-        val oldFeedPostList = _feedPostList.value ?: return
+        val oldFeedPostList = _feedPostList.value?.toMutableList() ?: return
 
-        val oldFeedPost = oldFeedPostList.find { it.id == feedPost.id } ?: return
-
-        val newStatistics = oldFeedPost.statistics.map {
+        val newStatistics = feedPost.statistics.map {
             if (statisticItem.type == it.type) {
                 it.copy(count = it.count + 1)
             } else {
@@ -34,17 +33,25 @@ class MainViewModel : ViewModel() {
             }
         }
 
-        val newFeedPost = oldFeedPost.copy(statistics = newStatistics)
+        val newFeedPost = feedPost.copy(statistics = newStatistics)
 
-        val newFeedPostList = oldFeedPostList.map {
-            if (feedPost.id == it.id) {
-                newFeedPost
+        _feedPostList.value = oldFeedPostList.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                replaceAll {
+                    if (feedPost.id == it.id) {
+                        newFeedPost
+                    } else {
+                        it
+                    }
+                }
             } else {
-                it
+                oldFeedPostList.forEachIndexed { index, it ->
+                    if (feedPost.id == it.id) {
+                        oldFeedPostList[index] = newFeedPost
+                    }
+                }
             }
         }
-
-        _feedPostList.value = newFeedPostList
     }
 
     fun remove(feedPost: FeedPost) {

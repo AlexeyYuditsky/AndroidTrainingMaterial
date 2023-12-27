@@ -22,7 +22,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,7 +35,6 @@ import com.alexeyyuditsky.vkclient.domain.StatisticType
 
 @Composable
 fun PostCard(
-    modifier: Modifier = Modifier,
     feedPost: FeedPost,
     onViewsClickListener: (StatisticItem) -> Unit,
     onShareClickListener: (StatisticItem) -> Unit,
@@ -44,15 +42,12 @@ fun PostCard(
     onLikeClickListener: (StatisticItem) -> Unit
 ) {
     Card(
-        modifier = modifier,
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.scrim)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            PostHeader(
-                feedPost = feedPost
-            )
+            PostHeader(feedPost = feedPost)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = feedPost.contentText,
