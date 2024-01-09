@@ -17,21 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.alexeyyuditsky.vkclient.MainViewModel
 import com.alexeyyuditsky.vkclient.navigation.AppNavGraph
-import com.alexeyyuditsky.vkclient.navigation.Screen
+import com.alexeyyuditsky.vkclient.navigation.rememberNavigationState
 
 @Composable
 fun MainScreen(
     viewModel: MainViewModel
 ) {
-    val navHostController = rememberNavController()
+    val navigationState = rememberNavigationState()
 
     Scaffold(
         bottomBar = {
             NavigationBar {
-                val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+                val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
 
                 val items = arrayOf(
@@ -43,15 +42,7 @@ fun MainScreen(
                 items.forEach { item ->
                     NavigationBarItem(
                         selected = currentRoute == item.screen.route,
-                        onClick = {
-                            navHostController.navigate(item.screen.route) {
-                                launchSingleTop = true
-                                restoreState = true
-                                popUpTo(Screen.NewsFeed.route) {
-                                    saveState = true
-                                }
-                            }
-                        },
+                        onClick = { navigationState.navigateTo(item.screen.route) },
                         icon = { Icon(imageVector = item.icon, contentDescription = null) },
                         label = { Text(text = stringResource(id = item.id)) },
                         colors = NavigationBarItemDefaults.colors(
@@ -64,7 +55,7 @@ fun MainScreen(
         }
     ) { paddingValues ->
         AppNavGraph(
-            navHostController = navHostController,
+            navHostController = navigationState.navHostController,
             homeScreenContent = {
                 HomeScreen(
                     viewModel = viewModel,

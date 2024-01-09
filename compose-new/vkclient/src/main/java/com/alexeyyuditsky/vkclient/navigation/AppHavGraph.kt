@@ -27,5 +27,4 @@ fun AppNavGraph(
             profileScreenContent()
         }
     }
-
 }
