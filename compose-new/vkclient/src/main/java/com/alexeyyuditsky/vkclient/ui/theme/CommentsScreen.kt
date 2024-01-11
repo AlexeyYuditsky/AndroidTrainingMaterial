@@ -2,6 +2,7 @@ package com.alexeyyuditsky.vkclient.ui.theme
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -27,7 +29,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alexeyyuditsky.vkclient.R
 import com.alexeyyuditsky.vkclient.domain.FeedPost
 import com.alexeyyuditsky.vkclient.domain.PostComment
 
@@ -50,13 +51,19 @@ fun CommentsScreen(
         }
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
+            contentPadding = PaddingValues(
+                top = 16.dp,
+                start = 8.dp,
+                end = 8.dp,
+                bottom = 86.dp
+            )
         ) {
             items(
                 items = comments,
                 key = { it.id }
-            ) {
-                CommentItem(comments.first())
+            ) { comment ->
+                CommentItem(comment)
             }
         }
     }
@@ -67,7 +74,12 @@ private fun CommentItem(
     comment: PostComment
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 16.dp,
+                vertical = 4.dp
+            )
     ) {
         Image(
             modifier = Modifier
@@ -80,11 +92,21 @@ private fun CommentItem(
         Column {
             Text(
                 text = "${comment.authorName} CommentId: ${comment.id}",
-                fontSize = 12.sp
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onPrimary
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = comment.commentText)
-            Text(text = comment.publicationDate)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = comment.commentText,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = comment.publicationDate,
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSecondary
+            )
         }
     }
 }
@@ -92,5 +114,7 @@ private fun CommentItem(
 @Composable
 @Preview
 private fun PreviewCommentItem() {
-    CommentItem(comment = PostComment(0))
+    VkClientTheme {
+        CommentItem(comment = PostComment(0))
+    }
 }
