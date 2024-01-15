@@ -6,14 +6,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alexeyyuditsky.vkclient.domain.FeedPost
 import com.alexeyyuditsky.vkclient.domain.StatisticItem
+import com.alexeyyuditsky.vkclient.ui.theme.HomeScreenState
 import com.alexeyyuditsky.vkclient.ui.theme.NavigationItem
 
 class MainViewModel : ViewModel() {
 
     private val sourceList = List(10) { FeedPost(id = it) }
 
-    private val _feedPostList = MutableLiveData(sourceList)
-    val feedPostList: LiveData<List<FeedPost>> get() = _feedPostList
+    private val initialState = HomeScreenState.FeedPosts(sourceList)
+
+    private val _screenState = MutableLiveData<HomeScreenState>(initialState)
+    val screenState: LiveData<HomeScreenState> get() = _screenState
 
     private val _selectedNavItem = MutableLiveData<NavigationItem>(NavigationItem.Home)
     val selectedNavItem: LiveData<NavigationItem> get() = _selectedNavItem
@@ -23,7 +26,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
-        val oldFeedPostList = _feedPostList.value?.toMutableList() ?: return
+        val oldFeedPostList = _screenState.value?.toMutableList() ?: return
 
         val newStatistics = feedPost.statistics.map {
             if (statisticItem.type == it.type) {
@@ -35,7 +38,7 @@ class MainViewModel : ViewModel() {
 
         val newFeedPost = feedPost.copy(statistics = newStatistics)
 
-        _feedPostList.value = oldFeedPostList.apply {
+        _screenState.value = oldFeedPostList.apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 replaceAll {
                     if (feedPost.id == it.id) {
@@ -55,6 +58,6 @@ class MainViewModel : ViewModel() {
     }
 
     fun remove(feedPost: FeedPost) {
-        _feedPostList.value = feedPostList.value?.filter { it != feedPost }
+        _screenState.value = screenState.value?.filter { it != feedPost }
     }
 }

@@ -113,8 +113,6 @@ private fun CommentItem(
 
 @Composable
 @Preview
-private fun PreviewCommentItem() {
-    VkClientTheme {
-        CommentItem(comment = PostComment(0))
-    }
+private fun PreviewCommentItem() = VkClientTheme {
+    CommentItem(comment = PostComment(0))
 }
