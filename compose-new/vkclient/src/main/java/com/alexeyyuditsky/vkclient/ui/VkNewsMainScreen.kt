@@ -1,4 +1,4 @@
-package com.alexeyyuditsky.vkclient.ui.theme
+package com.alexeyyuditsky.vkclient.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon

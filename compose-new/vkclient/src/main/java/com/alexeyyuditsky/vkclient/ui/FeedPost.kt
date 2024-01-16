@@ -1,4 +1,4 @@
-package com.alexeyyuditsky.vkclient.ui.theme
+package com.alexeyyuditsky.vkclient.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -11,44 +11,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alexeyyuditsky.vkclient.MainViewModel
 import com.alexeyyuditsky.vkclient.domain.FeedPost
-
-@Composable
-fun HomeScreen(
-    viewModel: MainViewModel,
-    paddingValues: PaddingValues
-) {
-    val screenState: State<HomeScreenState> =
-        viewModel.screenState.observeAsState(HomeScreenState.Initial)
-
-    when (val state = screenState.value) {
-        is HomeScreenState.Initial -> {}
-
-        is HomeScreenState.FeedPosts -> {
-            FeedPosts(
-                viewModel = viewModel,
-                paddingValues = paddingValues,
-                feedPosts = state.feedPosts
-            )
-        }
-
-        is HomeScreenState.Comments -> {
-            CommentsScreen(
-                feedPost = state.feedPost,
-                comments = state.comments
-            )
-        }
-    }
-}
+import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun FeedPosts(
+fun FeedPost(
     viewModel: MainViewModel,
     paddingValues: PaddingValues,
     feedPosts: List<FeedPost>
@@ -82,8 +54,8 @@ fun FeedPosts(
                         onShareClickListener = { statisticItem ->
                             viewModel.updateCount(feedPost, statisticItem)
                         },
-                        onCommentClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost, statisticItem)
+                        onCommentClickListener = {
+                            viewModel.showComments(feedPost)
                         },
                         onLikeClickListener = { statisticItem ->
                             viewModel.updateCount(feedPost, statisticItem)
@@ -93,4 +65,14 @@ fun FeedPosts(
             )
         }
     }
+}
+
+@Composable
+@Preview
+private fun FeedPostsPreview() = VkClientTheme {
+    FeedPost(
+        viewModel = MainViewModel(),
+        paddingValues = PaddingValues(0.dp),
+        feedPosts = listOf(FeedPost(0), FeedPost(1), FeedPost(2), FeedPost(3), FeedPost(4))
+    )
 }

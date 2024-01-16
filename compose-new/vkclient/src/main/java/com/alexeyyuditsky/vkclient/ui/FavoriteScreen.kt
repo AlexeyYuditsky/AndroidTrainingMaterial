@@ -1,4 +1,4 @@
-package com.alexeyyuditsky.vkclient.ui.theme
+package com.alexeyyuditsky.vkclient.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,7 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.alexeyyuditsky.vkclient.MainViewModel
+import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 @Composable
 fun FavoriteScreen(
@@ -24,4 +27,10 @@ fun FavoriteScreen(
             color = Color.Black
         )
     }
+}
+
+@Composable
+@Preview
+private fun FavoriteScreenPreview() = VkClientTheme {
+    FavoriteScreen(viewModel = MainViewModel(), paddingValues = PaddingValues(0.dp))
 }

@@ -1,4 +1,4 @@
-package com.alexeyyuditsky.vkclient.ui.theme
+package com.alexeyyuditsky.vkclient.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -31,19 +31,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alexeyyuditsky.vkclient.domain.FeedPost
 import com.alexeyyuditsky.vkclient.domain.PostComment
+import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommentsScreen(
+fun CommentScreen(
     feedPost: FeedPost,
-    comments: List<PostComment>
+    comments: List<PostComment>,
+    onBackPressed: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Comments for FeedPost id:${feedPost.id}") },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = { onBackPressed() }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                     }
                 }
@@ -114,5 +116,9 @@ private fun CommentItem(
 @Composable
 @Preview
 private fun PreviewCommentItem() = VkClientTheme {
-    CommentItem(comment = PostComment(0))
+    CommentScreen(
+        feedPost = FeedPost(0),
+        comments = listOf(PostComment(0), PostComment(1), PostComment(2), PostComment(3)),
+        onBackPressed = {}
+    )
 }

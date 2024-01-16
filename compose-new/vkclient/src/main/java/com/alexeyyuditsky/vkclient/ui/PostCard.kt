@@ -1,4 +1,4 @@
-package com.alexeyyuditsky.vkclient.ui.theme
+package com.alexeyyuditsky.vkclient.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -38,7 +38,7 @@ fun PostCard(
     feedPost: FeedPost,
     onViewsClickListener: (StatisticItem) -> Unit,
     onShareClickListener: (StatisticItem) -> Unit,
-    onCommentClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: () -> Unit,
     onLikeClickListener: (StatisticItem) -> Unit
 ) {
     Card(
@@ -102,7 +102,7 @@ private fun Statistics(
     statistics: List<StatisticItem>,
     onViewsClickListener: (StatisticItem) -> Unit,
     onShareClickListener: (StatisticItem) -> Unit,
-    onCommentClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: () -> Unit,
     onLikeClickListener: (StatisticItem) -> Unit
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
@@ -128,7 +128,7 @@ private fun Statistics(
             IconWithText(
                 iconResId = R.drawable.ic_comment,
                 text = commentsItem.count.toString(),
-                onClickListener = { onCommentClickListener(commentsItem) }
+                onClickListener = { onCommentClickListener() }
             )
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
             IconWithText(
