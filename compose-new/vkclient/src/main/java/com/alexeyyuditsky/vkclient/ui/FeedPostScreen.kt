@@ -14,17 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alexeyyuditsky.vkclient.MainViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alexeyyuditsky.vkclient.domain.FeedPost
 import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun FeedPost(
-    viewModel: MainViewModel,
-    paddingValues: PaddingValues,
+fun FeedPostScreen(
     feedPosts: List<FeedPost>
 ) {
+    val viewModel = viewModel(modelClass = FeedPostsViewModel::class.java)
+
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
         contentPadding = PaddingValues(8.dp),
@@ -70,9 +70,7 @@ fun FeedPost(
 @Composable
 @Preview
 private fun FeedPostsPreview() = VkClientTheme {
-    FeedPost(
-        viewModel = MainViewModel(),
-        paddingValues = PaddingValues(0.dp),
+    FeedPostScreen(
         feedPosts = listOf(FeedPost(0), FeedPost(1), FeedPost(2), FeedPost(3), FeedPost(4))
     )
 }

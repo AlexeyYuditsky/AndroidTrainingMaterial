@@ -17,13 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.alexeyyuditsky.vkclient.MainViewModel
 import com.alexeyyuditsky.vkclient.navigation.AppNavGraph
 import com.alexeyyuditsky.vkclient.navigation.rememberNavigationState
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel
+    viewModel: FeedPostsViewModel
 ) {
     val navigationState = rememberNavigationState()
 

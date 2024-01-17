@@ -10,12 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alexeyyuditsky.vkclient.MainViewModel
 import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 @Composable
 fun FavoriteScreen(
-    viewModel: MainViewModel,
+    viewModel: FeedPostsViewModel,
     paddingValues: PaddingValues
 ) {
     Box(
@@ -32,5 +31,5 @@ fun FavoriteScreen(
 @Composable
 @Preview
 private fun FavoriteScreenPreview() = VkClientTheme {
-    FavoriteScreen(viewModel = MainViewModel(), paddingValues = PaddingValues(0.dp))
+    FavoriteScreen(viewModel = FeedPostsViewModel(), paddingValues = PaddingValues(0.dp))
 }

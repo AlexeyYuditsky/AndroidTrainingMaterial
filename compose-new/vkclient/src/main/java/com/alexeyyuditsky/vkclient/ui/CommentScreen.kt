@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alexeyyuditsky.vkclient.domain.FeedPost
 import com.alexeyyuditsky.vkclient.domain.PostComment
 import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
@@ -36,10 +37,10 @@ import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentScreen(
-    feedPost: FeedPost,
-    comments: List<PostComment>,
     onBackPressed: () -> Unit
 ) {
+    val viewModel = viewModel(modelClass = CommentsViewModel::class.java)
+
     Scaffold(
         topBar = {
             TopAppBar(

@@ -1,14 +1,14 @@
 package com.alexeyyuditsky.vkclient.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
-import com.alexeyyuditsky.vkclient.MainViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: MainViewModel,
     paddingValues: PaddingValues
 ) {
     val screenState: State<HomeScreenState> =
@@ -18,19 +18,16 @@ fun HomeScreen(
         is HomeScreenState.Initial -> {}
 
         is HomeScreenState.Posts -> {
-            FeedPost(
-                viewModel = viewModel,
-                paddingValues = paddingValues,
-                feedPosts = state.feedPosts
+            FeedPostScreen(
+                feedPosts = state.posts
             )
         }
 
         is HomeScreenState.Comments -> {
             CommentScreen(
-                feedPost = state.feedPost,
-                comments = state.comments,
                 onBackPressed = { viewModel.closeCommentScreen() }
             )
+            BackHandler(onBack = { viewModel.closeCommentScreen() })
         }
     }
 }

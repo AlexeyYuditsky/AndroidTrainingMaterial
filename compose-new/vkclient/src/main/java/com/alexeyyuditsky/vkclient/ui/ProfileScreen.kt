@@ -15,12 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alexeyyuditsky.vkclient.MainViewModel
 import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 @Composable
 fun ProfileScreen(
-    viewModel: MainViewModel,
+    viewModel: FeedPostsViewModel,
     paddingValues: PaddingValues
 ) {
     var counter by remember {
@@ -42,5 +41,5 @@ fun ProfileScreen(
 @Composable
 @Preview
 private fun ProfileScreenPreview() = VkClientTheme {
-    ProfileScreen(viewModel = MainViewModel(), paddingValues = PaddingValues(0.dp))
+    ProfileScreen(viewModel = FeedPostsViewModel(), paddingValues = PaddingValues(0.dp))
 }

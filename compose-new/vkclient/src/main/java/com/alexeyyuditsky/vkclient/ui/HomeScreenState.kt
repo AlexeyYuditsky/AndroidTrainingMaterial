@@ -7,7 +7,7 @@ sealed interface HomeScreenState {
 
     object Initial : HomeScreenState
 
-    class Posts(val feedPosts: List<FeedPost>) : HomeScreenState
+    class Posts(val posts: List<FeedPost>) : HomeScreenState
 
     class Comments(val feedPost: FeedPost, val comments: List<PostComment>) : HomeScreenState
 }
