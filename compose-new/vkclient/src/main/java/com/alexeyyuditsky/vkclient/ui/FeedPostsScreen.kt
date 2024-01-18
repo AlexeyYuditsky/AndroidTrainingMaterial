@@ -20,8 +20,10 @@ import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun FeedPostScreen(
-    feedPosts: List<FeedPost>
+fun FeedPostsScreen(
+    paddingValues: PaddingValues,
+    feedPosts: List<FeedPost>,
+    onCommentsClickListener: (FeedPost) -> Unit
 ) {
     val viewModel = viewModel(modelClass = FeedPostsViewModel::class.java)
 
@@ -55,7 +57,7 @@ fun FeedPostScreen(
                             viewModel.updateCount(feedPost, statisticItem)
                         },
                         onCommentClickListener = {
-                            viewModel.showComments(feedPost)
+                            onCommentsClickListener(feedPost)
                         },
                         onLikeClickListener = { statisticItem ->
                             viewModel.updateCount(feedPost, statisticItem)
@@ -70,7 +72,8 @@ fun FeedPostScreen(
 @Composable
 @Preview
 private fun FeedPostsPreview() = VkClientTheme {
-    FeedPostScreen(
+    FeedPostsScreen(
+        paddingValues = PaddingValues(),
         feedPosts = listOf(FeedPost(0), FeedPost(1), FeedPost(2), FeedPost(3), FeedPost(4))
-    )
+    ) {}
 }

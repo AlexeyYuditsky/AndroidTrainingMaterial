@@ -21,9 +21,7 @@ import com.alexeyyuditsky.vkclient.navigation.AppNavGraph
 import com.alexeyyuditsky.vkclient.navigation.rememberNavigationState
 
 @Composable
-fun MainScreen(
-    viewModel: FeedPostsViewModel
-) {
+fun MainScreen() {
     val navigationState = rememberNavigationState()
 
     Scaffold(
@@ -57,8 +55,8 @@ fun MainScreen(
             navHostController = navigationState.navHostController,
             homeScreenContent = {
                 HomeScreen(
-                    viewModel = viewModel,
-                    paddingValues = paddingValues
+                    paddingValues = paddingValues,
+                    onCommentsClickListener = {}
                 )
             },
             favouriteScreenContent = { TextCounter(name = "Favourite") },

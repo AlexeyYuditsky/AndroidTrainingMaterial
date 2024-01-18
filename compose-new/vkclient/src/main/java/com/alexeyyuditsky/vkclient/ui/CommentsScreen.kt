@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -36,15 +37,18 @@ import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommentScreen(
+fun CommentsScreen(
     onBackPressed: () -> Unit
 ) {
-    val viewModel = viewModel(modelClass = CommentsViewModel::class.java)
+    val viewModel = viewModel<CommentsViewModel>()
+    val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
+    val currentState = screenState.value
+    if (currentState !is CommentsScreenState.Comments) return
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Comments for FeedPost id:${feedPost.id}") },
+                title = { Text(text = "Comments for FeedPost id:${currentState.feedPost.id}") },
                 navigationIcon = {
                     IconButton(onClick = { onBackPressed() }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
@@ -63,7 +67,7 @@ fun CommentScreen(
             )
         ) {
             items(
-                items = comments,
+                items = currentState.comments,
                 key = { it.id }
             ) { comment ->
                 CommentItem(comment)
@@ -117,9 +121,5 @@ private fun CommentItem(
 @Composable
 @Preview
 private fun PreviewCommentItem() = VkClientTheme {
-    CommentScreen(
-        feedPost = FeedPost(0),
-        comments = listOf(PostComment(0), PostComment(1), PostComment(2), PostComment(3)),
-        onBackPressed = {}
-    )
+    CommentsScreen {}
 }

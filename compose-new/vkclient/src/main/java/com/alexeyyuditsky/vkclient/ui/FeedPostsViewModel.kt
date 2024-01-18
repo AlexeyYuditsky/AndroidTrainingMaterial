@@ -11,19 +11,14 @@ class FeedPostsViewModel : ViewModel() {
 
     private val postList = List(10) { FeedPost(id = it) }
 
-    private val _screenState = MutableLiveData<HomeScreenState>(HomeScreenState.Initial)
-    val screenState: LiveData<HomeScreenState> get() = _screenState
+    private val initialState = FeedPostScreenState.Posts(postList)
 
-    private val _selectedNavItem = MutableLiveData<NavigationItem>(NavigationItem.Home)
-    val selectedNavItem: LiveData<NavigationItem> get() = _selectedNavItem
-
-    fun selectNavItem(navItem: NavigationItem) {
-        _selectedNavItem.value = navItem
-    }
+    private val _screenState = MutableLiveData<FeedPostScreenState>(initialState)
+    val screenState: LiveData<FeedPostScreenState> get() = _screenState
 
     fun updateCount(feedPost: FeedPost, statisticItem: StatisticItem) {
         val state = screenState.value
-        if (state !is HomeScreenState.Posts) return
+        if (state !is FeedPostScreenState.Posts) return
 
         val oldFeedPostList = state.posts.toMutableList()
 
@@ -55,14 +50,14 @@ class FeedPostsViewModel : ViewModel() {
             }
         }
 
-        _screenState.value = HomeScreenState.Posts(posts = newPosts)
+        _screenState.value = FeedPostScreenState.Posts(posts = newPosts)
     }
 
     fun remove(feedPost: FeedPost) {
         val state = screenState.value
-        if (state !is HomeScreenState.Posts) return
+        if (state !is FeedPostScreenState.Posts) return
 
         val newPosts = state.posts.filter { it != feedPost }
-        _screenState.value = HomeScreenState.Posts(newPosts)
+        _screenState.value = FeedPostScreenState.Posts(newPosts)
     }
 }
