@@ -25,7 +25,7 @@ fun FeedPostsScreen(
     feedPosts: List<FeedPost>,
     onCommentsClickListener: (FeedPost) -> Unit
 ) {
-    val viewModel = viewModel(modelClass = FeedPostsViewModel::class.java)
+    val viewModel = viewModel<FeedPostsViewModel>()
 
     LazyColumn(
         modifier = Modifier.padding(paddingValues),

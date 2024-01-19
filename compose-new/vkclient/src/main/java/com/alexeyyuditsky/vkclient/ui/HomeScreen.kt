@@ -10,7 +10,7 @@ import com.alexeyyuditsky.vkclient.domain.FeedPost
 @Composable
 fun HomeScreen(
     paddingValues: PaddingValues,
-    onCommentsClickListener: (FeedPost) -> Unit
+    onCommentClickListener: (FeedPost) -> Unit
 ) {
     val viewModel = viewModel<FeedPostsViewModel>()
 
@@ -22,7 +22,7 @@ fun HomeScreen(
         is FeedPostScreenState.Posts -> FeedPostsScreen(
             paddingValues = paddingValues,
             feedPosts = state.posts,
-            onCommentsClickListener = onCommentsClickListener
+            onCommentsClickListener = onCommentClickListener
         )
     }
 }

@@ -41,6 +41,7 @@ fun CommentsScreen(
     onBackPressed: () -> Unit
 ) {
     val viewModel = viewModel<CommentsViewModel>()
+   // viewModel.loadComments(FeedPost(0))
     val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
     val currentState = screenState.value
     if (currentState !is CommentsScreenState.Comments) return
