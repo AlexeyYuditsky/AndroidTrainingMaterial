@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.alexeyyuditsky.vkclient.domain.FeedPost
-import com.alexeyyuditsky.vkclient.domain.PostComment
 import com.alexeyyuditsky.vkclient.navigation.AppNavGraph
 import com.alexeyyuditsky.vkclient.navigation.rememberNavigationState
 
@@ -63,10 +62,11 @@ fun MainScreen() {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             homeScreenContent = {
-                commentsToPost.value?.let {
-                    CommentsScreen {
-                        commentsToPost.value = null
-                    }
+                commentsToPost.value?.let { feedPost ->
+                    CommentsScreen(
+                        feedPost = feedPost,
+                        onBackPressed = { commentsToPost.value = null }
+                    )
                 } ?: HomeScreen(
                     paddingValues = paddingValues,
                     onCommentClickListener = { feedPost -> commentsToPost.value = feedPost }

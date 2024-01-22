@@ -38,12 +38,14 @@ import com.alexeyyuditsky.vkclient.ui.theme.VkClientTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommentsScreen(
+    feedPost: FeedPost,
     onBackPressed: () -> Unit
 ) {
-    val viewModel = viewModel<CommentsViewModel>()
-   // viewModel.loadComments(FeedPost(0))
+    val viewModel = viewModel<CommentsViewModel>(factory = ViewModelFactory(feedPost))
+
     val screenState = viewModel.screenState.observeAsState(CommentsScreenState.Initial)
     val currentState = screenState.value
+
     if (currentState !is CommentsScreenState.Comments) return
 
     Scaffold(
@@ -122,5 +124,8 @@ private fun CommentItem(
 @Composable
 @Preview
 private fun PreviewCommentItem() = VkClientTheme {
-    CommentsScreen {}
+    CommentsScreen(
+        feedPost = FeedPost(),
+        onBackPressed = {}
+    )
 }

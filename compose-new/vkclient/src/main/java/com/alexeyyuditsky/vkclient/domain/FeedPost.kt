@@ -3,7 +3,7 @@ package com.alexeyyuditsky.vkclient.domain
 import com.alexeyyuditsky.vkclient.R
 
 data class FeedPost(
-    val id: Int,
+    val id: Int = 0,
     val communityName: String = "/dev/null",
     val publicationDate: String = "14:00",
     val avatarResId: Int = R.drawable.post_comunity_thumbnail,
