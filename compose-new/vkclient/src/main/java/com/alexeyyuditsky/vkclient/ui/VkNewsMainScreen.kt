@@ -71,7 +71,7 @@ fun MainScreen() {
                     paddingValues = paddingValues,
                     onCommentClickListener = { feedPost ->
                         commentsToPost.value = feedPost
-                        navigationState.navigateTo(Screen.Comments.route)
+                        navigationState.navigateToComments()
                     }
                 )
             },

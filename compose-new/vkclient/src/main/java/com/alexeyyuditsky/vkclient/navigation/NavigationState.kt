@@ -18,6 +18,8 @@ class NavigationState(
             restoreState = true
         }
     }
+
+    fun navigateToComments() = navHostController.navigate(Screen.Comments.route)
 }
 
 @Composable
