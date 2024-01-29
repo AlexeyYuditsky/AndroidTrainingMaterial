@@ -1,5 +1,7 @@
 package com.alexeyyuditsky.vkclient.navigation
 
+import com.alexeyyuditsky.vkclient.domain.FeedPost
+
 sealed class Screen(
     val route: String
 ) {
@@ -8,7 +10,10 @@ sealed class Screen(
     object Profile : Screen(ROUTE_PROFILE)
 
     object NewsFeed : Screen(ROUTE_NEWS_FEED)
-    object Comments : Screen(ROUTE_COMMENTS)
+
+    object Comments : Screen(ROUTE_COMMENTS) {
+        fun getRouteWithArgs(feedPost: FeedPost): String = "$ROUTE_COMMENTS/${feedPost.id}"
+    }
 
     private companion object {
         const val ROUTE_HOME = "home"

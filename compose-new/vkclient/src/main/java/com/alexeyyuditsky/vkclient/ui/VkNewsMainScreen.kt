@@ -23,16 +23,12 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.alexeyyuditsky.vkclient.domain.FeedPost
 import com.alexeyyuditsky.vkclient.navigation.AppNavGraph
-import com.alexeyyuditsky.vkclient.navigation.Screen
+import com.alexeyyuditsky.vkclient.navigation.NavigationState
 import com.alexeyyuditsky.vkclient.navigation.rememberNavigationState
 
 @Composable
 fun MainScreen() {
-    val navigationState = rememberNavigationState()
-
-    val commentsToPost: MutableState<FeedPost?> = remember {
-        mutableStateOf(null)
-    }
+    val navigationState: NavigationState = rememberNavigationState()
 
     Scaffold(
         bottomBar = {
@@ -70,14 +66,13 @@ fun MainScreen() {
                 HomeScreen(
                     paddingValues = paddingValues,
                     onCommentClickListener = { feedPost ->
-                        commentsToPost.value = feedPost
-                        navigationState.navigateToComments()
+                        navigationState.navigateToComments(feedPost)
                     }
                 )
             },
-            commentsScreenContent = {
+            commentsScreenContent = { feedPost ->
                 CommentsScreen(
-                    feedPost = commentsToPost.value!!,
+                    feedPost = feedPost,
                     onBackPressed = { navigationState.navHostController.popBackStack() }
                 )
             },
