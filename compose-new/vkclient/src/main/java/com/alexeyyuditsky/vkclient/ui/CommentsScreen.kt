@@ -51,7 +51,7 @@ fun CommentsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Comments for FeedPost id:${currentState.feedPost.id}") },
+                title = { Text(text = "Comments for FeedPost id:${currentState.feedPost.contentText}") },
                 navigationIcon = {
                     IconButton(onClick = { onBackPressed() }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
