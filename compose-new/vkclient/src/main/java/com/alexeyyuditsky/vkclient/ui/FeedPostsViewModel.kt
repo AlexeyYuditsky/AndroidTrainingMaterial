@@ -9,7 +9,7 @@ import com.alexeyyuditsky.vkclient.domain.StatisticItem
 
 class FeedPostsViewModel : ViewModel() {
 
-    private val postList = List(10) { FeedPost(id = it, contentText = "content $it") }
+    private val postList = List(10) { FeedPost(id = it, contentText = "con/tent $it") }
 
     private val initialState = FeedPostScreenState.Posts(postList)
 

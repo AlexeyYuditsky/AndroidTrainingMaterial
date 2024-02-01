@@ -22,7 +22,6 @@ class NavigationState(
 
     fun navigateToComments(feedPost: FeedPost) {
         val route: String = Screen.Comments.getRouteWithArgs(feedPost)
-
         navHostController.navigate(route)
     }
 }

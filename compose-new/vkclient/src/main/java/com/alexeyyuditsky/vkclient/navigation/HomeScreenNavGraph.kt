@@ -1,5 +1,6 @@
 package com.alexeyyuditsky.vkclient.navigation
 
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -7,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.alexeyyuditsky.vkclient.domain.FeedPost
+import com.alexeyyuditsky.vkclient.domain.FeedPostType
 
 fun NavGraphBuilder.homeScreenNavGraph(
     newsFeedScreenContent: @Composable () -> Unit,
@@ -22,22 +24,20 @@ fun NavGraphBuilder.homeScreenNavGraph(
         composable(
             route = Screen.Comments.route,
             arguments = listOf(
-                navArgument(Screen.KEY_FEED_POST_ID) {
-                    type = NavType.IntType
-                },
-                navArgument(Screen.KEY_FEED_POST_TEXT) {
-                    type = NavType.StringType
+                navArgument(Screen.KEY_FEED_POST) {
+                    type = NavType.FeedPostType
                 }
             )
         ) {
-            val feedPostId = it.arguments?.getInt(Screen.KEY_FEED_POST_ID) ?: 0
-            val contentText = it.arguments?.getString(Screen.KEY_FEED_POST_TEXT) ?: ""
-            commentsScreenContent(
-                FeedPost(
-                    id = feedPostId,
-                    contentText = contentText
-                )
-            )
+            val arguments = it.arguments ?: throw RuntimeException("args is null")
+            val feedPost = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arguments.getParcelable(Screen.KEY_FEED_POST, FeedPost::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                arguments.getParcelable(Screen.KEY_FEED_POST)
+            } as FeedPost
+
+            commentsScreenContent(feedPost)
         }
     }
 }
