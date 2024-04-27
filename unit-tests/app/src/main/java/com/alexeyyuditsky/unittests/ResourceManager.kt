@@ -142,5 +142,4 @@ class ResourceManager<R>(
             }
         }
     }
-
 }
