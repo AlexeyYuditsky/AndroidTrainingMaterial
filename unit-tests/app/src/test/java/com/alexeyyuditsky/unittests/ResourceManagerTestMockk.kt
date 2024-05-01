@@ -5,7 +5,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.concurrent.Executor
 
-class ResourceManagerTest2 {
+class ResourceManagerTestMockk {
 
     @Test
     fun consumeResourceAfterSetResourceCallReceivesResource() {
