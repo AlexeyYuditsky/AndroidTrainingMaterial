@@ -365,7 +365,7 @@ class ResourceManagerTestJunit {
     }
 
     @Test
-    fun `setResource invokes pending consimer in executor`() {
+    fun `setResource invokes pending consumer in executor`() {
         val executor = TestExecutor(autoExec = false)
         val resourceManager = createResourceManager(executor = executor)
         val consumer = TestConsumer()
