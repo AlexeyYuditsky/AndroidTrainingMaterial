@@ -59,7 +59,7 @@ open class BaseRetrofitSource(
         }
     }
 
-    class ErrorResponseBody(
+    private class ErrorResponseBody(
         val error: String
     )
 

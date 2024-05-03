@@ -1,6 +1,5 @@
 package ua.cn.stu.tests.domain
 
-
 open class AppException : RuntimeException {
     constructor() : super()
     constructor(message: String) : super(message)
