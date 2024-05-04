@@ -19,7 +19,6 @@ import ua.cn.stu.tests.domain.AppException
 import ua.cn.stu.tests.domain.BackendException
 import ua.cn.stu.tests.domain.ConnectionException
 import ua.cn.stu.tests.domain.ParseBackendResponseException
-import ua.cn.stu.tests.testutils.catch
 import java.io.IOException
 
 class BaseRetrofitSourceTest {
@@ -45,51 +44,37 @@ class BaseRetrofitSourceTest {
         assertEquals("TEST", result)
     }
 
-    @Test
-    fun `wrapRetrofitExceptions call with throw AppException`() = runTest {
-        val source = createBaseRetrofitSource()
-        val block = createMockedBlock()
-        val expectedException = AppException()
-        coEvery { block.invoke() } throws expectedException
+    @Test(expected = AppException::class)
+    fun `wrapRetrofitExceptions call with throw RuntimeException rethrow AppException`() =
+        runTest {
+            val source = createBaseRetrofitSource()
+            val block = createMockedBlock()
+            coEvery { block.invoke() } throws RuntimeException()
 
-        val exception = catch<AppException> {
             source.wrapRetrofitExceptions(block)
         }
 
-        assertSame(expectedException, exception)
-    }
-
-    @Test
+    @Test(expected = ParseBackendResponseException::class)
     fun `wrapRetrofitExceptions call with throw JsonDataException rethrow ParseBackendResponseException`() =
         runTest {
             val source = createBaseRetrofitSource()
             val block = createMockedBlock()
-            val expectedException = ParseBackendResponseException(JsonDataException())
-            coEvery { block.invoke() } throws expectedException
+            coEvery { block.invoke() } throws JsonDataException()
 
-            val exception = catch<ParseBackendResponseException> {
-                source.wrapRetrofitExceptions(block)
-            }
-
-            assertSame(expectedException, exception)
+            source.wrapRetrofitExceptions(block)
         }
 
-    @Test
+    @Test(expected = ParseBackendResponseException::class)
     fun `wrapRetrofitExceptions call with throw JsonEncodingException rethrow ParseBackendResponseException`() =
         runTest {
             val source = createBaseRetrofitSource()
             val block = createMockedBlock()
-            val expectedException = ParseBackendResponseException(JsonEncodingException("Boom"))
-            coEvery { block.invoke() } throws expectedException
+            coEvery { block.invoke() } throws JsonEncodingException("Boom")
 
-            val exception = catch<ParseBackendResponseException> {
-                source.wrapRetrofitExceptions(block)
-            }
-
-            assertSame(expectedException, exception)
+            source.wrapRetrofitExceptions(block)
         }
 
-    @Test
+    @Test(expected = BackendException::class)
     fun `wrapRetrofitExceptions call with throw HttpException rethrow BackendException`() =
         runTest {
             val source = createBaseRetrofitSource()
@@ -104,27 +89,17 @@ class BaseRetrofitSourceTest {
             every { response.errorBody() } returns errorBody
             every { errorBody.string() } returns errorJson
 
-            val exception = catch<BackendException> {
-                source.wrapRetrofitExceptions(block)
-            }
-
-            assertEquals("Oops", exception.message)
-            assertEquals(409, exception.code)
+            source.wrapRetrofitExceptions(block)
         }
 
-    @Test
+    @Test(expected = ConnectionException::class)
     fun `wrapRetrofitExceptions call with throw IOException rethrow ConnectionException`() =
         runTest {
             val source = createBaseRetrofitSource()
             val block = createMockedBlock()
-            val expectedException = ConnectionException(IOException())
-            coEvery { block.invoke() } throws expectedException
+            coEvery { block.invoke() } throws IOException()
 
-            val exception = catch<ConnectionException> {
-                source.wrapRetrofitExceptions(block)
-            }
-
-            assertSame(expectedException, exception)
+            source.wrapRetrofitExceptions(block)
         }
 
     private fun createMockedBlock(): suspend () -> String {

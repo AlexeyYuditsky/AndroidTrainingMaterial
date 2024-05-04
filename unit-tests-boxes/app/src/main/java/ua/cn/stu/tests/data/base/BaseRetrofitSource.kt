@@ -32,19 +32,19 @@ open class BaseRetrofitSource(
     suspend fun <T> wrapRetrofitExceptions(block: suspend () -> T): T {
         return try {
             block()
-        } catch (e: AppException) {
-            throw e
-        // moshi
+            // moshi
         } catch (e: JsonDataException) {
             throw ParseBackendResponseException(e)
         } catch (e: JsonEncodingException) {
             throw ParseBackendResponseException(e)
-        // retrofit
+            // retrofit
         } catch (e: HttpException) {
             throw createBackendException(e)
-        // mostly retrofit but may be Moshi too
+            // mostly retrofit but may be Moshi too
         } catch (e: IOException) {
             throw ConnectionException(e)
+        } catch (e: RuntimeException) {
+            throw AppException(e)
         }
     }
 
