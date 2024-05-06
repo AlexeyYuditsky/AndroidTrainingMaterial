@@ -14,6 +14,7 @@ sealed class Result<T> {
                     Success(mapper(this.value))
                 }
             }
+
             is Error<T> -> Error(this.error)
             is Empty<T> -> Empty()
             is Pending<T> -> Pending()
@@ -25,7 +26,7 @@ sealed class Result<T> {
         return null
     }
 
-    fun isFinished() = this is Success<T> || this is Error<T>
+    fun isFinished(): Boolean = this is Success<T> || this is Error<T>
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -39,11 +40,11 @@ sealed class Result<T> {
     }
 
     override fun hashCode(): Int {
-        if (this is Success<*>) return javaClass.hashCode() +
-                31 * this.value.hashCode()
-        if (this is Error<*>) return javaClass.hashCode() +
-                31 * this.error.hashCode()
-        return javaClass.hashCode()
+        return when (this) {
+            is Success<*> -> javaClass.hashCode() + 31 * this.value.hashCode()
+            is Error<*> -> javaClass.hashCode() + 31 * this.error.hashCode()
+            else -> javaClass.hashCode()
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package ua.cn.stu.tests.domain.boxes
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -11,11 +12,11 @@ import ua.cn.stu.tests.domain.accounts.entities.Account
 import ua.cn.stu.tests.domain.boxes.entities.Box
 import ua.cn.stu.tests.domain.boxes.entities.BoxAndSettings
 import ua.cn.stu.tests.domain.boxes.entities.BoxesFilter
-import ua.cn.stu.tests.domain.settings.AppSettings
 import ua.cn.stu.tests.utils.async.LazyFlowFactory
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@ExperimentalCoroutinesApi
 @Singleton
 class BoxesRepository @Inject constructor(
     private val accountsRepository: AccountsRepository,
