@@ -7,7 +7,9 @@ import ua.cn.stu.tests.data.boxes.entities.UpdateBoxRequestEntity
 interface BoxesApi {
 
     @GET("boxes")
-    suspend fun getBoxes(@Query("active") isActive: Boolean?): List<GetBoxResponseEntity>
+    suspend fun getBoxes(
+        @Query("active") isActive: Boolean?
+    ): List<GetBoxResponseEntity>
 
     @PUT("boxes/{boxId}")
     suspend fun setIsActive(
