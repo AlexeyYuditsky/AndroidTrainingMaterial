@@ -13,6 +13,7 @@ import ua.cn.stu.tests.domain.boxes.entities.BoxAndSettings
 
 class GetBoxResponseEntityTest {
 
+
     @Before
     fun setUp() {
         mockkStatic(Color::class)
