@@ -1,90 +1,62 @@
 package ua.cn.stu.tests.domain.accounts.entities
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import ua.cn.stu.tests.domain.EmptyFieldException
 import ua.cn.stu.tests.domain.Field
 import ua.cn.stu.tests.domain.PasswordMismatchException
-import kotlin.Exception
+import ua.cn.stu.tests.testutils.catch
+import ua.cn.stu.tests.testutils.createSignUpData
+import ua.cn.stu.tests.testutils.wellDone
 
 class SignUpDataTest {
 
     @Test
-    fun `validate call with blank username throw EmptyFieldException with enum Username`() {
-        val signUpData = SignUpData(
-            username = " ",
-            email = "1",
-            password = "1",
-            repeatPassword = "1"
-        )
+    fun validateForBlankEmailThrowsException() {
+        val signUpData = createSignUpData(email = "     ")
 
-        val exception = try {
-            signUpData.validate()
-        } catch (e: Exception) {
-            e
-        } as EmptyFieldException
-
-        assertEquals(Field.Username, exception.field)
-    }
-
-    @Test
-    fun `validate call with blank email throw EmptyFieldException with enum Email`() {
-        val signUpData = SignUpData(
-            username = "1",
-            email = " ",
-            password = "1",
-            repeatPassword = "1"
-        )
-
-        val exception = try {
-            signUpData.validate()
-        } catch (e: Exception) {
-            e
-        } as EmptyFieldException
+        val exception: EmptyFieldException = catch { signUpData.validate() }
 
         assertEquals(Field.Email, exception.field)
     }
 
     @Test
-    fun `validate call with blank password throw EmptyFieldException with enum Password`() {
-        val signUpData = SignUpData(
-            username = "1",
-            email = "1",
-            password = " ",
-            repeatPassword = "1"
-        )
+    fun validateForBlankUsernameThrowsException() {
+        val signUpData = createSignUpData(username = "     ")
 
-        val exception = try {
-            signUpData.validate()
-        } catch (e: Exception) {
-            e
-        } as EmptyFieldException
+        val exception: EmptyFieldException = catch { signUpData.validate() }
+
+        assertEquals(Field.Username, exception.field)
+    }
+
+    @Test
+    fun validateForBlankPasswordThrowsException() {
+        val signUpData = createSignUpData(password = "     ")
+
+        val exception: EmptyFieldException = catch { signUpData.validate() }
 
         assertEquals(Field.Password, exception.field)
     }
 
-    @Test(expected = PasswordMismatchException::class)
-    fun `validate call with mismatch password throw PasswordMismatchException`() {
-        val signUpData = SignUpData(
-            username = "1",
-            email = "1",
-            password = "1",
-            repeatPassword = "2"
+    @Test
+    fun validateForMismatchedPasswordsThrowsException() {
+        val signUpData = createSignUpData(
+            password = "p1",
+            repeatPassword = "p2"
         )
 
-        signUpData.validate()
+        catch<PasswordMismatchException> { signUpData.validate() }
+
+        wellDone()
     }
 
     @Test
-    fun `validate call with validate data`() {
-        val signUpData = SignUpData(
-            username = "1",
-            email = "1",
-            password = "1",
-            repeatPassword = "1"
-        )
+    fun validateForValidDataDoesNothing() {
+        val signUpData = createSignUpData()
 
         signUpData.validate()
+
+        wellDone()
     }
 
 }

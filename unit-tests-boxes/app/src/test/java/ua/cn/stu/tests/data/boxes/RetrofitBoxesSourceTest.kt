@@ -4,26 +4,20 @@ import android.graphics.Color
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.confirmVerified
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit4.MockKRule
-import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.HttpException
 import retrofit2.Response
 import retrofit2.Retrofit
-import ua.cn.stu.tests.data.base.RetrofitConfig
-import ua.cn.stu.tests.data.boxes.entities.GetBoxResponseEntity
-import ua.cn.stu.tests.data.boxes.entities.UpdateBoxRequestEntity
 import ua.cn.stu.tests.domain.AppException
 import ua.cn.stu.tests.domain.BackendException
 import ua.cn.stu.tests.domain.ConnectionException
@@ -31,9 +25,15 @@ import ua.cn.stu.tests.domain.ParseBackendResponseException
 import ua.cn.stu.tests.domain.boxes.entities.Box
 import ua.cn.stu.tests.domain.boxes.entities.BoxAndSettings
 import ua.cn.stu.tests.domain.boxes.entities.BoxesFilter
+import ua.cn.stu.tests.data.base.RetrofitConfig
+import ua.cn.stu.tests.data.boxes.entities.GetBoxResponseEntity
+import ua.cn.stu.tests.data.boxes.entities.UpdateBoxRequestEntity
+import ua.cn.stu.tests.testutils.arranged
+import ua.cn.stu.tests.testutils.catch
+import ua.cn.stu.tests.testutils.wellDone
 import java.io.IOException
-import java.lang.RuntimeException
 
+@ExperimentalCoroutinesApi
 class RetrofitBoxesSourceTest {
 
     @get:Rule
@@ -50,30 +50,34 @@ class RetrofitBoxesSourceTest {
     }
 
     @Test
-    fun `getBoxes call with receive active boxes`() = runTest {
+    fun getBoxesWithOnlyActiveBoxesFilterInvokesEndpoint() = runTest {
         val filter = BoxesFilter.ONLY_ACTIVE
 
         retrofitBoxesSource.getBoxes(filter)
 
-        coVerify(exactly = 1) { boxesApi.getBoxes(true) }
+        coVerify(exactly = 1) {
+            boxesApi.getBoxes(true)
+        }
         confirmVerified(boxesApi)
     }
 
     @Test
-    fun `getBoxes call with receive all boxes`() = runTest {
+    fun getBoxesWithAllBoxesFilterInvokesEndpoint() = runTest {
         val filter = BoxesFilter.ALL
 
         retrofitBoxesSource.getBoxes(filter)
 
-        coVerify(exactly = 1) { boxesApi.getBoxes(null) }
+        coVerify(exactly = 1) {
+            boxesApi.getBoxes(isNull())
+        }
         confirmVerified(boxesApi)
     }
 
     @Test
-    fun `getBoxes call return boxes from endpoint`() = runTest {
+    fun getBoxesReturnsBoxesFromEndpoint() = runTest {
         val expectedBox1 = BoxAndSettings(
             box = Box(id = 1, colorName = "Red", colorValue = Color.RED),
-            isActive = false
+            isActive = true
         )
         val expectedBox2 = BoxAndSettings(
             box = Box(id = 3, colorName = "Green", colorValue = Color.GREEN),
@@ -83,6 +87,7 @@ class RetrofitBoxesSourceTest {
         val box2Response = mockk<GetBoxResponseEntity>()
         every { box1Response.toBoxAndSettings() } returns expectedBox1
         every { box2Response.toBoxAndSettings() } returns expectedBox2
+
         coEvery { boxesApi.getBoxes(any()) } returns listOf(box1Response, box2Response)
 
         val boxes = retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
@@ -92,111 +97,159 @@ class RetrofitBoxesSourceTest {
         assertEquals(boxes[1], expectedBox2)
     }
 
-    @Test(expected = AppException::class)
-    fun `getBoxes call with throw RuntimeException rethrow AppException`() = runTest {
-        coEvery { boxesApi.getBoxes(any()) } throws RuntimeException()
+    @Test
+    fun getBoxesWithAppExceptionRethrowsException() = runTest {
+        val expectedException = AppException()
+        coEvery { boxesApi.getBoxes(any()) } throws expectedException
 
-        retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
+        val exception: AppException = catch {
+            retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
+        }
+
+        assertSame(expectedException, exception)
     }
 
-    @Test(expected = ConnectionException::class)
-    fun `getBoxes call with throw IOException rethrow ConnectionException`() = runTest {
+    @Test
+    fun getBoxesWithJsonDataExceptionThrowsParseBackendResponseException() = runTest {
+        coEvery { boxesApi.getBoxes(any()) } throws JsonDataException()
+
+        catch<ParseBackendResponseException> {
+            retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
+        }
+
+        wellDone()
+    }
+
+    @Test
+    fun getBoxesWithJsonEncodingExceptionThrowsParseBackendResponseException() = runTest {
+        coEvery { boxesApi.getBoxes(any()) } throws JsonEncodingException("Oops")
+
+        catch<ParseBackendResponseException> {
+            retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
+        }
+
+        wellDone()
+    }
+
+    @Test
+    fun getBoxesWithIOExceptionThrowsConnectionException() = runTest {
         coEvery { boxesApi.getBoxes(any()) } throws IOException()
 
-        retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
+        catch<ConnectionException> {
+            retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
+        }
+
+        wellDone()
     }
 
-    @Test(expected = BackendException::class)
-    fun `getBoxes call with throw HttpException rethrow BackendException`() = runTest {
+    @Test
+    fun getBoxesWithHttpExceptionThrowsBackendException() = runTest {
         val httpException = mockk<HttpException>()
         val response = mockk<Response<*>>()
         val errorBody = mockk<ResponseBody>()
         val errorJson = "{\"error\": \"Oops\"}"
+        coEvery { boxesApi.getBoxes(any()) } throws httpException
         every { httpException.response() } returns response
         every { httpException.code() } returns 409
         every { response.errorBody() } returns errorBody
         every { errorBody.string() } returns errorJson
-        coEvery { boxesApi.getBoxes(any()) } throws httpException
 
-        retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
+        val exception: BackendException = catch {
+            retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
+        }
+
+        assertEquals("Oops", exception.message)
+        assertEquals(409, exception.code)
     }
 
-    @Test(expected = ParseBackendResponseException::class)
-    fun `getBoxes call with throw JsonEncodingException rethrow ParseBackendResponseException`() =
-        runTest {
-            coEvery { boxesApi.getBoxes(any()) } throws JsonEncodingException("Boom")
-
-            retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
-        }
-
-    @Test(expected = ParseBackendResponseException::class)
-    fun `getBoxes call with throw JsonDataException rethrow ParseBackendResponseException`() =
-        runTest {
-            coEvery { boxesApi.getBoxes(any()) } throws JsonDataException()
-
-            retrofitBoxesSource.getBoxes(BoxesFilter.ALL)
-        }
-
     @Test
-    fun `setIsActive call`() = runTest {
-        retrofitBoxesSource.setIsActive(5L, true)
+    fun setIsActiveCallsEndpoint() = runTest {
+        arranged()
 
-        coVerify(exactly = 1) { boxesApi.setIsActive(5L, UpdateBoxRequestEntity(true)) }
+        retrofitBoxesSource.setIsActive(2, true)
+
+        coVerify(exactly = 1) {
+            boxesApi.setIsActive(2, UpdateBoxRequestEntity(true))
+        }
         confirmVerified(boxesApi)
     }
 
-    @Test(expected = AppException::class)
-    fun `setIsActive call with throw RuntimeException rethrow AppException`() = runTest {
-        coEvery { boxesApi.setIsActive(any(), any()) } throws RuntimeException()
 
-        retrofitBoxesSource.setIsActive(5L, true)
+    @Test
+    fun setIsActiveWithAppExceptionRethrowsException() = runTest {
+        val expectedException = AppException()
+        coEvery { boxesApi.setIsActive(any(), any()) } throws expectedException
+
+        val exception: AppException = catch {
+            retrofitBoxesSource.setIsActive(1, true)
+        }
+
+        assertSame(expectedException, exception)
     }
 
-    @Test(expected = ConnectionException::class)
-    fun `setIsActive call with throw IOException rethrow ConnectionException`() = runTest {
+    @Test
+    fun setIsActiveWithJsonDataExceptionThrowsParseBackendResponseException() = runTest {
+        coEvery { boxesApi.setIsActive(any(), any()) } throws JsonDataException()
+
+        catch<ParseBackendResponseException> {
+            retrofitBoxesSource.setIsActive(1, true)
+        }
+
+        wellDone()
+    }
+
+    @Test
+    fun setIsActiveWithJsonEncodingExceptionThrowsParseBackendResponseException() = runTest {
+        coEvery { boxesApi.setIsActive(any(), any()) } throws JsonEncodingException("Oops")
+
+        catch<ParseBackendResponseException> {
+            retrofitBoxesSource.setIsActive(1, true)
+        }
+
+        wellDone()
+    }
+
+    @Test
+    fun setIsActiveWithIOExceptionThrowsConnectionException() = runTest {
         coEvery { boxesApi.setIsActive(any(), any()) } throws IOException()
 
-        retrofitBoxesSource.setIsActive(5L, true)
+        catch<ConnectionException> {
+            retrofitBoxesSource.setIsActive(1, true)
+        }
+
+        wellDone()
     }
 
-    @Test(expected = BackendException::class)
-    fun `setIsActive call with throw HttpException rethrow BackendException`() = runTest {
+    @Test
+    fun setIsActiveWithHttpExceptionThrowsBackendException() = runTest {
         val httpException = mockk<HttpException>()
         val response = mockk<Response<*>>()
         val errorBody = mockk<ResponseBody>()
         val errorJson = "{\"error\": \"Oops\"}"
-        every { httpException.code() } returns 409
+        coEvery { boxesApi.setIsActive(any(), any()) } throws httpException
         every { httpException.response() } returns response
+        every { httpException.code() } returns 409
         every { response.errorBody() } returns errorBody
         every { errorBody.string() } returns errorJson
-        coEvery { boxesApi.setIsActive(any(), any()) } throws httpException
 
-        retrofitBoxesSource.setIsActive(5L, true)
+        val exception: BackendException = catch {
+            retrofitBoxesSource.setIsActive(1, true)
+        }
+
+        assertEquals("Oops", exception.message)
+        assertEquals(409, exception.code)
     }
 
-    @Test(expected = ParseBackendResponseException::class)
-    fun `setIsActive call with throw JsonEncodingException rethrow ParseBackendResponseException`() =
-        runTest {
-            coEvery { boxesApi.setIsActive(any(), any()) } throws JsonEncodingException("Boom")
 
-            retrofitBoxesSource.setIsActive(5L, true)
-        }
-
-    @Test(expected = ParseBackendResponseException::class)
-    fun `setIsActive call with throw JsonDataException rethrow ParseBackendResponseException`() =
-        runTest {
-            coEvery { boxesApi.setIsActive(any(), any()) } throws JsonDataException()
-
-            retrofitBoxesSource.setIsActive(5L, true)
-        }
-
-    private fun createRetrofitBoxesSource(): RetrofitBoxesSource {
-        return RetrofitBoxesSource(
-            config = RetrofitConfig(
-                retrofit = createRetrofit(),
-                moshi = createMoshi()
-            )
+    private fun createRetrofitBoxesSource(
+        retrofit: Retrofit = createRetrofit(),
+        moshi: Moshi = createMoshi()
+    ): RetrofitBoxesSource {
+        val config = RetrofitConfig(
+            retrofit = retrofit,
+            moshi = moshi
         )
+        return RetrofitBoxesSource(config)
     }
 
     private fun createRetrofit(): Retrofit {
@@ -206,7 +259,6 @@ class RetrofitBoxesSourceTest {
     }
 
     private fun createMoshi(): Moshi {
-        return Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+        return Moshi.Builder().build()
     }
-
 }

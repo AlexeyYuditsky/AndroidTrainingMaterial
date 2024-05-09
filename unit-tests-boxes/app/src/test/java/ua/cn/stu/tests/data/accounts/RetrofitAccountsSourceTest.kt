@@ -1,35 +1,23 @@
 package ua.cn.stu.tests.data.accounts
 
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import io.mockk.called
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.confirmVerified
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.runs
-import io.mockk.slot
-import io.mockk.spyk
-import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.Retrofit
-import ua.cn.stu.tests.data.accounts.entities.GetAccountResponseEntity
-import ua.cn.stu.tests.data.accounts.entities.SignInRequestEntity
-import ua.cn.stu.tests.data.accounts.entities.SignInResponseEntity
-import ua.cn.stu.tests.data.accounts.entities.SignUpRequestEntity
-import ua.cn.stu.tests.data.accounts.entities.UpdateUsernameRequestEntity
-import ua.cn.stu.tests.data.base.RetrofitConfig
 import ua.cn.stu.tests.domain.accounts.entities.Account
 import ua.cn.stu.tests.domain.accounts.entities.SignUpData
+import ua.cn.stu.tests.data.accounts.entities.*
+import ua.cn.stu.tests.data.base.RetrofitConfig
+import ua.cn.stu.tests.testutils.createAccount
 
+@ExperimentalCoroutinesApi
 class RetrofitAccountsSourceTest {
 
     @get:Rule
@@ -39,163 +27,153 @@ class RetrofitAccountsSourceTest {
     lateinit var accountsApi: AccountsApi
 
     @Test
-    fun `signIn call and return token`() = runTest {
-        val requestEntity = SignInRequestEntity(
-            email = "email",
-            password = "password"
-        )
-        coEvery { accountsApi.signIn(requestEntity) } returns SignInResponseEntity("token")
-        val retrofitAccountSource = createRetrofitAccountSource()
+    fun signInCallsEndpointAndReturnsToken() = runTest {
+        val requestEntity = SignInRequestEntity("email", "password")
+        coEvery { accountsApi.signIn(requestEntity) } returns
+                SignInResponseEntity("token")
+        val source = createSource()
 
-        val token = retrofitAccountSource.signIn(
-            email = "email",
-            password = "password"
-        )
+        val token = source.signIn("email", "password")
 
         assertEquals("token", token)
-        coVerify(exactly = 1) { accountsApi.signIn(requestEntity) }
+        coVerify(exactly = 1) {
+            accountsApi.signIn(requestEntity)
+        }
         confirmVerified(accountsApi)
     }
 
     @Test
-    fun `signIn call with wrapRetrofitException call`() = runTest {
-        val retrofitAccountSource = spyk(createRetrofitAccountSource())
-        val requestEntity = SignInRequestEntity(
-            email = "email",
-            password = "password"
-        )
-        coEvery { accountsApi.signIn(requestEntity) } returns SignInResponseEntity("token")
-        val slot = slot<suspend () -> String>()
-        coEvery { retrofitAccountSource.wrapRetrofitExceptions(capture(slot)) } returns ""
+    fun signInWrapsExecutionIntoWrapRetrofitExceptions() = runTest {
+        val source = spyk(createSource())
+        val requestEntity = SignInRequestEntity("email", "password")
+        coEvery { accountsApi.signIn(requestEntity) } returns
+                SignInResponseEntity("token")
+        val slot: CapturingSlot<suspend () -> String> = slot()
+        coEvery { source.wrapRetrofitExceptions(capture(slot)) } returns ""
 
-        retrofitAccountSource.signIn(
-            email = "email",
-            password = "password"
-        )
+        source.signIn("email", "password")
         val token = slot.captured.invoke()
 
         assertEquals("token", token)
     }
 
     @Test
-    fun `signUp call`() = runTest {
-        val retrofitAccountsSource = createRetrofitAccountSource()
-        val signUpData = SignUpData(
-            username = "username",
-            password = "password",
-            email = "email",
-            repeatPassword = "repeatPassword",
-        )
-        val requestEntity = SignUpRequestEntity(
-            email = signUpData.email,
-            password = signUpData.password,
-            username = signUpData.username
-        )
-        coEvery { accountsApi.signUp(requestEntity) } just runs
+    fun signUpCallsEndpoint() = runTest {
+        val inputEmail = "email"
+        val inputUsername = "username"
+        val inputPassword = "password"
+        val source = createSource()
+        coEvery { accountsApi.signUp(any()) } just runs
 
-        retrofitAccountsSource.signUp(signUpData)
+        val signUpData = SignUpData(inputUsername, inputEmail, inputPassword, inputPassword)
+        source.signUp(signUpData)
 
-        coVerify(exactly = 1) { accountsApi.signUp(requestEntity) }
+        val requestEntity = SignUpRequestEntity(inputEmail, inputUsername, inputPassword)
+        coVerify(exactly = 1) {
+            accountsApi.signUp(requestEntity)
+        }
         confirmVerified(accountsApi)
     }
 
     @Test
-    fun `signUp call with wrapRetrofitException call`() = runTest {
-        val retrofitAccountsSource = spyk(createRetrofitAccountSource())
-        val signUpData = SignUpData(
-            username = "username",
-            password = "password",
-            email = "email",
-            repeatPassword = "repeatPassword",
-        )
-        val requestEntity = SignUpRequestEntity(
-            email = signUpData.email,
-            password = signUpData.password,
-            username = signUpData.username
-        )
-        coEvery { accountsApi.signUp(requestEntity) } just runs
-        val slot = slot<suspend () -> Unit>()
-        coEvery { retrofitAccountsSource.wrapRetrofitExceptions(capture(slot)) } just runs
+    fun signUpWrapsExecutionIntoWrapRetrofitExceptions() = runTest {
+        val inputEmail = "email"
+        val inputUsername = "username"
+        val inputPassword = "password"
+        val requestEntity = SignUpRequestEntity(inputEmail, inputUsername, inputPassword)
+        val source = spyk(createSource())
+        coEvery { accountsApi.signUp(any()) } just runs
+        val slot: CapturingSlot<suspend () -> Unit> = slot()
+        coEvery { source.wrapRetrofitExceptions(capture(slot)) } just runs
 
-        retrofitAccountsSource.signUp(signUpData)
+        val signUpData = SignUpData(inputUsername, inputEmail, inputPassword, inputPassword)
+        source.signUp(signUpData)
 
-        verify { accountsApi wasNot called }
+        verify {
+            accountsApi wasNot called
+        }
         slot.captured.invoke()
-        coVerify { accountsApi.signUp(requestEntity) }
+        coVerify {
+            accountsApi.signUp(requestEntity)
+        }
     }
 
     @Test
-    fun `getAccount call`() = runTest {
-        val retrofitAccountsSource = createRetrofitAccountSource()
-        val getAccountResponseEntity = mockk<GetAccountResponseEntity>()
+    fun getAccountCallsEndpoint() = runTest {
+        val source = createSource()
+        val getAccountResponse = mockk<GetAccountResponseEntity>()
         val expectedAccount = Account(
-            id = 1,
-            username = "username",
-            email = "email"
+            id = 1, username = "username", email = "email", createdAt = 123
         )
-        coEvery { accountsApi.getAccount() } returns getAccountResponseEntity
-        every { getAccountResponseEntity.toAccount() } returns expectedAccount
+        every { getAccountResponse.toAccount() } returns expectedAccount
+        coEvery { accountsApi.getAccount() } returns getAccountResponse
 
-        val account = retrofitAccountsSource.getAccount()
+        val account = source.getAccount()
 
         assertSame(expectedAccount, account)
-        coVerify(exactly = 1) { accountsApi.getAccount() }
+        coVerify(exactly = 1) {
+            accountsApi.getAccount()
+        }
         confirmVerified(accountsApi)
     }
 
     @Test
-    fun `getAccount call with wrapRetrofitException call`() = runTest {
-        val retrofitAccountsSource = spyk(createRetrofitAccountSource())
-        val getAccountResponseEntity = mockk<GetAccountResponseEntity>()
-        val expectedAccount = Account(
-            id = 1,
-            username = "username",
-            email = "email"
+    fun getAccountWrapsExecutionIntoWrapRetrofitExceptions() = runTest {
+        val source = spyk(createSource())
+        val getAccountResponse = mockk<GetAccountResponseEntity>()
+        val expectedAccount = createAccount(
+            id = 123, username = "username", email = "email"
         )
-        every { getAccountResponseEntity.toAccount() } returns expectedAccount
-        coEvery { accountsApi.getAccount() } returns getAccountResponseEntity
-        val slot = slot<suspend () -> Account>()
-        coEvery { retrofitAccountsSource.wrapRetrofitExceptions(capture(slot)) } returns expectedAccount
+        every { getAccountResponse.toAccount() } returns expectedAccount
+        coEvery { accountsApi.getAccount() } returns getAccountResponse
+        val slot: CapturingSlot<suspend () -> Account> = slot()
+        coEvery { source.wrapRetrofitExceptions(capture(slot)) } returns createAccount()
 
-        retrofitAccountsSource.getAccount()
+        source.getAccount()
         val account = slot.captured.invoke()
 
         assertSame(expectedAccount, account)
     }
 
     @Test
-    fun `setUsername call`() = runTest {
-        val username = "username"
-        val requestUsername = UpdateUsernameRequestEntity(username = username)
-        val retrofitAccountsSource = createRetrofitAccountSource()
-        coEvery { accountsApi.setUsername(requestUsername) } just runs
+    fun setUsernameCallsEndpoint() = runTest {
+        val inputUsername = "username"
+        val expectedRequestEntity = UpdateUsernameRequestEntity(inputUsername)
+        val source = createSource()
+        coEvery { accountsApi.setUsername(any()) } just runs
 
-        retrofitAccountsSource.setUsername(username)
+        source.setUsername(inputUsername)
 
-        coVerify(exactly = 1) { accountsApi.setUsername(requestUsername) }
+        coVerify(exactly = 1) {
+            accountsApi.setUsername(expectedRequestEntity)
+        }
         confirmVerified(accountsApi)
     }
 
     @Test
-    fun `setUsername call with wrapRetrofitException call`() = runTest {
-        val retrofitAccountsSource = spyk(createRetrofitAccountSource())
-        val username = "username"
-        val requestUsername = UpdateUsernameRequestEntity(username = username)
-        val slot = slot<suspend () -> Unit>()
-        coEvery { retrofitAccountsSource.wrapRetrofitExceptions(capture(slot)) } just runs
-        coEvery { accountsApi.setUsername(requestUsername) } just runs
+    fun setUsernameWrapsExecutionIntoWrapRetrofitExceptions() = runTest {
+        val inputUsername = "username"
+        val expectedRequestEntity = UpdateUsernameRequestEntity(inputUsername)
+        val source = spyk(createSource())
+        coEvery { accountsApi.setUsername(any()) } just runs
+        val slot: CapturingSlot<suspend () -> Unit> = slot()
+        coEvery { source.wrapRetrofitExceptions(capture(slot)) } just runs
 
-        retrofitAccountsSource.setUsername(username)
+        source.setUsername(inputUsername)
 
-        coVerify { accountsApi wasNot called }
+        verify {
+            accountsApi wasNot called
+        }
         slot.captured.invoke()
-        coVerify { accountsApi.setUsername(requestUsername) }
+        coVerify {
+            accountsApi.setUsername(expectedRequestEntity)
+        }
     }
 
-    private fun createRetrofitAccountSource() = RetrofitAccountsSource(
+    private fun createSource() = RetrofitAccountsSource(
         config = RetrofitConfig(
             retrofit = createRetrofit(),
-            moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+            moshi = Moshi.Builder().build()
         )
     )
 

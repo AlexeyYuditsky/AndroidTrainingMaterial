@@ -3,10 +3,10 @@ package ua.cn.stu.tests.data.base
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody
 import org.junit.Assert.assertEquals
@@ -19,14 +19,19 @@ import ua.cn.stu.tests.domain.AppException
 import ua.cn.stu.tests.domain.BackendException
 import ua.cn.stu.tests.domain.ConnectionException
 import ua.cn.stu.tests.domain.ParseBackendResponseException
+import ua.cn.stu.tests.testutils.catch
+import ua.cn.stu.tests.testutils.wellDone
 import java.io.IOException
 
+@ExperimentalCoroutinesApi
 class BaseRetrofitSourceTest {
 
     @Test
-    fun `getRetrofit call returns instance from config`() {
+    fun getRetrofitReturnsInstanceFromConfig() {
         val expectedRetrofit = mockk<Retrofit>()
-        val source = createBaseRetrofitSource(retrofit = expectedRetrofit)
+        val source = createBaseRetrofitSource(
+            retrofit = expectedRetrofit
+        )
 
         val retrofit = source.retrofit
 
@@ -34,73 +39,90 @@ class BaseRetrofitSourceTest {
     }
 
     @Test
-    fun `wrapRetrofitExceptions call receive result from block of lambda`() = runTest {
+    fun wrapRetrofitExceptionsReturnsValueGeneratedByBlock() = runTest {
         val source = createBaseRetrofitSource()
         val block = createMockedBlock()
-        coEvery { block.invoke() } returns "TEST"
+        coEvery { block() } returns "test"
 
         val result = source.wrapRetrofitExceptions(block)
 
-        assertEquals("TEST", result)
+        assertEquals("test", result)
     }
 
-    @Test(expected = AppException::class)
-    fun `wrapRetrofitExceptions call with throw RuntimeException rethrow AppException`() =
-        runTest {
-            val source = createBaseRetrofitSource()
-            val block = createMockedBlock()
-            coEvery { block.invoke() } throws RuntimeException()
+    @Test
+    fun wrapRetrofitExceptionsWithAppExceptionRethrowsException() = runTest {
+        val source = createBaseRetrofitSource()
+        val block = createMockedBlock()
+        val expectedException = AppException()
+        coEvery { block() } throws expectedException
 
+        val exception: AppException = catch {
             source.wrapRetrofitExceptions(block)
         }
 
-    @Test(expected = ParseBackendResponseException::class)
-    fun `wrapRetrofitExceptions call with throw JsonDataException rethrow ParseBackendResponseException`() =
-        runTest {
-            val source = createBaseRetrofitSource()
-            val block = createMockedBlock()
-            coEvery { block.invoke() } throws JsonDataException()
+        assertSame(expectedException, exception)
+    }
 
+    @Test
+    fun wrapRetrofitExceptionsWithJsonDataExceptionThrowsParseBackendResponseException() = runTest {
+        val source = createBaseRetrofitSource()
+        val block = createMockedBlock()
+        coEvery { block.invoke() } throws JsonDataException()
+
+        catch<ParseBackendResponseException> {
             source.wrapRetrofitExceptions(block)
         }
 
-    @Test(expected = ParseBackendResponseException::class)
-    fun `wrapRetrofitExceptions call with throw JsonEncodingException rethrow ParseBackendResponseException`() =
-        runTest {
-            val source = createBaseRetrofitSource()
-            val block = createMockedBlock()
-            coEvery { block.invoke() } throws JsonEncodingException("Boom")
+        wellDone()
+    }
 
+    @Test
+    fun wrapRetrofitExceptionsWithJsonEncodingExceptionThrowsParseBackendResponseException() = runTest {
+        val source = createBaseRetrofitSource()
+        val block = createMockedBlock()
+        coEvery { block.invoke() } throws JsonEncodingException("Bo-o-om")
+
+        catch<ParseBackendResponseException> {
             source.wrapRetrofitExceptions(block)
         }
 
-    @Test(expected = BackendException::class)
-    fun `wrapRetrofitExceptions call with throw HttpException rethrow BackendException`() =
-        runTest {
-            val source = createBaseRetrofitSource()
-            val block = createMockedBlock()
-            val httpException = mockk<HttpException>()
-            val response = mockk<Response<*>>()
-            val errorBody = mockk<ResponseBody>()
-            val errorJson = "{\"error\": \"Oops\"}"
-            coEvery { block.invoke() } throws httpException
-            every { httpException.response() } returns response
-            every { httpException.code() } returns 409
-            every { response.errorBody() } returns errorBody
-            every { errorBody.string() } returns errorJson
+        wellDone()
+    }
 
+    @Test
+    fun wrapRetrofitExceptionsWithIOExceptionThrowsConnectionException() = runTest {
+        val source = createBaseRetrofitSource()
+        val block = createMockedBlock()
+        coEvery { block.invoke() } throws IOException()
+
+        catch<ConnectionException> {
             source.wrapRetrofitExceptions(block)
         }
 
-    @Test(expected = ConnectionException::class)
-    fun `wrapRetrofitExceptions call with throw IOException rethrow ConnectionException`() =
-        runTest {
-            val source = createBaseRetrofitSource()
-            val block = createMockedBlock()
-            coEvery { block.invoke() } throws IOException()
+        wellDone()
+    }
 
+    @Test
+    fun wrapRetrofitExceptionsWithHttpExceptionThrowsBackendException() = runTest {
+        val source = createBaseRetrofitSource()
+        val block = createMockedBlock()
+        val httpException = mockk<HttpException>()
+        val response = mockk<Response<*>>()
+        val errorBody = mockk<ResponseBody>()
+        val errorJson = "{\"error\": \"Oops\"}"
+        coEvery { block.invoke() } throws httpException
+        every { httpException.response() } returns response
+        every { httpException.code() } returns 409
+        every { response.errorBody() } returns errorBody
+        every { errorBody.string() } returns errorJson
+
+        val exception: BackendException = catch {
             source.wrapRetrofitExceptions(block)
         }
+
+        assertEquals("Oops", exception.message)
+        assertEquals(409, exception.code)
+    }
 
     private fun createMockedBlock(): suspend () -> String {
         return mockk()
@@ -109,10 +131,9 @@ class BaseRetrofitSourceTest {
     private fun createBaseRetrofitSource(
         retrofit: Retrofit = mockk()
     ) = BaseRetrofitSource(
-        retrofitConfig = RetrofitConfig(
+        RetrofitConfig(
             retrofit = retrofit,
-            moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+            moshi = Moshi.Builder().build()
         )
     )
-
 }

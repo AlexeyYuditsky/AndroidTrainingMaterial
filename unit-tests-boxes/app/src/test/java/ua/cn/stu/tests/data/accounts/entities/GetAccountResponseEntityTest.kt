@@ -7,23 +7,22 @@ import ua.cn.stu.tests.domain.accounts.entities.Account
 class GetAccountResponseEntityTest {
 
     @Test
-    fun `GetAccountResponseEntity map to Account`() {
-        val getAccountResponseEntity = GetAccountResponseEntity(
-            id = 5,
-            email = "some email",
-            username = "some username",
-            createdAt = 5555
-        )
-        val expectedAccount = Account(
-            id = 5,
-            email = "some email",
-            username = "some username",
-            createdAt = 5555
+    fun toAccountMapsToInAppEntity() {
+        val responseEntity = GetAccountResponseEntity(
+            id = 3,
+            email = "some-email",
+            username = "some-username",
+            createdAt = 123
         )
 
-        val account = getAccountResponseEntity.toAccount()
+        val inAppEntity = responseEntity.toAccount()
 
-        assertEquals(expectedAccount, account)
+        val expectedInAppEntity = Account(
+            id = 3,
+            email = "some-email",
+            username = "some-username",
+            createdAt = 123
+        )
+        assertEquals(expectedInAppEntity, inAppEntity)
     }
-
 }

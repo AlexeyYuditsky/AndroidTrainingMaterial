@@ -5,14 +5,13 @@ import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.After
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import ua.cn.stu.tests.domain.boxes.entities.Box
 import ua.cn.stu.tests.domain.boxes.entities.BoxAndSettings
 
 class GetBoxResponseEntityTest {
-
 
     @Before
     fun setUp() {
@@ -25,26 +24,21 @@ class GetBoxResponseEntityTest {
     }
 
     @Test
-    fun `GetBoxResponseEntity map to BoxAndSettings`() {
-        val getBoxResponseEntity = GetBoxResponseEntity(
-            id = 5,
-            colorName = "RED",
+    fun toBoxAndSettingsMapsToInAppEntity() {
+        val responseEntity = GetBoxResponseEntity(
+            id = 2,
+            colorName = "Red",
             colorValue = "#ff0000",
             isActive = true
         )
         every { Color.parseColor(any()) } returns Color.RED
 
-        val boxAndSettings = getBoxResponseEntity.toBoxAndSettings()
+        val inAppEntity = responseEntity.toBoxAndSettings()
 
-        val expectedBoxAndSettings = BoxAndSettings(
-            box = Box(
-                id = 5,
-                colorName = "RED",
-                colorValue = Color.RED
-            ),
+        val expectedInAppEntity = BoxAndSettings(
+            box = Box(id = 2, colorName = "Red", colorValue = Color.RED),
             isActive = true
         )
-        assertEquals(expectedBoxAndSettings, boxAndSettings)
+        Assert.assertEquals(expectedInAppEntity, inAppEntity)
     }
-
 }
